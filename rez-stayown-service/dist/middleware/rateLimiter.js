@@ -13,16 +13,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.rateLimiters = void 0;
+exports.closeRedisClient = closeRedisClient;
 exports.createRateLimiter = createRateLimiter;
 const ioredis_1 = __importDefault(require("ioredis"));
 // Redis client for rate limiting
 let redis = null;
+let isRedisConnected = false;
 try {
     const redisUrl = process.env.REDIS_URL;
     if (redisUrl) {
         redis = new ioredis_1.default(redisUrl, {
             lazyConnect: true,
             maxRetriesPerRequest: 3,
+        });
+        redis.on('connect', () => {
+            isRedisConnected = true;
+            console.log('[RateLimiter] Redis connected');
+        });
+        redis.on('error', (err) => {
+            isRedisConnected = false;
+            console.error('[RateLimiter] Redis error:', err.message);
+        });
+        redis.on('close', () => {
+            isRedisConnected = false;
         });
     }
 }
@@ -31,6 +44,37 @@ catch {
 }
 // In-memory fallback for when Redis is not available
 const inMemoryStore = new Map();
+// Periodic cleanup of in-memory store to prevent memory leaks
+const MEMORY_CLEANUP_INTERVAL = 60 * 1000; // 1 minute
+setInterval(() => {
+    const now = Date.now();
+    let cleaned = 0;
+    for (const [key, value] of inMemoryStore.entries()) {
+        if (value.resetAt < now) {
+            inMemoryStore.delete(key);
+            cleaned++;
+        }
+    }
+    if (cleaned > 0) {
+        console.log(`[RateLimiter] Cleaned ${cleaned} expired entries from in-memory store`);
+    }
+}, MEMORY_CLEANUP_INTERVAL);
+/**
+ * Close Redis connection for graceful shutdown
+ */
+async function closeRedisClient() {
+    if (redis) {
+        try {
+            await redis.quit();
+            console.log('[RateLimiter] Redis connection closed');
+        }
+        catch (err) {
+            console.error('[RateLimiter] Error closing Redis:', err);
+        }
+        redis = null;
+        isRedisConnected = false;
+    }
+}
 const RATE_LIMIT_CONFIGS = {
     qrGenerate: {
         windowMs: 60 * 1000, // 1 minute
@@ -42,6 +86,11 @@ const RATE_LIMIT_CONFIGS = {
         maxRequests: 60, // 60 validations per minute
         keyPrefix: 'rl:qr:val:',
     },
+    qrValidateHigh: {
+        windowMs: 60 * 1000, // 1 minute
+        maxRequests: 100, // 100 validations per minute (high throughput)
+        keyPrefix: 'rl:qr:val:hi:',
+    },
     charge: {
         windowMs: 60 * 1000, // 1 minute
         maxRequests: 30, // 30 charges per minute
@@ -51,6 +100,16 @@ const RATE_LIMIT_CONFIGS = {
         windowMs: 60 * 1000, // 1 minute
         maxRequests: 10, // 10 checkouts per minute
         keyPrefix: 'rl:checkout:',
+    },
+    hotelSearch: {
+        windowMs: 60 * 1000, // 1 minute
+        maxRequests: 30, // 30 searches per minute
+        keyPrefix: 'rl:hotel:search:',
+    },
+    hotelBooking: {
+        windowMs: 60 * 1000, // 1 minute
+        maxRequests: 10, // 10 bookings per minute
+        keyPrefix: 'rl:hotel:booking:',
     },
     general: {
         windowMs: 60 * 1000, // 1 minute
@@ -151,8 +210,11 @@ function createRateLimiter(type = 'general') {
 exports.rateLimiters = {
     qrGenerate: createRateLimiter('qrGenerate'),
     qrValidate: createRateLimiter('qrValidate'),
+    qrValidateHigh: createRateLimiter('qrValidateHigh'),
     charge: createRateLimiter('charge'),
     checkout: createRateLimiter('checkout'),
+    hotelSearch: createRateLimiter('hotelSearch'),
+    hotelBooking: createRateLimiter('hotelBooking'),
     general: createRateLimiter('general'),
 };
 exports.default = exports.rateLimiters;

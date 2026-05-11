@@ -59,7 +59,7 @@ export interface PreArrivalDocument extends mongoose.Document {
     createdAt: Date;
     updatedAt: Date;
 }
-export declare const PreArrival: mongoose.Model<any, {}, {}, {}, any, any>;
+export declare const PreArrival: mongoose.Model<any, {}, {}, {}, any, any, any>;
 /**
  * Get pre-arrival preferences for a booking
  */

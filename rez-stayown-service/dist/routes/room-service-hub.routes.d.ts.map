@@ -1,1 +1,1 @@
-{"version":3,"file":"room-service-hub.routes.d.ts","sourceRoot":"","sources":["../../src/routes/room-service-hub.routes.ts"],"names":[],"mappings":"AAAA;;;;;;;;;GASG;AAQH,QAAA,MAAM,MAAM,4CAAW,CAAC;AAybxB,eAAe,MAAM,CAAC"}
+{"version":3,"file":"room-service-hub.routes.d.ts","sourceRoot":"","sources":["../../src/routes/room-service-hub.routes.ts"],"names":[],"mappings":"AAAA;;;;;;;;;GASG;AASH,QAAA,MAAM,MAAM,4CAAW,CAAC;AA6cxB,eAAe,MAAM,CAAC"}

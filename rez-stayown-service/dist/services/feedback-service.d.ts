@@ -87,7 +87,7 @@ export interface FeedbackListItem {
     submittedAt: Date;
     isAnonymous: boolean;
 }
-export declare const Feedback: mongoose.Model<any, {}, {}, {}, any, any>;
+export declare const Feedback: mongoose.Model<any, {}, {}, {}, any, any, any>;
 /**
  * Submit guest feedback
  */

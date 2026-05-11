@@ -48,9 +48,9 @@ export interface RoomQRLink {
     expiresAt: Date;
     isActive: boolean;
 }
-export declare const RoomQRTemplates: mongoose.Model<any, {}, {}, {}, any, any>;
-export declare const RoomQRLinks: mongoose.Model<any, {}, {}, {}, any, any>;
-export declare const RoomServiceRequests: mongoose.Model<any, {}, {}, {}, any, any>;
+export declare const RoomQRTemplates: mongoose.Model<any, {}, {}, {}, any, any, any>;
+export declare const RoomQRLinks: mongoose.Model<any, {}, {}, {}, any, any, any>;
+export declare const RoomServiceRequests: mongoose.Model<any, {}, {}, {}, any, any, any>;
 /**
  * Generate a fixed QR for a room (done during hotel setup)
  */

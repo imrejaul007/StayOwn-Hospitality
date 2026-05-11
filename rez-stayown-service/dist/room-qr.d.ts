@@ -153,8 +153,8 @@ export interface ServiceChargeDocument extends mongoose.Document {
     createdAt: Date;
     updatedAt: Date;
 }
-export declare const RoomQR: mongoose.Model<any, {}, {}, {}, any, any>;
-export declare const ServiceCharge: mongoose.Model<any, {}, {}, {}, any, any>;
+export declare const RoomQR: mongoose.Model<any, {}, {}, {}, any, any, any>;
+export declare const ServiceCharge: mongoose.Model<any, {}, {}, {}, any, any, any>;
 /**
  * Generate Room QR for a booking
  */

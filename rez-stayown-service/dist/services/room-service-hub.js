@@ -52,6 +52,7 @@ const room_qr_2 = require("../room-qr");
 const room_qr_3 = require("../room-qr");
 const room_qr_4 = require("../room-qr");
 const sla_monitor_1 = require("./sla-monitor");
+const rez_mind_client_1 = require("./rez-mind-client");
 const axios_1 = __importDefault(require("axios"));
 const HOTEL_PMS_URL = process.env.HOTEL_PMS_URL || 'http://localhost:3008';
 // ─── Service Catalog ────────────────────────────────────────────────────────────
@@ -408,6 +409,22 @@ exports.roomServiceHub = {
             catch {
                 // Continue even if PMS notification fails
             }
+            // Emit service_ordered event to REZ Mind
+            rez_mind_client_1.rezMindClient.sendEvent({
+                eventType: 'service_ordered',
+                source: 'stayown',
+                data: {
+                    bookingId: request.bookingId,
+                    hotelId: request.hotelId,
+                    roomId: request.roomId,
+                    serviceType: request.serviceType,
+                    items: request.items,
+                    totalPaise,
+                    orderId: charge.id,
+                    specialInstructions: request.specialInstructions,
+                },
+                timestamp: new Date(),
+            });
             // Estimate time based on service type
             const timeEstimates = {
                 food: '20-30 mins',
@@ -582,7 +599,7 @@ exports.roomServiceHub = {
                         balanceDuePaise: bill.balanceDuePaise,
                     };
                 }
-                return {
+                const response = {
                     success: true,
                     checkoutId: `CHK${Date.now()}`,
                     totalAmountPaise: bill.totalPaise,
@@ -592,9 +609,29 @@ exports.roomServiceHub = {
                     balanceDuePaise: bill.balanceDuePaise,
                     paymentLink: payment.checkoutUrl,
                 };
+                // Emit checkout_completed event to REZ Mind
+                rez_mind_client_1.rezMindClient.sendEvent({
+                    eventType: 'checkout_completed',
+                    source: 'stayown',
+                    data: {
+                        bookingId: request.bookingId,
+                        hotelId: request.hotelId,
+                        roomId: request.roomId,
+                        checkoutId: response.checkoutId,
+                        totalAmountPaise: response.totalAmountPaise,
+                        serviceChargesPaise: response.serviceChargesPaise,
+                        roomChargesPaise: response.roomChargesPaise,
+                        taxesPaise: response.taxesPaise,
+                        balanceDuePaise: response.balanceDuePaise,
+                        paymentMethod: request.paymentMethod,
+                        hasPaymentLink: !!response.paymentLink,
+                    },
+                    timestamp: new Date(),
+                });
+                return response;
             }
             // No payment needed
-            return {
+            const response = {
                 success: true,
                 checkoutId: `CHK${Date.now()}`,
                 totalAmountPaise: bill.totalPaise,
@@ -603,6 +640,26 @@ exports.roomServiceHub = {
                 taxesPaise: bill.taxesPaise,
                 balanceDuePaise: 0,
             };
+            // Emit checkout_completed event to REZ Mind
+            rez_mind_client_1.rezMindClient.sendEvent({
+                eventType: 'checkout_completed',
+                source: 'stayown',
+                data: {
+                    bookingId: request.bookingId,
+                    hotelId: request.hotelId,
+                    roomId: request.roomId,
+                    checkoutId: response.checkoutId,
+                    totalAmountPaise: response.totalAmountPaise,
+                    serviceChargesPaise: response.serviceChargesPaise,
+                    roomChargesPaise: response.roomChargesPaise,
+                    taxesPaise: response.taxesPaise,
+                    balanceDuePaise: response.balanceDuePaise,
+                    paymentMethod: request.paymentMethod,
+                    hasPaymentLink: false,
+                },
+                timestamp: new Date(),
+            });
+            return response;
         }
         catch (error) {
             console.error('[RoomServiceHub] Checkout failed:', error);

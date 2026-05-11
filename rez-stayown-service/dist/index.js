@@ -51,6 +51,7 @@ const cors_1 = __importDefault(require("cors"));
 const helmet_1 = __importDefault(require("helmet"));
 const express_mongo_sanitize_1 = __importDefault(require("express-mongo-sanitize"));
 const morgan_1 = __importDefault(require("morgan"));
+const crypto_1 = __importDefault(require("crypto"));
 // Sentry initialization
 const Sentry = __importStar(require("@sentry/node"));
 Sentry.init({
@@ -60,6 +61,7 @@ Sentry.init({
 });
 // MongoDB connection
 const mongodb_auth_1 = require("./config/mongodb-auth");
+const rateLimiter_1 = require("./middleware/rateLimiter");
 // Routes
 const stayownRoutes_1 = __importDefault(require("./routes/stayownRoutes"));
 const room_qr_routes_1 = __importDefault(require("./routes/room-qr-routes"));
@@ -68,10 +70,50 @@ const room_service_hub_routes_1 = __importDefault(require("./routes/room-service
 const merchant_qr_routes_1 = __importDefault(require("./routes/merchant-qr.routes"));
 const bulk_qr_routes_1 = __importDefault(require("./routes/bulk-qr.routes"));
 const pms_webhooks_routes_1 = __importDefault(require("./routes/pms-webhooks.routes"));
+const room_qr_manager_routes_1 = __importDefault(require("./routes/room-qr-manager.routes"));
+const ai_routes_1 = __importDefault(require("./routes/ai-routes"));
+const google_hotel_ads_routes_1 = __importDefault(require("./routes/google-hotel-ads.routes"));
+const digital_checkin_routes_1 = __importDefault(require("./routes/digital-checkin.routes"));
+const whatsapp_routes_1 = __importDefault(require("./routes/whatsapp.routes"));
+const currency_routes_1 = __importDefault(require("./routes/currency.routes"));
 // Services
 const room_qr_1 = require("./room-qr");
+function validateEnvironment() {
+    const errors = [];
+    // Required in production
+    if (process.env.NODE_ENV === 'production') {
+        const requiredProduction = [
+            { key: 'JWT_SECRET', name: 'JWT Secret' },
+            { key: 'MONGODB_URI', name: 'MongoDB URI' },
+        ];
+        for (const { key, name } of requiredProduction) {
+            if (!process.env[key]) {
+                errors.push(`${name} (${key}) is required in production`);
+            }
+        }
+    }
+    return { valid: errors.length === 0, errors };
+}
+// Validate at startup
+const envValidation = validateEnvironment();
+if (!envValidation.valid) {
+    console.error('[Startup] CRITICAL: Environment validation failed:');
+    envValidation.errors.forEach(e => console.error('  -', e));
+    if (process.env.NODE_ENV === 'production') {
+        process.exit(1);
+    }
+}
 const app = (0, express_1.default)();
-const PORT = parseInt(process.env.PORT || '4015', 10);
+const PORT = parseInt(process.env.PORT || '4016', 10);
+// ─── Correlation ID Middleware ────────────────────────────────────────────────
+app.use((req, res, next) => {
+    const correlationId = req.headers['x-correlation-id'] ||
+        crypto_1.default.randomUUID();
+    req.headers['x-correlation-id'] = correlationId;
+    res.setHeader('X-Correlation-ID', correlationId);
+    req.correlationId = correlationId;
+    next();
+});
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.set('trust proxy', 1);
 // Security headers
@@ -81,24 +123,46 @@ app.use((0, helmet_1.default)({
             defaultSrc: ["'self'"],
             styleSrc: ["'self'", "'unsafe-inline'"],
             imgSrc: ["'self'", 'data:', 'https:'],
+            connectSrc: ["'self'"],
+            scriptSrc: ["'self'"],
+            objectSrc: ["'none'"],
+            frameAncestors: ["'none'"],
         },
     },
+    crossOriginEmbedderPolicy: false,
 }));
-// CORS
-const allowedOrigins = (process.env.CORS_ORIGIN || 'https://admin.rez.money,https://rez.money,https://rez-app.vercel.app')
-    .split(',')
-    .map(s => s.trim());
+// CORS - strict configuration
+const allowedOrigins = process.env.CORS_ORIGIN
+    ? process.env.CORS_ORIGIN.split(',').map(s => s.trim())
+    : [];
 app.use((0, cors_1.default)({
     origin: (origin, callback) => {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
+        // Allow requests with no origin (mobile apps, curl, Postman)
+        if (!origin) {
+            return callback(null, true);
         }
-        else {
-            callback(new Error(`CORS: origin ${origin} not allowed`));
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
         }
+        // Log suspicious CORS attempts
+        console.warn(`[CORS] Blocked origin: ${origin}`);
+        callback(new Error(`CORS: origin ${origin} not allowed`));
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Service-Key', 'X-Correlation-ID', 'X-Requested-With'],
+    exposedHeaders: ['X-RateLimit-Limit', 'X-RateLimit-Remaining', 'X-RateLimit-Reset', 'X-Correlation-ID'],
+    maxAge: 86400, // 24 hours
 }));
+// HTTPS enforcement in production
+if (process.env.NODE_ENV === 'production') {
+    app.use((req, res, next) => {
+        if (req.headers['x-forwarded-proto'] !== 'https') {
+            return res.redirect(301, `https://${req.hostname}${req.url}`);
+        }
+        next();
+    });
+}
 // Body parsing
 app.use(express_1.default.json({ limit: '1mb' }));
 app.use(express_1.default.urlencoded({ extended: true }));
@@ -181,9 +245,23 @@ app.use('/api/merchant', merchant_qr_routes_1.default);
 // Bulk QR routes (for batch operations)
 app.use('/api/room-qr/bulk', bulk_qr_routes_1.default);
 // Room QR Manager routes (room-bound system)
-app.use('/api/room-qr/manager', require('./routes/room-qr-manager.routes').default);
+app.use('/api/room-qr/manager', room_qr_manager_routes_1.default);
 // PMS Webhooks (room assignment from Hotel-PMS)
 app.use('/api/webhooks/pms', pms_webhooks_routes_1.default);
+// AI Routes (REZ Mind integration - dynamic pricing, recommendations, insights)
+app.use('/ai', ai_routes_1.default);
+// Digital Check-in Routes (guest check-in, ID verification, digital keys)
+app.use('/api/digital-checkin', digital_checkin_routes_1.default);
+// WhatsApp Business Routes (REZ Marketing platform integration)
+app.use('/api/whatsapp', whatsapp_routes_1.default);
+// Multi-Currency Routes (price conversion and formatting)
+app.use('/api/currency', currency_routes_1.default);
+// Google Hotel Ads Routes (product feed, click/conversion tracking)
+app.use('/api/google-hotel-ads', google_hotel_ads_routes_1.default);
+// Google Hotel Ads webhooks (click tracking, conversion tracking)
+app.use('/api/webhooks/google-hotel-ads', google_hotel_ads_routes_1.default);
+// Google Hotel Ads product feed (Google crawler endpoint)
+app.use('/feeds', google_hotel_ads_routes_1.default);
 // ─── Webhook Endpoints ────────────────────────────────────────────────────────
 // Room service webhook from Hotel OTA
 app.post('/api/webhooks/room-service', async (req, res) => {
@@ -204,13 +282,21 @@ app.post('/api/webhooks/room-service', async (req, res) => {
     }
 });
 // ─── Error Handler ───────────────────────────────────────────────────────────
+// CORS error handler
 app.use((err, _req, res, _next) => {
+    if (err.message.includes('CORS')) {
+        res.status(403).json({
+            success: false,
+            error: 'Not allowed by CORS policy'
+        });
+        return;
+    }
     console.error('[Error]', err.message);
     Sentry.captureException(err);
+    // Never expose internal error details in production
     res.status(500).json({
         success: false,
-        error: 'Internal server error',
-        message: process.env.NODE_ENV === 'development' ? err.message : undefined,
+        error: 'Internal server error'
     });
 });
 // 404 handler
@@ -235,6 +321,14 @@ async function startServer() {
             console.log(`[Shutdown] Received ${signal}, shutting down gracefully...`);
             server.close(async () => {
                 console.log('[Shutdown] HTTP server closed');
+                // Close Redis connection
+                try {
+                    await (0, rateLimiter_1.closeRedisClient)();
+                }
+                catch (err) {
+                    console.error('[Shutdown] Redis disconnect error:', err);
+                }
+                // Disconnect MongoDB
                 try {
                     await (0, mongodb_auth_1.disconnectMongoDB)();
                     console.log('[Shutdown] MongoDB disconnected');
@@ -244,11 +338,11 @@ async function startServer() {
                 }
                 process.exit(0);
             });
-            // Force exit after 30 seconds
+            // Force exit after 15 seconds (reduced from 30)
             setTimeout(() => {
                 console.error('[Shutdown] Forcing exit after timeout');
                 process.exit(1);
-            }, 30000);
+            }, 15000);
         };
         process.on('SIGTERM', () => shutdown('SIGTERM'));
         process.on('SIGINT', () => shutdown('SIGINT'));

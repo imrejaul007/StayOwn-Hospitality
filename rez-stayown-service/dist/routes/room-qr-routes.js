@@ -47,13 +47,16 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const room_qr_1 = require("../room-qr");
+const rateLimiter_1 = require("../middleware/rateLimiter");
+const auth_1 = require("../middleware/auth");
 const router = (0, express_1.Router)();
 // ─── Generate QR ─────────────────────────────────────────────────────────────
 /**
  * Generate QR for a booking
  * POST /api/room-qr/generate
+ * Requires authentication + rate limiting
  */
-router.post('/generate', async (req, res) => {
+router.post('/generate', auth_1.authenticateToken, rateLimiter_1.rateLimiters.qrGenerate, async (req, res) => {
     try {
         const { hotelId, hotelName, hotelSlug, roomId, roomNumber, bookingId, guestId, guestName, guestEmail, guestPhone, checkIn, checkOut } = req.body;
         // Validate required fields
@@ -107,8 +110,9 @@ router.post('/generate', async (req, res) => {
 /**
  * Get QR details for a booking
  * GET /api/room-qr/:bookingId
+ * Requires authentication
  */
-router.get('/:bookingId', async (req, res) => {
+router.get('/:bookingId', auth_1.authenticateToken, async (req, res) => {
     try {
         const { bookingId } = req.params;
         const roomQR = await (0, room_qr_1.getRoomQRByBookingId)(bookingId);
@@ -154,8 +158,9 @@ router.get('/:bookingId', async (req, res) => {
 /**
  * Resend QR notification
  * POST /api/room-qr/:bookingId/send
+ * Requires authentication
  */
-router.post('/:bookingId/send', async (req, res) => {
+router.post('/:bookingId/send', auth_1.authenticateToken, async (req, res) => {
     try {
         const { bookingId } = req.params;
         const { channel } = req.body; // 'email', 'whatsapp', 'sms', or 'all'
@@ -189,8 +194,9 @@ router.post('/:bookingId/send', async (req, res) => {
 /**
  * Validate QR token
  * POST /api/room-qr/validate
+ * Rate limited: 100 requests per minute
  */
-router.post('/validate', async (req, res) => {
+router.post('/validate', rateLimiter_1.rateLimiters.qrValidateHigh, async (req, res) => {
     try {
         const { token } = req.body;
         if (!token) {
@@ -225,8 +231,9 @@ router.post('/validate', async (req, res) => {
 /**
  * Add charge to folio
  * POST /api/room-qr/charge
+ * Requires authentication + rate limiting
  */
-router.post('/charge', async (req, res) => {
+router.post('/charge', auth_1.authenticateToken, rateLimiter_1.rateLimiters.charge, async (req, res) => {
     try {
         const { bookingId, hotelId, roomId, category, description, amountPaise, quantity = 1, unitPricePaise, source = 'manual' } = req.body;
         // Validate required fields
@@ -277,8 +284,9 @@ router.post('/charge', async (req, res) => {
 /**
  * Get charges for a booking
  * GET /api/room-qr/:bookingId/charges
+ * Requires authentication
  */
-router.get('/:bookingId/charges', async (req, res) => {
+router.get('/:bookingId/charges', auth_1.authenticateToken, async (req, res) => {
     try {
         const { bookingId } = req.params;
         const charges = await (0, room_qr_1.getChargesForBooking)(bookingId);
@@ -315,8 +323,9 @@ router.get('/:bookingId/charges', async (req, res) => {
 /**
  * Get checkout bill
  * GET /api/room-qr/:bookingId/bill
+ * Requires authentication
  */
-router.get('/:bookingId/bill', async (req, res) => {
+router.get('/:bookingId/bill', auth_1.authenticateToken, async (req, res) => {
     try {
         const { bookingId } = req.params;
         const bill = await (0, room_qr_1.getCheckoutBill)(bookingId);
@@ -356,8 +365,9 @@ router.get('/:bookingId/bill', async (req, res) => {
 /**
  * Process checkout
  * POST /api/room-qr/:bookingId/checkout
+ * Requires authentication + rate limiting
  */
-router.post('/:bookingId/checkout', async (req, res) => {
+router.post('/:bookingId/checkout', auth_1.authenticateToken, rateLimiter_1.rateLimiters.checkout, async (req, res) => {
     try {
         const { bookingId } = req.params;
         const summary = await (0, room_qr_1.processRoomCheckout)(bookingId);
@@ -394,8 +404,9 @@ router.post('/:bookingId/checkout', async (req, res) => {
 /**
  * Deactivate QR code
  * POST /api/room-qr/:bookingId/deactivate
+ * Requires authentication
  */
-router.post('/:bookingId/deactivate', async (req, res) => {
+router.post('/:bookingId/deactivate', auth_1.authenticateToken, async (req, res) => {
     try {
         const { bookingId } = req.params;
         const success = await (0, room_qr_1.deactivateRoomQR)(bookingId);
@@ -425,8 +436,9 @@ router.post('/:bookingId/deactivate', async (req, res) => {
 /**
  * Get QR statistics for a hotel
  * GET /api/room-qr/hotel/:hotelId/stats
+ * Requires authentication
  */
-router.get('/hotel/:hotelId/stats', async (req, res) => {
+router.get('/hotel/:hotelId/stats', auth_1.authenticateToken, async (req, res) => {
     try {
         const { hotelId } = req.params;
         const stats = await (0, room_qr_1.getHotelQRStats)(hotelId);
@@ -451,11 +463,12 @@ router.get('/hotel/:hotelId/stats', async (req, res) => {
 /**
  * Handle room service webhook events
  * POST /api/room-qr/webhook
+ * Requires service authentication via authenticateService middleware
  */
-router.post('/webhook', async (req, res) => {
+router.post('/webhook', auth_1.authenticateService, async (req, res) => {
     try {
         const { event, bookingId, hotelId, roomId, data } = req.body;
-        // Verify webhook secret (in production)
+        // Additional webhook secret verification for extra security
         const webhookSecret = req.headers['x-webhook-secret'];
         const expectedSecret = process.env.ROOM_QR_WEBHOOK_SECRET;
         if (expectedSecret && webhookSecret !== expectedSecret) {

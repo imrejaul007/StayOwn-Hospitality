@@ -67,8 +67,20 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const qrcode_1 = __importDefault(require("qrcode"));
 const axios_1 = __importDefault(require("axios"));
 const mongoose_1 = __importDefault(require("mongoose"));
-// Configuration
-const JWT_SECRET = process.env.ROOM_QR_JWT_SECRET || process.env.JWT_SECRET || 'room-qr-secret-key-change-in-production';
+const rez_mind_client_1 = require("./services/rez-mind-client");
+// Configuration - FAIL CLOSED if secrets not configured in production
+function getJwtSecret() {
+    const secret = process.env.ROOM_QR_JWT_SECRET || process.env.JWT_SECRET;
+    if (!secret) {
+        if (process.env.NODE_ENV === 'production') {
+            throw new Error('CRITICAL: ROOM_QR_JWT_SECRET or JWT_SECRET must be configured in production');
+        }
+        console.warn('[Security] WARNING: Using fallback JWT secret - DO NOT use in production');
+        return 'dev-only-fallback-secret-do-not-use-in-production';
+    }
+    return secret;
+}
+const JWT_SECRET = getJwtSecret();
 const QR_BASE_URL = process.env.ROOM_QR_BASE_URL || 'https://rez.money/room';
 const HOTEL_OTA_API = process.env.HOTEL_OTA_API_URL || 'http://localhost:3008';
 // ─── MongoDB Schemas ─────────────────────────────────────────────────────────
@@ -438,6 +450,22 @@ async function recordServiceCharge(charge) {
         await serviceCharge.save();
         // Try to sync to StayOwn folio immediately
         await syncChargeToFolio(serviceCharge);
+        // Emit service_ordered event to REZ Mind
+        rez_mind_client_1.rezMindClient.sendEvent({
+            eventType: 'service_ordered',
+            source: 'stayown',
+            data: {
+                bookingId: charge.bookingId,
+                hotelId: charge.hotelId,
+                roomId: charge.roomId,
+                category: charge.category,
+                description: charge.description,
+                amountPaise: charge.amountPaise,
+                quantity: charge.quantity || 1,
+                source: charge.source || 'manual',
+            },
+            timestamp: new Date(),
+        });
         return serviceCharge;
     }
     catch (error) {
@@ -557,7 +585,7 @@ async function processRoomCheckout(bookingId) {
         // Deactivate the QR code
         roomQR.isActive = false;
         await roomQR.save();
-        return {
+        const checkoutSummary = {
             bookingId,
             guestName: roomQR.guestName,
             roomNumber: roomQR.roomNumber,
@@ -572,6 +600,27 @@ async function processRoomCheckout(bookingId) {
             balanceDuePaise: Math.max(0, totalPaise - payments.reduce((sum, p) => sum + p.amountPaise, 0)),
             checkoutTime: new Date()
         };
+        // Emit checkout_completed event to REZ Mind
+        rez_mind_client_1.rezMindClient.sendEvent({
+            eventType: 'checkout_completed',
+            source: 'stayown',
+            userId: roomQR.guestId,
+            data: {
+                bookingId,
+                hotelId: roomQR.hotelId,
+                roomId: roomQR.roomId,
+                roomNumber: roomQR.roomNumber,
+                checkIn: roomQR.checkIn.toISOString(),
+                checkOut: roomQR.checkOut.toISOString(),
+                roomChargesPaise: roomSubtotal,
+                serviceChargesPaise: serviceSubtotal,
+                taxesPaise,
+                totalPaise,
+                balanceDuePaise: checkoutSummary.balanceDuePaise,
+            },
+            timestamp: new Date(),
+        });
+        return checkoutSummary;
     }
     catch (error) {
         console.error('[RoomQR] Checkout processing failed:', error);
@@ -654,6 +703,21 @@ async function generateAndNotifyRoomQR(config) {
         guestName: config.guestName,
         guestEmail: config.guestEmail,
         guestPhone: config.guestPhone
+    });
+    // 4. Emit room_qr_generated event to REZ Mind
+    rez_mind_client_1.rezMindClient.sendEvent({
+        eventType: 'room_qr_generated',
+        source: 'stayown',
+        userId: config.guestId,
+        data: {
+            bookingId: config.bookingId,
+            hotelId: config.hotelId,
+            roomId: config.roomId,
+            roomNumber: config.roomNumber,
+            checkIn: config.checkIn.toISOString(),
+            checkOut: config.checkOut.toISOString(),
+        },
+        timestamp: new Date(),
     });
     console.log(`[RoomQR] Generated and notified for booking ${config.bookingId}`);
     return roomQR;

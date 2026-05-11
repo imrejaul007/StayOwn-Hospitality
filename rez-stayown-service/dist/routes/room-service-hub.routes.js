@@ -15,6 +15,7 @@ const room_service_hub_1 = require("../services/room-service-hub");
 const feedback_service_1 = require("../services/feedback-service");
 const auth_1 = require("../middleware/auth");
 const rateLimiter_1 = require("../middleware/rateLimiter");
+const rez_mind_client_1 = require("../services/rez-mind-client");
 const router = (0, express_1.Router)();
 // ─── Get Room Service Info ─────────────────────────────────────────────────────
 /**
@@ -290,6 +291,25 @@ router.post('/feedback', rateLimiter_1.rateLimiters.general, async (req, res) =>
                 feedbackId: result.feedbackId,
                 thankYouMessage: result.thankYouMessage,
             },
+        });
+        // Emit feedback_submitted event to REZ Mind
+        rez_mind_client_1.rezMindClient.sendEvent({
+            eventType: 'feedback_submitted',
+            source: 'stayown',
+            userId: isAnonymous ? undefined : guestId,
+            data: {
+                feedbackId: result.feedbackId,
+                bookingId,
+                hotelId,
+                overallRating,
+                serviceRatings: serviceRatings || [],
+                recommendLikelihood: recommendLikelihood ?? 7,
+                stayType,
+                roomType,
+                source: source || 'checkout_screen',
+                textComment: textComment || null,
+            },
+            timestamp: new Date(),
         });
     }
     catch (error) {

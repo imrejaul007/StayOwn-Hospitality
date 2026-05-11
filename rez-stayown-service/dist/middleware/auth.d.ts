@@ -48,4 +48,17 @@ export declare function optionalAuth(req: Request, _res: Response, next: NextFun
  * Generate a service token for internal use
  */
 export declare function generateServiceToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): string;
+/**
+ * Validate API key for programmatic access
+ * Accepts either:
+ * - x-api-key header
+ * - Bearer token with 'service' role
+ * - Service key header (x-service-key)
+ */
+export declare function validateApiKey(req: Request, res: Response, next: NextFunction): void;
+/**
+ * Verify WhatsApp webhook signature (Meta)
+ * CRITICAL: Implements HMAC-SHA256 signature verification
+ */
+export declare function verifyWebhookSignature(req: Request, res: Response, next: NextFunction): void;
 //# sourceMappingURL=auth.d.ts.map

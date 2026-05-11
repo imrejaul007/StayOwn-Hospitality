@@ -34,7 +34,7 @@ export interface ISLARecord {
     staffName?: string;
     notes?: string;
 }
-export declare const SLARecord: mongoose.Model<any, {}, {}, {}, any, any>;
+export declare const SLARecord: mongoose.Model<any, {}, {}, {}, any, any, any>;
 export declare class SLAMonitorService {
     /**
      * Create a new SLA record when a service request is created
