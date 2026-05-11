@@ -1,0 +1,2 @@
+- for reference for any context whenever u need & 'c:\Users\Mukul raj\Downloads\project-bolt-sb1-vhvvuqkj\project\.claude\context' go to this folder and read any file if needed
+- for creating any new test file or for searching for any test file use this folder & 'c:\Users\Mukul raj\Downloads\project-bolt-sb1-vhvvuqkj\project\test'

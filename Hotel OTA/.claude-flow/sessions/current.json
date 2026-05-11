@@ -1,0 +1,21 @@
+{
+  "id": "session-1776061813332",
+  "startedAt": "2026-04-13T06:30:13.332Z",
+  "cwd": "/Users/rejaulkarim/Documents/ReZ Full App/Hotel OTA",
+  "context": {
+    "lastMatchedPatterns": [
+      "mem-reference_services_urls-all-rez-repos--18-total-",
+      "mem-project_rezapp-rez-consumer-app--nuqta-master",
+      "mem-project_api_gateway----",
+      "mem-reference_services_urls-infrastructure",
+      "mem-project_ads_architecture----"
+    ]
+  },
+  "metrics": {
+    "edits": 36,
+    "commands": 0,
+    "tasks": 0,
+    "errors": 0
+  },
+  "updatedAt": "2026-04-14T02:50:31.335Z"
+}

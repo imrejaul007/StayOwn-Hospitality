@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE PENTOUZ Hotel Booking Widget Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .widget-demo {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .widget-demo h2 {
+            margin-top: 0;
+            color: #333;
+        }
+        .widget-demo p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        .buttons {
+            margin: 20px 0;
+        }
+        .btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background: #2563eb;
+        }
+        .btn-secondary {
+            background: #6b7280;
+        }
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .status.success {
+            background: #d1fae5;
+            border: 1px solid #10b981;
+            color: #065f46;
+        }
+        .status.error {
+            background: #fee2e2;
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏨 THE PENTOUZ Hotel Booking Widget Test Page</h1>
+        <p>This page demonstrates the embeddable booking widgets for THE PENTOUZ Hotel Management System.</p>
+
+        <!-- Inline Widget Demo -->
+        <div class="widget-demo">
+            <h2>1. Inline Widget</h2>
+            <p>This widget embeds directly into the page content, perfect for dedicated booking pages.</p>
+
+            <!-- Widget Container -->
+            <div id="booking-widget-main-booking-widget"></div>
+
+            <div class="code-block"><!-- Hotel Booking Widget -->
+&lt;div id="booking-widget-main-booking-widget"&gt;&lt;/div&gt;
+&lt;script&gt;
+  (function() {
+    var script = document.createElement('script');
+    script.src = 'http://localhost:4000/widget.js';
+    script.async = true;
+    script.onload = function() {
+      HotelBookingWidget.init({
+        widgetId: 'main-booking-widget',
+        type: 'inline',
+        theme: {
+          primaryColor: '#3b82f6',
+          secondaryColor: '#1d4ed8',
+          textColor: '#1f2937',
+          borderRadius: '8px',
+          fontFamily: 'Inter'
+        },
+        openInNewTab: false,
+        bookingUrl: 'http://localhost:3000/booking'
+      });
+    };
+    document.head.appendChild(script);
+  })();
+&lt;/script&gt;
+&lt;!-- End Hotel Booking Widget --&gt;</div>
+        </div>
+
+        <!-- Popup Widget Demo -->
+        <div class="widget-demo">
+            <h2>2. Popup Widget</h2>
+            <p>This widget appears as an overlay popup when triggered, great for call-to-action buttons.</p>
+
+            <div class="buttons">
+                <button class="btn" onclick="showPopupWidget()">Show Popup Widget</button>
+            </div>
+
+            <div class="code-block"><!-- Hotel Booking Widget Popup -->
+&lt;button onclick="HotelBookingWidget.show()"&gt;Book Now&lt;/button&gt;
+&lt;script&gt;
+  (function() {
+    var script = document.createElement('script');
+    script.src = 'http://localhost:4000/widget.js';
+    script.async = true;
+    script.onload = function() {
+      HotelBookingWidget.init({
+        widgetId: 'popup-promo-widget',
+        type: 'popup',
+        theme: {
+          primaryColor: '#dc2626',
+          secondaryColor: '#fef2f2',
+          textColor: '#1f2937'
+        }
+      });
+    };
+    document.head.appendChild(script);
+  })();
+&lt;/script&gt;</div>
+        </div>
+
+        <!-- Floating Widget Demo -->
+        <div class="widget-demo">
+            <h2>3. Floating Widget</h2>
+            <p>This widget appears as a floating button in the bottom-right corner, perfect for persistent booking access.</p>
+
+            <div class="buttons">
+                <button class="btn" onclick="showFloatingWidget()">Show Floating Widget</button>
+                <button class="btn btn-secondary" onclick="hideFloatingWidget()">Hide Floating Widget</button>
+            </div>
+
+            <div class="code-block"><!-- Hotel Booking Widget Floating -->
+&lt;script&gt;
+  (function() {
+    var script = document.createElement('script');
+    script.src = 'http://localhost:4000/widget.js';
+    script.async = true;
+    script.onload = function() {
+      HotelBookingWidget.init({
+        widgetId: 'mobile-floating-widget',
+        type: 'floating',
+        autoShow: true,
+        autoShowDelay: 3000,
+        theme: {
+          primaryColor: '#059669',
+          secondaryColor: '#ecfdf5'
+        }
+      });
+    };
+    document.head.appendChild(script);
+  })();
+&lt;/script&gt;</div>
+        </div>
+
+        <!-- Analytics Demo -->
+        <div class="widget-demo">
+            <h2>4. Widget Analytics & Tracking</h2>
+            <p>All widgets automatically track impressions, clicks, conversions, and user behavior for detailed analytics.</p>
+
+            <div class="buttons">
+                <button class="btn" onclick="testTracking()">Test Tracking Event</button>
+                <button class="btn btn-secondary" onclick="getAnalytics()">Get Widget Analytics</button>
+            </div>
+
+            <div id="analytics-result" class="status" style="display: none;"></div>
+
+            <div class="code-block">// Widgets automatically track:
+- Impressions (when widget loads)
+- Clicks (when user interacts)
+- Conversions (when booking is completed)
+- Device/Browser information
+- Geographic data
+- Session behavior
+
+// Manual tracking (optional):
+HotelBookingWidget.track('custom_event', {
+  customData: 'value',
+  userId: 'guest123'
+});</div>
+        </div>
+
+        <!-- Integration Info -->
+        <div class="widget-demo">
+            <h2>5. Integration Features</h2>
+            <p>Advanced features available for production use:</p>
+
+            <ul>
+                <li><strong>CORS Enabled</strong> - Works on any external website</li>
+                <li><strong>Real-time Analytics</strong> - Performance tracking and conversion measurement</li>
+                <li><strong>Responsive Design</strong> - Works on desktop, tablet, and mobile devices</li>
+                <li><strong>Customizable Themes</strong> - Match your website's branding</li>
+                <li><strong>A/B Testing Ready</strong> - Test different widget variations</li>
+                <li><strong>UTM Parameter Tracking</strong> - Campaign attribution and source tracking</li>
+                <li><strong>Conversion Attribution</strong> - Track booking sources and ROI</li>
+                <li><strong>Promo Code Support</strong> - Automatic discount application</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Widget Scripts -->
+    <script>
+        // Initialize inline widget
+        (function() {
+            var script = document.createElement('script');
+            script.src = 'http://localhost:4000/widget.js';
+            script.async = true;
+            script.onload = function() {
+                // Initialize inline widget
+                HotelBookingWidget.init({
+                    widgetId: 'main-booking-widget',
+                    type: 'inline',
+                    theme: {
+                        primaryColor: '#3b82f6',
+                        secondaryColor: '#1d4ed8',
+                        textColor: '#1f2937',
+                        borderRadius: '8px',
+                        fontFamily: 'Inter'
+                    },
+                    openInNewTab: false,
+                    bookingUrl: 'http://localhost:3000/booking'
+                });
+            };
+            document.head.appendChild(script);
+        })();
+
+        // Global widget instances for testing
+        let popupWidget = null;
+        let floatingWidget = null;
+
+        function showPopupWidget() {
+            if (!popupWidget) {
+                popupWidget = Object.create(HotelBookingWidget);
+                popupWidget.init({
+                    widgetId: 'popup-promo-widget',
+                    type: 'popup',
+                    theme: {
+                        primaryColor: '#dc2626',
+                        secondaryColor: '#fef2f2',
+                        textColor: '#1f2937'
+                    }
+                });
+            }
+            popupWidget.show();
+        }
+
+        function showFloatingWidget() {
+            if (!floatingWidget) {
+                floatingWidget = Object.create(HotelBookingWidget);
+                floatingWidget.init({
+                    widgetId: 'mobile-floating-widget',
+                    type: 'floating',
+                    autoShow: false,
+                    theme: {
+                        primaryColor: '#059669',
+                        secondaryColor: '#ecfdf5'
+                    }
+                });
+            }
+            floatingWidget.show();
+        }
+
+        function hideFloatingWidget() {
+            if (floatingWidget) {
+                floatingWidget.close();
+            }
+        }
+
+        function testTracking() {
+            if (typeof HotelBookingWidget !== 'undefined') {
+                HotelBookingWidget.track('test_event', {
+                    testData: 'Demo tracking event',
+                    timestamp: new Date().toISOString()
+                });
+
+                const result = document.getElementById('analytics-result');
+                result.className = 'status success';
+                result.style.display = 'block';
+                result.textContent = '✅ Tracking event sent successfully!';
+
+                setTimeout(() => {
+                    result.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        async function getAnalytics() {
+            const result = document.getElementById('analytics-result');
+            result.style.display = 'block';
+            result.className = 'status';
+            result.textContent = 'Loading analytics...';
+
+            try {
+                // This would require authentication in a real scenario
+                const response = await fetch('http://localhost:4000/api/v1/booking-engine/widgets/performance/summary');
+                const data = await response.json();
+
+                if (data.success) {
+                    result.className = 'status success';
+                    result.innerHTML = `
+                        <strong>📊 Widget Performance Summary:</strong><br>
+                        • Total Impressions: ${data.data.summary.totalImpressions.toLocaleString()}<br>
+                        • Total Clicks: ${data.data.summary.totalClicks.toLocaleString()}<br>
+                        • Total Conversions: ${data.data.summary.totalConversions.toLocaleString()}<br>
+                        • Overall Conversion Rate: ${data.data.summary.overallConversionRate.toFixed(2)}%<br>
+                        • Total Revenue: ₹${data.data.summary.totalRevenue.toLocaleString()}
+                    `;
+                } else {
+                    throw new Error(data.message || 'Failed to fetch analytics');
+                }
+            } catch (error) {
+                result.className = 'status error';
+                result.textContent = `❌ Analytics fetch failed: ${error.message}. (Note: Authentication required for analytics)`;
+            }
+        }
+
+        // Log widget events for testing
+        window.addEventListener('message', function(event) {
+            if (event.data && event.data.type === 'widget_event') {
+                console.log('Widget Event:', event.data);
+            }
+        });
+    </script>
+</body>
+</html>

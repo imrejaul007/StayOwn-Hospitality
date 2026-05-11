@@ -1,0 +1,41 @@
+{
+  "schema": "phase5-verification-v1",
+  "updated": "2026-03-27",
+  "environment": "local-dev",
+  "runs": [
+    {
+      "id": "backend-test-unit-2026-03-27",
+      "command": "cd backend && npm run test:unit",
+      "result": "partial",
+      "notes": "18 suites: 17 passed when MongoMemoryServer binds; bookingOverlap.test.js can fail with EACCES on Windows. Auth/booking server-import tests moved out of unit/ to integration/."
+    },
+    {
+      "id": "backend-test-integration-gate-2026-03-27",
+      "command": "cd backend && npm run test:integration:gate",
+      "result": "pass",
+      "notes": "Runs multiProperty.integration.test.js only (CI gate)."
+    },
+    {
+      "id": "backend-test-integration",
+      "command": "cd backend && npm run test:integration",
+      "result": "not_recorded",
+      "notes": "Full integration folder; long duration; watch for async logger noise after teardown."
+    },
+    {
+      "id": "playwright-e2e",
+      "command": "npm run test:e2e -- --project=chromium",
+      "result": "not_recorded",
+      "notes": "Requires Playwright browsers; uses webServer in playwright.config.ts."
+    }
+  ],
+  "manual_journeys": [
+    {
+      "name": "Availability hotelId enforcement (FAB-017)",
+      "status": "pending_record",
+      "steps": [
+        "GET /api/v1/availability/check without hotelId → 400",
+        "GET with hotelId + dates → 200 scoped to property"
+      ]
+    }
+  ]
+}

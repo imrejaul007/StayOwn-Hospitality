@@ -1,0 +1,327 @@
+/* Mobile-First Meet-Up Interface Styles */
+
+/* Touch-friendly button sizing */
+.meetup-btn-touch {
+  @apply min-h-[44px] min-w-[44px] px-4 py-3;
+}
+
+/* Swipe gesture support */
+.meetup-swipeable {
+  touch-action: pan-x pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Card enhancements for mobile */
+.meetup-card-mobile {
+  @apply p-4 rounded-lg shadow-sm border border-gray-200;
+  min-height: 120px;
+  transition: all 0.2s ease-in-out;
+}
+
+.meetup-card-mobile:active {
+  @apply scale-[0.98] shadow-md;
+}
+
+/* Mobile-optimized spacing */
+.meetup-container-mobile {
+  @apply px-4 py-4 space-y-4;
+}
+
+@media (min-width: 768px) {
+  .meetup-container-mobile {
+    @apply px-6 py-6 space-y-6;
+  }
+}
+
+/* Stack layout for mobile */
+.meetup-stack-mobile {
+  @apply flex flex-col space-y-3;
+}
+
+@media (min-width: 640px) {
+  .meetup-stack-mobile {
+    @apply flex-row space-y-0 space-x-4 items-center;
+  }
+}
+
+/* Responsive grid for meet-up items */
+.meetup-grid-responsive {
+  @apply grid grid-cols-1 gap-4;
+}
+
+@media (min-width: 640px) {
+  .meetup-grid-responsive {
+    @apply grid-cols-2 gap-6;
+  }
+}
+
+@media (min-width: 1024px) {
+  .meetup-grid-responsive {
+    @apply grid-cols-3;
+  }
+}
+
+/* Typography adjustments for mobile */
+.meetup-title-mobile {
+  @apply text-lg font-semibold text-gray-900;
+  line-height: 1.3;
+}
+
+@media (min-width: 768px) {
+  .meetup-title-mobile {
+    @apply text-xl;
+    line-height: 1.4;
+  }
+}
+
+.meetup-subtitle-mobile {
+  @apply text-sm text-gray-600;
+}
+
+@media (min-width: 768px) {
+  .meetup-subtitle-mobile {
+    @apply text-base;
+  }
+}
+
+/* Form elements for mobile */
+.meetup-form-mobile .form-group {
+  @apply mb-4;
+}
+
+.meetup-form-mobile label {
+  @apply block text-sm font-medium text-gray-700 mb-1;
+}
+
+.meetup-form-mobile input,
+.meetup-form-mobile select,
+.meetup-form-mobile textarea {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md;
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+  min-height: 44px; /* Touch-friendly */
+}
+
+/* Status badges for mobile */
+.meetup-status-badge {
+  @apply px-2 py-1 text-xs font-medium rounded-full;
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Mobile navigation tabs */
+.meetup-tabs-mobile {
+  @apply flex border-b border-gray-200 overflow-x-auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.meetup-tabs-mobile::-webkit-scrollbar {
+  display: none;
+}
+
+.meetup-tab-mobile {
+  @apply flex-shrink-0 px-4 py-3 text-sm font-medium border-b-2 border-transparent;
+  @apply transition-colors duration-200;
+  min-width: 120px;
+  white-space: nowrap;
+}
+
+.meetup-tab-mobile.active {
+  @apply border-blue-500 text-blue-600;
+}
+
+.meetup-tab-mobile:not(.active) {
+  @apply text-gray-500 hover:text-gray-700;
+}
+
+/* Filter section for mobile */
+.meetup-filters-mobile {
+  @apply bg-gray-50 p-4 border-b border-gray-200;
+}
+
+.meetup-filter-toggle {
+  @apply lg:hidden flex items-center justify-between w-full p-3 bg-white border border-gray-300 rounded-md;
+}
+
+.meetup-filters-content {
+  @apply hidden lg:block space-y-4;
+}
+
+.meetup-filters-content.expanded {
+  @apply block mt-4 space-y-4;
+}
+
+/* Modal adjustments for mobile */
+.meetup-modal-mobile {
+  @apply fixed inset-0 z-50 overflow-y-auto;
+}
+
+.meetup-modal-mobile .modal-content {
+  @apply min-h-screen lg:min-h-0 lg:max-h-[90vh] w-full lg:max-w-4xl;
+  @apply lg:my-8 lg:mx-auto lg:rounded-lg lg:shadow-xl;
+  @apply bg-white;
+}
+
+.meetup-modal-mobile .modal-body {
+  @apply p-4 lg:p-6 overflow-y-auto;
+  max-height: calc(100vh - 120px);
+}
+
+@media (min-width: 1024px) {
+  .meetup-modal-mobile .modal-body {
+    max-height: calc(90vh - 120px);
+  }
+}
+
+/* Loading states */
+.meetup-loading-mobile {
+  @apply flex items-center justify-center py-8 lg:py-12;
+}
+
+.meetup-loading-spinner {
+  @apply animate-spin h-6 w-6 lg:h-8 lg:w-8 text-blue-600;
+}
+
+/* Empty states */
+.meetup-empty-state {
+  @apply text-center py-8 lg:py-12 px-4;
+}
+
+.meetup-empty-icon {
+  @apply w-12 h-12 lg:w-16 lg:h-16 text-gray-300 mx-auto mb-4;
+}
+
+.meetup-empty-title {
+  @apply text-lg lg:text-xl font-semibold text-gray-900 mb-2;
+}
+
+.meetup-empty-description {
+  @apply text-sm lg:text-base text-gray-600;
+}
+
+/* Action buttons for mobile */
+.meetup-action-buttons {
+  @apply flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-200;
+}
+
+.meetup-action-buttons .btn {
+  @apply w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2;
+  @apply text-sm font-medium rounded-md transition-colors duration-200;
+  min-height: 44px;
+}
+
+.meetup-action-buttons .btn-primary {
+  @apply bg-blue-600 text-white hover:bg-blue-700;
+}
+
+.meetup-action-buttons .btn-secondary {
+  @apply bg-gray-100 text-gray-700 hover:bg-gray-200;
+}
+
+.meetup-action-buttons .btn-danger {
+  @apply bg-red-600 text-white hover:bg-red-700;
+}
+
+/* Swipe animations */
+@keyframes swipeLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+@keyframes swipeRight {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+
+.meetup-swipe-left {
+  animation: swipeLeft 0.3s ease-in-out forwards;
+}
+
+.meetup-swipe-right {
+  animation: swipeRight 0.3s ease-in-out forwards;
+}
+
+/* Pull-to-refresh indicator */
+.meetup-pull-refresh {
+  @apply flex items-center justify-center py-4 text-gray-500;
+  transform: translateY(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.meetup-pull-refresh.active {
+  transform: translateY(0);
+}
+
+/* Floating action button for mobile */
+.meetup-fab {
+  @apply fixed bottom-6 right-6 z-40;
+  @apply w-14 h-14 bg-blue-600 text-white rounded-full shadow-lg;
+  @apply flex items-center justify-center;
+  @apply transition-all duration-200;
+}
+
+.meetup-fab:hover {
+  @apply bg-blue-700 shadow-xl scale-110;
+}
+
+.meetup-fab:active {
+  @apply scale-95;
+}
+
+/* Progressive Web App specific styles */
+.meetup-pwa-safe-area {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Dark mode support for mobile */
+@media (prefers-color-scheme: dark) {
+  .meetup-card-mobile {
+    @apply bg-gray-800 border-gray-700 text-white;
+  }
+
+  .meetup-filters-mobile {
+    @apply bg-gray-900;
+  }
+
+  .meetup-modal-mobile .modal-content {
+    @apply bg-gray-800 text-white;
+  }
+}
+
+/* Accessibility improvements for mobile */
+.meetup-focus-visible {
+  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+}
+
+.meetup-sr-only {
+  @apply sr-only;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .meetup-card-mobile {
+    @apply border-2 border-black;
+  }
+
+  .meetup-status-badge {
+    @apply border border-black;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .meetup-card-mobile,
+  .meetup-fab,
+  .meetup-tab-mobile {
+    transition: none;
+  }
+
+  .meetup-swipe-left,
+  .meetup-swipe-right {
+    animation: none;
+  }
+}

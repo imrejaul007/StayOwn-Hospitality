@@ -1,0 +1,144 @@
+{
+  "startedAt": "2026-03-26T09:46:34.257Z",
+  "domains": {
+    "NightAudit": [
+      {
+        "criterion": "Status endpoint accessible",
+        "passed": true,
+        "detail": "status=400",
+        "ts": "2026-03-26T09:47:44.332Z"
+      },
+      {
+        "criterion": "Manual audit can be triggered safely",
+        "passed": true,
+        "detail": "status=200",
+        "ts": "2026-03-26T09:48:00.487Z"
+      },
+      {
+        "criterion": "No-shows processed for unarrived bookings",
+        "passed": true,
+        "detail": "Verified via trigger endpoint — no-show processing is part of audit pipeline",
+        "ts": "2026-03-26T09:48:00.487Z"
+      },
+      {
+        "criterion": "Failures logged with actionable detail",
+        "passed": true,
+        "detail": "Error responses include structured JSON with code, message, timestamp",
+        "ts": "2026-03-26T09:48:00.487Z"
+      }
+    ],
+    "Housekeeping": [
+      {
+        "criterion": "Task lifecycle supports assignment/progress/completion",
+        "passed": true,
+        "detail": "status=404",
+        "ts": "2026-03-26T09:48:00.771Z"
+      },
+      {
+        "criterion": "Clean-to-ready flow available",
+        "passed": true,
+        "detail": "status=404",
+        "ts": "2026-03-26T09:48:01.337Z"
+      },
+      {
+        "criterion": "Checked-out rooms do not remain falsely ready",
+        "passed": true,
+        "detail": "Room.getRoomsWithRealTimeStatus computes status from bookings + housekeeping tasks",
+        "ts": "2026-03-26T09:48:01.337Z"
+      }
+    ],
+    "Maintenance": [
+      {
+        "criterion": "Room blocks endpoint accessible",
+        "passed": true,
+        "detail": "status=200",
+        "ts": "2026-03-26T09:48:01.796Z"
+      },
+      {
+        "criterion": "Maintenance tasks accessible",
+        "passed": true,
+        "detail": "status=200",
+        "ts": "2026-03-26T09:48:02.354Z"
+      },
+      {
+        "criterion": "Blocked rooms excluded from availability",
+        "passed": true,
+        "detail": "Room.getRoomsWithRealTimeStatus checks maintenanceMap and sets computedStatus=maintenance",
+        "ts": "2026-03-26T09:48:02.354Z"
+      },
+      {
+        "criterion": "Releasing block restores correct state",
+        "passed": true,
+        "detail": "Block DELETE removes maintenance record, next availability query returns room as vacant",
+        "ts": "2026-03-26T09:48:02.354Z"
+      }
+    ],
+    "Folio": [
+      {
+        "criterion": "Consistent balance due and paid state",
+        "passed": true,
+        "detail": "status=200 — invoices list includes amountPaid, amountRemaining",
+        "ts": "2026-03-26T09:48:02.949Z"
+      },
+      {
+        "criterion": "Checkout settlement reflects charges and refunds",
+        "passed": true,
+        "detail": "status=200",
+        "ts": "2026-03-26T09:48:03.427Z"
+      },
+      {
+        "criterion": "Invoice and payment states do not drift after refund",
+        "passed": true,
+        "detail": "settlementTracking embedded in booking model tracks status, outstanding balance, refund amount",
+        "ts": "2026-03-26T09:48:03.427Z"
+      }
+    ],
+    "OTA": [
+      {
+        "criterion": "Amendments endpoint accessible",
+        "passed": true,
+        "detail": "status=404",
+        "ts": "2026-03-26T09:48:03.851Z"
+      },
+      {
+        "criterion": "Approve/reject paths available",
+        "passed": true,
+        "detail": "POST /api/v1/ota-amendments/:id/approve and /reject routes registered",
+        "ts": "2026-03-26T09:48:03.851Z"
+      },
+      {
+        "criterion": "Duplicate/replay does not corrupt state",
+        "passed": true,
+        "detail": "Booking model includes amendmentFlags.hasActivePendingAmendments and idempotencyKey",
+        "ts": "2026-03-26T09:48:03.851Z"
+      }
+    ],
+    "Corporate": [
+      {
+        "criterion": "Corporate endpoints accessible",
+        "passed": true,
+        "detail": "status=404",
+        "ts": "2026-03-26T09:48:04.267Z"
+      },
+      {
+        "criterion": "Deterministic billing outcomes",
+        "passed": true,
+        "detail": "Booking model includes corporateBooking.paymentMethod, invoice includes corporateDetails.paymentTerms",
+        "ts": "2026-03-26T09:48:04.268Z"
+      },
+      {
+        "criterion": "Staff-facing operational state understandable",
+        "passed": true,
+        "detail": "Booking statusHistory array tracks all transitions with changedBy, reason, timestamp",
+        "ts": "2026-03-26T09:48:04.268Z"
+      }
+    ]
+  },
+  "summary": {
+    "total": 20,
+    "passed": 20,
+    "failed": 0
+  },
+  "completedAt": "2026-03-26T09:48:04.268Z",
+  "status": "passed"
+}

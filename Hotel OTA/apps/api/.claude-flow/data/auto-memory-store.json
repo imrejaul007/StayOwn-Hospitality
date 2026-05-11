@@ -1,0 +1,717 @@
+[
+  {
+    "id": "mem-MEMORY-memory-index",
+    "key": "memory-index",
+    "content": "- [project_overview.md](project_overview.md) — Hotel OTA platform overview, tech stack, current build state",
+    "summary": "Memory Index",
+    "namespace": "core",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-Hotel-OTA/memory/MEMORY.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007436
+  },
+  {
+    "id": "mem-project_overview----",
+    "key": "-",
+    "content": "name: Hotel OTA Platform - Project Overview\ndescription: Decentralised hotel-owned OTA with dual coin rewards, ReZ integration, ownership mining. Phase 1 MVP built.\ntype: project\n---\n\nHotel OTA platform - decentralised hotel-owned Online Travel Agency.\n\n**Why:** Building a hotel booking platform where hotels earn equity over time via performance. Dual coin system (OTA Coin + ReZ Coin). Bangalore launch with 30 hotels.\n\n**How to apply:** All specs are in 6 MD files (01-06) at project root. Follow",
+    "summary": "---",
+    "namespace": "project_overview",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-Hotel-OTA/memory/project_overview.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007437
+  },
+  {
+    "id": "mem-project_overview-tech-stack",
+    "key": "tech-stack",
+    "content": "- Backend: Node.js + Express + PostgreSQL + Prisma + Redis + BullMQ\n- Hotel Panel: Next.js (port 3001)\n- Admin Panel: Next.js (port 3002)\n- Mobile: React Native (Expo)\n- Payments: Razorpay (lazy-init, dev mode returns mocks)",
+    "summary": "Tech Stack",
+    "namespace": "project_overview",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-Hotel-OTA/memory/project_overview.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007437
+  },
+  {
+    "id": "mem-project_overview-current-state--phase-1-built-",
+    "key": "current-state-phase-1-built-",
+    "content": "- API: 30+ endpoints, all Phase 1 services, zero TS errors\n- Database: 16 Prisma models, seeded with 4 hotels + earn/burn rules + admin user\n- PostgreSQL via Postgres.app, Redis via Homebrew\n- Admin login: admin@ota.com / admin123\n- Hotel staff OTP: check console in dev mode",
+    "summary": "Current State (Phase 1 built)",
+    "namespace": "project_overview",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-Hotel-OTA/memory/project_overview.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007437
+  },
+  {
+    "id": "mem-MEMORY-memory-index",
+    "key": "memory-index",
+    "content": "- [feedback_autonomy.md](feedback_autonomy.md) — Full autonomy granted: read/edit/run anything without asking permission\n- [feedback_git_email.md](feedback_git_email.md) — Always use work@rez.money as git commit email (Vercel blocks deploys otherwise)\n- [user_founder.md](user_founder.md) — User is REZ founder, strategic thinker, values brutal honesty\n- [project_rez_strategy.md](project_rez_strategy.md) — REZ must become habit layer, not feature app. Key gaps and execution plan reference.\n- [refe",
+    "summary": "Memory Index",
+    "namespace": "core",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/MEMORY.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007455
+  },
+  {
+    "id": "mem-feedback_autonomy----",
+    "key": "-",
+    "content": "name: Full Autonomy Permission\ndescription: User grants blanket permission to read/edit/create any file and run any command without asking\ntype: feedback\n---\n\nWork fully autonomously — read, edit, create, and run anything needed without asking for permission each time.\n\n**Why:** User finds repeated permission prompts disruptive and has explicitly granted blanket authorization for all file operations, bash commands, and edits across the entire ReZ Full App workspace.\n\n**How to apply:** Never paus",
+    "summary": "---",
+    "namespace": "feedback_autonomy",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/feedback_autonomy.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007456
+  },
+  {
+    "id": "mem-feedback_git_email----",
+    "key": "-",
+    "content": "name: Git commit email\ndescription: Always use work@rez.money as git commit author email for all REZ repos\ntype: feedback\n---\n\nAlways use `work@rez.money` as the git author email when making commits across all REZ repositories.\n\n**Why:** Vercel deployment gets blocked when the committer email can't be associated with the GitHub user. `work@rez.money` is the correct GitHub-linked email for imrejaul007.\n\n**How to apply:** Before committing in any REZ repo, ensure `git config user.email` is `work@r",
+    "summary": "---",
+    "namespace": "feedback_git_email",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/feedback_git_email.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007466
+  },
+  {
+    "id": "mem-project_adbazaar----",
+    "key": "-",
+    "content": "name: AdBazaar Platform\ndescription: India's first closed-loop ad marketplace. Next.js + Supabase. GitHub: imrejaul007/adBazaar. Live: https://ad-bazaar.vercel.app. Full reference: docs/ADBAZAAR_COMPLETE_REFERENCE.md\ntype: project\n---\n\nAdBazaar is a fully independent Next.js 16 web app — a two-sided marketplace for offline ad inventory (billboards, transit, local businesses, print, influencer, unconventional).\n\n**GitHub:** imrejaul007/adBazaar (branch: main)\n**Live:** https://ad-bazaar.vercel.ap",
+    "summary": "---",
+    "namespace": "project_adbazaar",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_adbazaar.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007468
+  },
+  {
+    "id": "mem-project_adbazaar_go_live----",
+    "key": "-",
+    "content": "name: AdBazaar Go-Live Checklist\ndescription: Complete ops checklist to go live — Supabase setup, migrations, Vercel env vars, REZ backend wiring, and test flow\ntype: project\n---",
+    "summary": "---",
+    "namespace": "project_adbazaar_go_live",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_adbazaar_go_live.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007471
+  },
+  {
+    "id": "mem-project_adbazaar_go_live-status",
+    "key": "status",
+    "content": "- **Deployed at:** https://ad-bazaar.vercel.app\n- **Repo:** imrejaul007/adBazaar (branch: main)\n- **Build:** Passing as of commit b2b91b5\n- **Auth:** Supabase Auth (email + password) — NOT rez-auth-service\n\n**Why:** AdBazaar is a web marketplace with 3 roles (vendor/buyer/admin) tied to Postgres RLS. rez-auth-service is SMS OTP only and MongoDB-based — wrong fit.\n\n---",
+    "summary": "Status",
+    "namespace": "project_adbazaar_go_live",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_adbazaar_go_live.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007471
+  },
+  {
+    "id": "mem-project_adbazaar_go_live-step-1---supabase-project",
+    "key": "step-1-supabase-project",
+    "content": "1. supabase.com → New project → name: `adbazaar`\n2. Settings → API → copy 3 keys (URL, anon, service_role)\n3. SQL Editor → run migrations in order:\n   - `supabase/migrations/001_initial_schema.sql`\n   - `supabase/migrations/002_inquiries_messages.sql`\n   - `supabase/migrations/003_missing_columns.sql`\n   - `supabase/migrations/004_payout_fields.sql`\n   - `supabase/migrations/005_notifications.sql`\n   - `supabase/migrations/006_qr_analytics.sql`\n4. Storage → New bucket → name: `listing-images` → ",
+    "summary": "Step 1 — Supabase Project",
+    "namespace": "project_adbazaar_go_live",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_adbazaar_go_live.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007471
+  },
+  {
+    "id": "mem-project_adbazaar_go_live-step-2---vercel-env-vars",
+    "key": "step-2-vercel-env-vars",
+    "content": "URL: vercel.com/imrejaul007/ad-bazaar/settings/environment-variables\n\n```env\nNEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co\nNEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...\nSUPABASE_SERVICE_ROLE_KEY=eyJ...\n\nRAZORPAY_KEY_ID=rzp_live_xxx\nRAZORPAY_KEY_SECRET=xxx\nNEXT_PUBLIC_RAZORPAY_KEY_ID=rzp_live_xxx\n\nRESEND_API_KEY=re_xxx\n\nNEXT_PUBLIC_GOOGLE_MAPS_API_KEY=AIza...\n\nREZ_API_BASE_URL=https://api.rezapp.com/api\nREZ_INTERNAL_KEY=fa62f9959a629e0ae9f2748c0ce078eb340e3f4eef808d52c52fe4c350d4a5b9\n\nADBAZAAR_WEBHOOK",
+    "summary": "Step 2 — Vercel Env Vars",
+    "namespace": "project_adbazaar_go_live",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_adbazaar_go_live.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007471
+  },
+  {
+    "id": "mem-project_adbazaar_go_live-step-3---rez-backend-on-render",
+    "key": "step-3-rez-backend-on-render",
+    "content": "Service: `rez-backend` on Render → Environment → add:\n\n```env\nADBAZAAR_WEBHOOK_URL=https://ad-bazaar.vercel.app\nADBAZAAR_WEBHOOK_SECRET=<same secret as Vercel>\n```\n\nEdit existing:\n```env\nCORS_ORIGIN=...existing...,https://ad-bazaar.vercel.app\n```\n\n---",
+    "summary": "Step 3 — REZ Backend on Render",
+    "namespace": "project_adbazaar_go_live",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_adbazaar_go_live.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007471
+  },
+  {
+    "id": "mem-project_adbazaar_go_live-step-4---rez-merchant-connecti",
+    "key": "step-4-rez-merchant-connection-flow",
+    "content": "1. Vendor registers on AdBazaar → `/register`\n2. Goes to `/vendor/rez-connect`\n3. Enters REZ Merchant ID (from REZ Merchant App → Profile)\n4. AdBazaar stores `rez_merchant_id` in Supabase `users` table\n5. From now on: QR scans → REZ coins credited to consumers\n6. REZ fires webhooks back → attribution table populated\n7. Vendor sees full ROI at `/vendor/attribution`\n\n---",
+    "summary": "Step 4 — REZ Merchant Connection Flow",
+    "namespace": "project_adbazaar_go_live",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_adbazaar_go_live.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007472
+  },
+  {
+    "id": "mem-project_adbazaar_go_live-key-architecture-decisions",
+    "key": "key-architecture-decisions",
+    "content": "| Decision | Choice | Why |\n|----------|--------|-----|\n| Auth | Supabase Auth | Web-native, email/password, RLS works automatically |\n| DB | Supabase Postgres | Single DB for users + listings + bookings + attribution |\n| Email | Resend (not SendGrid) | AdBazaar-specific, SendGrid is REZ backend only |\n| Payments | Razorpay | Live keys needed (backend currently has test keys) |\n| Storage | Supabase Storage | `listing-images` bucket, public |\n| REZ bridge | webhook + rez_merchant_id | Two auth sy",
+    "summary": "Key Architecture Decisions",
+    "namespace": "project_adbazaar_go_live",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_adbazaar_go_live.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007472
+  },
+  {
+    "id": "mem-project_adbazaar_go_live-build-fix-history--for-context",
+    "key": "build-fix-history-for-context-if-errors-return-",
+    "content": "| Error | Fix |\n|-------|-----|\n| `supabaseUrl is required` at build time | `createServerClient()` lazy init inside function; `export const dynamic = 'force-dynamic'` on server component pages |\n| `useSearchParams()` missing Suspense | Extract to inner component (`BrowseContent`, `CartContent`, `BuyerInquireContent`), wrap default export in `<Suspense>` |\n| `Authorization` header type error | `const h: Record<string,string> = {}; if (t) h['Authorization'] = \\`Bearer ${t}\\`` |\n| `params.id` not a",
+    "summary": "Build Fix History (for context if errors return)",
+    "namespace": "project_adbazaar_go_live",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_adbazaar_go_live.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007472
+  },
+  {
+    "id": "mem-project_ads_architecture----",
+    "key": "-",
+    "content": "name: Ads & Marketing Architecture Plan\ndescription: Two-service ad system architecture — rez-ads-service (in-app) and rez-marketing-service (outbound). Future outside-REZ project to be integrated.\ntype: project\n---\n\nREZ ad system is split into two independent services:\n\n**rez-ads-service** (port 4007, standalone git: imrejaul007/rez-ads-service)\n- In-app visual ads for any REZ ecosystem app\n- Merchant creates → Admin approves → Consumer app serves\n- Will need `appId` field added when sister app",
+    "summary": "---",
+    "namespace": "project_ads_architecture",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_ads_architecture.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007475
+  },
+  {
+    "id": "mem-project_api_gateway----",
+    "key": "-",
+    "content": "name: API Gateway Architecture\ndescription: REZ traffic routes through rez-api-gateway (nginx on Render) — search goes to microservice, rest to monolith\ntype: project\n---\n\nAPI gateway deployed at https://rez-api-gateway.onrender.com (2026-04-03).\n\nConsumer app EXPO_PUBLIC_API_BASE_URL now points at the gateway instead of the monolith directly.\n\n**Why:** Strangler Fig migration — gradually move endpoints from monolith to microservices without changing client code.\n\n**How to apply:**\n- Search/home",
+    "summary": "---",
+    "namespace": "project_api_gateway",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_api_gateway.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007479
+  },
+  {
+    "id": "mem-project_hotel_integration----",
+    "key": "-",
+    "content": "name: Hotel OTA + PMS Integration\ndescription: REZ↔Hotel OTA↔Hotel PMS integration state — auth, coins, webhooks, env vars, key files, deploy URLs\ntype: project\n---\n\nFull integration built between three systems: REZ App, Hotel OTA (PostgreSQL/Prisma), Hotel PMS (MongoDB/Mongoose).\n\n**Why:** REZ users need SSO into OTA and PMS, earn coins per hotel, and bookings need to sync bidirectionally.\n\n**How to apply:** When working on any of these systems, check this memory + `docs/INTEGRATION_RUNBOOK.md`",
+    "summary": "---",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-live-deploy-urls--as-of-2026-0",
+    "key": "live-deploy-urls-as-of-2026-04-08-",
+    "content": "| Service | URL | Platform |\n|---------|-----|----------|\n| **StayOwn (OTA frontend)** | https://hotel-ota-ota-web-five.vercel.app | Vercel |\n| **OTA Admin** | https://hotel-ota-admin.vercel.app | Vercel |\n| **Hotel OTA API** | https://hotel-ota-api.onrender.com (pending — deploying) | Render |\n| **PMS Frontend** | https://rez-hotel-pms.onrender.com | Render Static Site |\n| **PMS Alt** | https://rez-hotel-pms-1.onrender.com | Render Static Site |\n| **PMS Backend** | Render Web Service (separate)",
+    "summary": "Live Deploy URLs (as of 2026-04-08)",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-repo",
+    "key": "repo",
+    "content": "- GitHub: `imrejaul007/hotel-ota`\n- Branch: `main`\n- Monorepo layout: `apps/api`, `apps/ota-web`, `apps/admin`, `packages/database`",
+    "summary": "Repo",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-infrastructure",
+    "key": "infrastructure",
+    "content": "| Component | Details |\n|-----------|---------|\n| **PostgreSQL** | Render managed — `hotel-ota-db` (Singapore, free tier) |\n| **Redis** | Upstash — shared with REZ backend (`rez-redis`, `flexible-ewe-84459.upstash.io`) |\n| **OTA Frontend** | Vercel — auto-deploys on push to main |\n| **OTA Admin** | Vercel — auto-deploys on push to main |\n| **OTA API** | Render Web Service — root dir `apps/api`, build: `npm install && npm run build` |",
+    "summary": "Infrastructure",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-system-map",
+    "key": "system-map",
+    "content": "```\nREZ App → POST /v1/auth/rez-sso (OTA) or POST /auth/rez-sso (PMS)\n       2-step: /auth/validate → /internal/auth/user/:id (x-internal-token)\n       Phone normalize: \"+91xxxxxxxxxx\" → 10-digit\n\nOTA → PMS: HMAC-SHA256 webhook, POST /api/v1/ota-webhooks/rez-ota\nPMS → OTA: x-internal-token, POST /v1/partner/pms/coins/earn + PUT /v1/partner/pms/inventory/…\n```",
+    "summary": "System Map",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-three-level-coin-system",
+    "key": "three-level-coin-system",
+    "content": "- OTA coin (Travel Coins): flat column on CoinWallet\n- REZ coin: synced from REZ wallet service, flat column\n- Hotel brand: HotelBrandCoinBalance(userId, hotelId) junction table — one row per hotel per user\n\nBurn waterfall: OTA → REZ → Hotel brand. 40% max total discount.",
+    "summary": "Three-Level Coin System",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-shared-secrets--must-match-on-",
+    "key": "shared-secrets-must-match-on-both-sides-",
+    "content": "| What | OTA key | PMS key |\n|------|---------|---------|\n| PMS→OTA calls | REZ_OTA_INTERNAL_TOKEN | REZ_OTA_INTERNAL_TOKEN |\n| OTA→PMS webhook | PMS_WEBHOOK_SECRET | REZ_OTA_WEBHOOK_SECRET |\n| REZ↔OTA calls | INTERNAL_SERVICE_TOKEN | INTERNAL_SERVICE_TOKEN |",
+    "summary": "Shared Secrets (must match on both sides)",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-hotel-ota-api-render-environme",
+    "key": "hotel-ota-api-render-environment-variables-complet",
+    "content": "```\nNODE_ENV=production\nDATABASE_URL=postgresql://hotel_ota_db_user:<password>@dpg-d7ackuma2pns73debo70-a/hotel_ota_db\nREDIS_URL=rediss://default:<password>@flexible-ewe-84459.upstash.io:6379\nJWT_SECRET=<generated>\nREFRESH_TOKEN_SECRET=<generated>\nADMIN_JWT_SECRET=<generated>\nINTERNAL_SERVICE_TOKEN=<generated>\nPMS_WEBHOOK_SECRET=<generated>\nREZ_OTA_INTERNAL_TOKEN=<generated>\nREZ_AUTH_SERVICE_URL=https://rez-auth-service.onrender.com\nREZ_WALLET_SERVICE_URL=https://rez-wallet-service-36vo.onrender",
+    "summary": "hotel-ota-api Render Environment Variables (complete set)",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-vercel-environment-variables--",
+    "key": "vercel-environment-variables-add-after-api-is-live",
+    "content": "Both `hotel-ota-ota-web` and `hotel-ota-admin` need:\n```\nNEXT_PUBLIC_API_URL=https://hotel-ota-api.onrender.com/v1\n```",
+    "summary": "Vercel Environment Variables (add after API is live)",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-key-source-files",
+    "key": "key-source-files",
+    "content": "- `apps/api/src/services/pms-webhook.service.ts` — HMAC push OTA→PMS\n- `apps/api/src/routes/partner-pms.routes.ts` — PMS→OTA internal API\n- `apps/api/src/services/rezIntegrationService.ts` — REZ SSO token verify\n- `apps/api/src/config/logger.ts` — simple console logger (no winston dep)\n- `apps/api/src/config/redis.ts` — lazy connect, non-fatal if Redis down\n- `apps/api/src/index.ts` — server starts before BullMQ jobs init (non-blocking)\n- `hotel-pms/…/backend/src/services/rezOtaConnector.js` — P",
+    "summary": "Key source files",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-db-changes--postgresql-",
+    "key": "db-changes-postgresql-",
+    "content": "Migration: `20260406180401_add_hotel_brand_coins`\n- HotelBrandCoinBalance model\n- CoinType enum: added hotel_brand\n- Booking: hotelBrandCoinBurnedPaise\n- Hotel: brandCoinEnabled, brandCoinName, brandCoinSymbol\n- CoinTransaction: hotelId (nullable)",
+    "summary": "DB changes (PostgreSQL)",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-db-changes--mongodb---pms-",
+    "key": "db-changes-mongodb-pms-",
+    "content": "- Hotel.otaConnections.rezOta: { isEnabled, hotelId (OTA UUID), lastSync }\n- User: rezUserId, otaUserId",
+    "summary": "DB changes (MongoDB / PMS)",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-post-deploy-checklist",
+    "key": "post-deploy-checklist",
+    "content": "1. Run Prisma migrations in Render Shell:\n   `cd apps/api && npx prisma migrate deploy --schema=../../packages/database/prisma/schema.prisma`\n2. Add `NEXT_PUBLIC_API_URL` to both Vercel projects\n3. Add real Razorpay keys when going live\n4. Rotate DB password (was exposed in chat on 2026-04-07)\n5. Add Render SPA rewrite rule for PMS frontend: `/* → /index.html`",
+    "summary": "Post-deploy checklist",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-branding",
+    "key": "branding",
+    "content": "- OTA frontend brand name: **StayOwn**\n- PMS/hotel-facing brand: **REZ Hotels**",
+    "summary": "Branding",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_integration-runbook",
+    "key": "runbook",
+    "content": "Full reference: `docs/INTEGRATION_RUNBOOK.md` in ReZ Full App root.",
+    "summary": "Runbook",
+    "namespace": "project_hotel_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007480
+  },
+  {
+    "id": "mem-project_hotel_ota_rez_integration----",
+    "key": "-",
+    "content": "name: Hotel OTA ← REZ Integration Complete\ndescription: REZ SSO, wallet sync, and profile unification for Hotel OTA platform\ntype: project\n---",
+    "summary": "---",
+    "namespace": "project_hotel_ota_rez_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_ota_rez_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007481
+  },
+  {
+    "id": "mem-project_hotel_ota_rez_integration-integration-status----implemen",
+    "key": "integration-status-implemented-2026-04-06-",
+    "content": "Hotel OTA now accepts REZ credentials for single sign-on, shares wallet balances, and unifies user profiles across the ecosystem.",
+    "summary": "Integration Status: ✅ IMPLEMENTED (2026-04-06)",
+    "namespace": "project_hotel_ota_rez_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_ota_rez_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007481
+  },
+  {
+    "id": "mem-project_hotel_ota_rez_integration-what-was-built",
+    "key": "what-was-built",
+    "content": "**Entry Point:** `POST /v1/auth/rez-sso { rez_access_token }`\n\n**Core Components:**\n1. `RezIntegrationService` — handles all REZ API calls (auth + wallet)\n2. SSO auth route — exchanges REZ JWT for OTA JWT\n3. Profile sync — on-demand and automatic background sync\n4. Wallet sync — background non-blocking balance updates\n\n**Key Features:**\n- No secret sharing (verification via REZ's internal API)\n- Phone-based user linking (REZ JWT has no phone, OTA queries it)\n- Graceful timeout handling (wallet s",
+    "summary": "What Was Built",
+    "namespace": "project_hotel_ota_rez_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_ota_rez_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007481
+  },
+  {
+    "id": "mem-project_hotel_ota_rez_integration-files-modified-created",
+    "key": "files-modified-created",
+    "content": "| File | Change |\n|------|--------|\n| `apps/api/src/services/rez-integration.service.ts` | NEW — Core integration logic |\n| `apps/api/src/routes/auth.routes.ts` | ADD `/rez-sso` endpoint |\n| `apps/api/src/routes/user.routes.ts` | ADD `/rez-sync` + auto-sync on profile GET |\n| `apps/api/src/routes/wallet.routes.ts` | ADD auto-sync on wallet GET |\n| `apps/api/src/config/env.ts` | ADD 4 REZ vars, production validation |\n| `.env.example` | ADD placeholders for REZ vars |\n| `INTEGRATION_SUMMARY.md` |",
+    "summary": "Files Modified/Created",
+    "namespace": "project_hotel_ota_rez_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_ota_rez_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007481
+  },
+  {
+    "id": "mem-project_hotel_ota_rez_integration-env-variables--required-for-pr",
+    "key": "env-variables-required-for-prod-",
+    "content": "```\nREZ_AUTH_SERVICE_URL=https://rez-auth-service.onrender.com\nREZ_WALLET_SERVICE_URL=https://rez-wallet-service-36vo.onrender.com\nINTERNAL_SERVICE_TOKEN=<shared-secret>\nREZ_COIN_TO_RUPEE_RATE=0.50\n```",
+    "summary": "Env Variables (Required for Prod)",
+    "namespace": "project_hotel_ota_rez_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_ota_rez_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007481
+  },
+  {
+    "id": "mem-project_hotel_ota_rez_integration-key-design-decisions",
+    "key": "key-design-decisions",
+    "content": "**Why:** No secret sharing between services\n**How:** Hotel OTA calls REZ's internal API to verify tokens + fetch balances\n\n**Why:** Phone as linking key\n**How:** REZ JWT has userId only, OTA queries REZ auth service to get phone\n\n**Why:** Background wallet sync\n**How:** Non-blocking async updates with 300ms timeout; respond with cached balance\n\n**Why:** Coin-to-paise conversion in Hotel OTA\n**How:** REZ wallet returns coins; OTA multiplies by COIN_TO_RUPEE_RATE * 100",
+    "summary": "Key Design Decisions",
+    "namespace": "project_hotel_ota_rez_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_ota_rez_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007481
+  },
+  {
+    "id": "mem-project_hotel_ota_rez_integration-test-plan",
+    "key": "test-plan",
+    "content": "Local dev:\n1. `POST /v1/auth/rez-sso` with valid REZ JWT → should create/link user + return OTA JWT\n2. `GET /v1/user/profile` → should have rez_coin_balance_paise synced\n3. `GET /v1/wallet/` → should trigger async balance update\n4. Test existing OTA user with same phone as REZ → should link without duplicate\n5. Kill REZ service → should gracefully fall back to cached balance\n6. `npm test` & `npm run build` must pass\n\nProduction deploy:\n1. Add the 4 env vars (build fails without them)\n2. No schem",
+    "summary": "Test Plan",
+    "namespace": "project_hotel_ota_rez_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_ota_rez_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007481
+  },
+  {
+    "id": "mem-project_hotel_ota_rez_integration-next-steps",
+    "key": "next-steps",
+    "content": "- [ ] Deploy to staging, test against staging REZ services\n- [ ] Update frontend (REZ app) to call new SSO endpoint\n- [ ] Monitor logs for any REZ service connectivity issues\n- [ ] Test deep linking from REZ → Hotel OTA (use `lastCampaignId`)\n- [ ] Optional: Add webhook for real-time coin balance updates from REZ",
+    "summary": "Next Steps",
+    "namespace": "project_hotel_ota_rez_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_ota_rez_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007481
+  },
+  {
+    "id": "mem-project_hotel_ota_rez_integration-why----design",
+    "key": "why-design",
+    "content": "The SSO flow deliberately avoids token federation (Hotel OTA accepting REZ JWTs directly) because it requires sharing REZ's JWT_SECRET, which violates the security principle of secret scoping. Instead, Hotel OTA acts as a client of REZ's identity + wallet APIs, verifying tokens and fetching data via authenticated internal endpoints. This keeps REZ's secret in REZ and Hotel OTA's secret in Hotel OTA.",
+    "summary": "Why:** Design",
+    "namespace": "project_hotel_ota_rez_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_ota_rez_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007481
+  },
+  {
+    "id": "mem-project_hotel_ota_rez_integration-how-to-apply",
+    "key": "how-to-apply",
+    "content": "When a REZ user wants to use Hotel OTA:\n1. REZ app gets JWT via normal OTP flow\n2. REZ app calls Hotel OTA: `POST /v1/auth/rez-sso { rez_access_token }`\n3. Hotel OTA verifies + links + issues its own JWT\n4. User is now authenticated in Hotel OTA with shared wallet",
+    "summary": "How to Apply",
+    "namespace": "project_hotel_ota_rez_integration",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_hotel_ota_rez_integration.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007481
+  },
+  {
+    "id": "mem-project_pending_migrations----",
+    "key": "-",
+    "content": "name: Pending Prisma Migrations\ndescription: Two schema migrations needed before Hotel OTA deploys — hotel_brand coin expiry hotelId + PMS webhook URL\ntype: project\n---\n\nTwo Prisma migrations must be run before deploying Hotel OTA changes.\n\n**Why:** Schema changes were made for hotel brand coin expiry and PMS auto-sync features but migrations were not run yet.\n\n**How to apply:** Run both in `Hotel OTA/packages/database/` before next deploy:\n\n```bash\nnpx prisma migrate dev --name add_coin_expiry_",
+    "summary": "---",
+    "namespace": "project_pending_migrations",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_pending_migrations.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007483
+  },
+  {
+    "id": "mem-project_rez_strategy----",
+    "key": "-",
+    "content": "name: REZ Product Strategy Direction\ndescription: REZ must become a \"habit layer for local spending\" not a feature super-app. Core loop = visit → save → see reward → level up. Key gaps identified March 2026.\ntype: project\n---\n\nREZ strategic direction is to become \"the default smart savings and loyalty layer for everyday local spending\" — a behavior platform, not a feature app.\n\n**Why:** Business analysis (PDF, March 2026) identified that REZ competes across 8 layers (discovery, cashback, dining,",
+    "summary": "---",
+    "namespace": "project_rez_strategy",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/project_rez_strategy.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007484
+  },
+  {
+    "id": "mem-reference_services_urls----",
+    "key": "-",
+    "content": "name: REZ Platform — All Repos & Services\ndescription: Complete inventory of all 18 REZ repos, deploy URLs, microservice extraction status, endpoints, infra, and env vars\ntype: reference\n---",
+    "summary": "---",
+    "namespace": "reference_services_urls",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/reference_services_urls.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007485
+  },
+  {
+    "id": "mem-reference_services_urls-all-rez-repos--18-total-",
+    "key": "all-rez-repos-18-total-",
+    "content": "### Core Apps (5) — In Production\n\n| # | Service | Repo | Production URL | Visibility |\n|---|---------|------|---------------|------------|\n| 1 | **Backend API** | `imrejaul007/rez-backend` | `https://api.rezapp.com/api` | Private |\n| 2 | **Consumer App** | `imrejaul007/rez-app-consumer` (nuqta-master) | Expo/EAS mobile build | Private |\n| 3 | **Merchant App** | `imrejaul007/rez-app-marchant` | Vercel web + Expo native | Private |\n| 4 | **Admin App** | `imrejaul007/rez-app-admin` | Vercel web + ",
+    "summary": "All REZ Repos (18 total)",
+    "namespace": "reference_services_urls",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/reference_services_urls.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007485
+  },
+  {
+    "id": "mem-reference_services_urls-monolith---microservice-mappin",
+    "key": "monolith-microservice-mapping",
+    "content": "| Monolith File(s) | Extracts To | Repo |\n|-------------------|------------|------|\n| `notificationService.ts`, `emailService.ts` | Notification Service | `rez-notification-events` |\n| `uploadService.ts`, `imageService.ts` | Media Service | `rez-media-events` |\n| `analyticsService.ts`, admin dashboard queries | Analytics Service | `analytics-events` |\n| `gamificationService.ts`, `gamificationQueue.ts` | Gamification Service | `rez-gamification-service` |\n| `routes/merchant/*`, `services/merchant",
+    "summary": "Monolith → Microservice Mapping",
+    "namespace": "reference_services_urls",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/reference_services_urls.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007485
+  },
+  {
+    "id": "mem-reference_services_urls-key-backend-endpoints",
+    "key": "key-backend-endpoints",
+    "content": "| Endpoint | Purpose |\n|----------|---------|\n| `/health` | Liveness (DB + Redis + payment) |\n| `/health/ready` | Readiness probe |\n| `/metrics` | Prometheus (admin auth) |\n| `/api/auth/*` | Consumer auth (OTP) |\n| `/api/merchant/auth/*` | Merchant auth |\n| `/api/admin/*` | Admin panel APIs |\n| `/api/orders/*` | Order lifecycle |\n| `/api/wallet/*` | Wallet ops |\n| `/api/cashback/*` | Cashback forecast/claim |\n| `/api/qr-checkin/*` | QR check-in |",
+    "summary": "Key Backend Endpoints",
+    "namespace": "reference_services_urls",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/reference_services_urls.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007485
+  },
+  {
+    "id": "mem-reference_services_urls-infrastructure",
+    "key": "infrastructure",
+    "content": "| Component | Details |\n|-----------|---------|\n| **Database** | MongoDB (shared single cluster) |\n| **Cache/Queue** | Redis + BullMQ (`gamification-events`, notifications) |\n| **Payments** | Razorpay |\n| **Monitoring** | Sentry (all apps) |\n| **CDN/Hosting** | Vercel (web), EAS (native) |\n| **Service Auth** | `X-Internal-Token` header |\n| **Trace** | `X-Correlation-ID` / `X-Request-ID` via nginx |",
+    "summary": "Infrastructure",
+    "namespace": "reference_services_urls",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/reference_services_urls.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007485
+  },
+  {
+    "id": "mem-reference_services_urls-environment-variables--critica",
+    "key": "environment-variables-critical-",
+    "content": "| Var | Where | Purpose |\n|-----|-------|---------|\n| `INTERNAL_SERVICE_TOKEN` | Backend + docker-compose | Service-to-service auth |\n| `PUBLIC_URL` | Backend | Invoice/shipping label links |\n| `MERCHANT_FRONTEND_URL` | Backend | Merchant email links |\n| `MARKETING_SERVICE_URL` | Backend | Marketing service endpoint |\n| `EXPO_PUBLIC_SENTRY_DSN` | All apps | Error tracking |\n| `EXPO_PUBLIC_API_BASE_URL` | Consumer/Merchant/Admin | Backend API URL |\n| `EXPO_PUBLIC_RAZORPAY_KEY_ID` | Merchant app |",
+    "summary": "Environment Variables (critical)",
+    "namespace": "reference_services_urls",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/reference_services_urls.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007485
+  },
+  {
+    "id": "mem-user_founder----",
+    "key": "-",
+    "content": "name: User is REZ founder/product owner\ndescription: User is founder of REZ, a multi-layer hyperlocal commerce platform (India-first). Thinks deeply about product strategy, competitive positioning, and user psychology.\ntype: user\n---\n\nThe user is the founder/product owner of REZ, a hyperlocal commerce platform. They think at the strategic product level — asking questions like \"what problem are we really solving?\" and \"why will users switch?\" They value brutal honesty over motivation, and want ac",
+    "summary": "---",
+    "namespace": "user_founder",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App/memory/user_founder.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007486
+  },
+  {
+    "id": "mem-MEMORY-memory-index",
+    "key": "memory-index",
+    "content": "- [ReZ Consumer App (nuqta-master)](project_rezapp.md) — Core project context: super-app, Expo Router + Zustand + React Context dual-layer, known bugs, 150+ services, 30+ stores",
+    "summary": "Memory Index",
+    "namespace": "core",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App-rezapp/memory/MEMORY.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007488
+  },
+  {
+    "id": "mem-project_rezapp----",
+    "key": "-",
+    "content": "name: ReZ Consumer App (nuqta-master)\ndescription: Core project context — purpose, stack, architecture, known bugs\ntype: project\n---",
+    "summary": "---",
+    "namespace": "project_rezapp",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App-rezapp/memory/project_rezapp.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007489
+  },
+  {
+    "id": "mem-project_rezapp-rez-consumer-app--nuqta-master",
+    "key": "rez-consumer-app-nuqta-master-",
+    "content": "**What it is:** REZ Consumer super-app (codename \"Nuqta\") — React Native/Expo lifestyle & commerce platform targeting India/Middle East. Features: shopping, dining, travel (flight/hotel/train/bus/cab), financial tools (wallet, bill payment, recharge, gold savings, insurance, khata), gamification (coin system, scratch cards, minigames), social/UGC content, loyalty/subscription programs, booking/appointments.\n\n**Location:** `/Users/rejaulkarim/Documents/ReZ Full App/rezapp/nuqta-master`\n\n**Tech st",
+    "summary": "ReZ Consumer App (nuqta-master)",
+    "namespace": "project_rezapp",
+    "type": "semantic",
+    "metadata": {
+      "sourceFile": "/Users/rejaulkarim/.claude/projects/-Users-rejaulkarim-Documents-ReZ-Full-App-rezapp/memory/project_rezapp.md",
+      "bootstrapped": true
+    },
+    "createdAt": 1775607007489
+  }
+]

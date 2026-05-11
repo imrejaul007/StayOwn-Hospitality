@@ -1,0 +1,471 @@
+/* Advanced Animations for AdminServiceRequests Page */
+
+/* Floating Animations */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-12px) rotate(1deg);
+  }
+  66% {
+    transform: translateY(-6px) rotate(-1deg);
+  }
+}
+
+@keyframes float-delayed {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  33% {
+    transform: translateY(-18px) rotate(-1deg);
+  }
+  66% {
+    transform: translateY(-9px) rotate(1deg);
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-25px) rotate(0.5deg);
+  }
+}
+
+/* Pulse Glow Effect */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 50px rgba(59, 130, 246, 0.7);
+  }
+}
+
+/* Scale Bounce Animation */
+@keyframes scale-bounce {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.03);
+  }
+}
+
+/* Slide Up Animation */
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(35px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Card Slide In Animation */
+@keyframes card-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Gradient Text Effects */
+.text-gradient-blue {
+  background: linear-gradient(135deg, #3B82F6, #6366F1, #8B5CF6);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 3s ease infinite;
+}
+
+.text-gradient-service {
+  background: linear-gradient(135deg, #10B981, #059669, #047857);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradient-shift 4s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Glass Effect */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-effect-strong {
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Button Glow Effects */
+.btn-glow-blue {
+  background: linear-gradient(135deg, #3B82F6, #6366F1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glow-green {
+  background: linear-gradient(135deg, #10B981, #059669);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glow-orange {
+  background: linear-gradient(135deg, #F59E0B, #EA580C);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glow-red {
+  background: linear-gradient(135deg, #EF4444, #DC2626);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-glow-blue::before,
+.btn-glow-green::before,
+.btn-glow-orange::before,
+.btn-glow-red::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-glow-blue:hover::before,
+.btn-glow-green:hover::before,
+.btn-glow-orange:hover::before,
+.btn-glow-red:hover::before {
+  left: 100%;
+}
+
+/* Hover Lift Effect */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* Card Shine Effect */
+.card-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-shine::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  transform: rotate(45deg);
+  transition: all 0.6s ease;
+  opacity: 0;
+}
+
+.card-shine:hover::before {
+  opacity: 1;
+  left: 100%;
+  top: 100%;
+}
+
+/* Service Card Animations */
+.service-card {
+  animation: card-slide-in 0.6s ease forwards;
+  transform: translateX(-20px) scale(0.95);
+  opacity: 0;
+}
+
+.service-card:nth-child(1) { animation-delay: 0.1s; }
+.service-card:nth-child(2) { animation-delay: 0.15s; }
+.service-card:nth-child(3) { animation-delay: 0.2s; }
+.service-card:nth-child(4) { animation-delay: 0.25s; }
+.service-card:nth-child(5) { animation-delay: 0.3s; }
+.service-card:nth-child(6) { animation-delay: 0.35s; }
+.service-card:nth-child(7) { animation-delay: 0.4s; }
+.service-card:nth-child(8) { animation-delay: 0.45s; }
+
+/* Stagger Animation for Stats Cards */
+.stagger-animation {
+  animation: slide-up 0.6s ease forwards;
+  opacity: 0;
+  transform: translateY(35px);
+}
+
+.stagger-animation:nth-child(1) { animation-delay: 0.1s; }
+.stagger-animation:nth-child(2) { animation-delay: 0.2s; }
+.stagger-animation:nth-child(3) { animation-delay: 0.3s; }
+.stagger-animation:nth-child(4) { animation-delay: 0.4s; }
+.stagger-animation:nth-child(5) { animation-delay: 0.5s; }
+.stagger-animation:nth-child(6) { animation-delay: 0.6s; }
+.stagger-animation:nth-child(7) { animation-delay: 0.7s; }
+.stagger-animation:nth-child(8) { animation-delay: 0.8s; }
+
+/* Progress Bar Animation */
+@keyframes progress-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--progress-width);
+  }
+}
+
+.progress-bar {
+  animation: progress-fill 1.2s ease-in-out;
+}
+
+/* Loading Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.8s infinite;
+}
+
+/* Service Type Icon Animations */
+@keyframes service-icon-bounce {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    transform: scale(1.1) rotate(5deg);
+  }
+}
+
+.service-icon {
+  animation: service-icon-bounce 2s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+/* Status Badge Animations */
+@keyframes status-pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+.status-badge {
+  animation: status-pulse 3s ease-in-out infinite;
+}
+
+/* Utility Animation Classes */
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float-delayed 8s ease-in-out infinite;
+  animation-delay: -2s;
+}
+
+.animate-float-slow {
+  animation: float-slow 10s ease-in-out infinite;
+  animation-delay: -5s;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+
+.animate-scale-bounce {
+  animation: scale-bounce 2s ease-in-out infinite;
+}
+
+.animate-slide-up {
+  animation: slide-up 0.6s ease forwards;
+}
+
+/* Filter Enhancement Animations */
+@keyframes filter-focus {
+  from {
+    box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4);
+  }
+  to {
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+  }
+}
+
+.filter-enhanced:focus {
+  animation: filter-focus 0.3s ease-in-out;
+}
+
+/* Responsive Enhancements */
+@media (max-width: 640px) {
+  .glass-effect {
+    backdrop-filter: blur(8px);
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-3px);
+  }
+
+  .text-gradient-blue,
+  .text-gradient-service {
+    font-size: 1.5rem;
+  }
+
+  .service-card {
+    animation-duration: 0.4s;
+  }
+}
+
+@media (max-width: 768px) {
+  .animate-float,
+  .animate-float-delayed,
+  .animate-float-slow {
+    animation-duration: 4s;
+  }
+
+  .stagger-animation {
+    animation-duration: 0.4s;
+  }
+}
+
+/* High Performance Mode (Reduced Animations) */
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-float-delayed,
+  .animate-float-slow,
+  .animate-pulse-glow,
+  .animate-scale-bounce,
+  .hover-lift,
+  .card-shine::before,
+  .btn-glow-blue::before,
+  .btn-glow-green::before,
+  .btn-glow-orange::before,
+  .btn-glow-red::before,
+  .service-card,
+  .service-icon,
+  .status-badge {
+    animation: none;
+    transition: none;
+  }
+
+  .animate-slide-up,
+  .stagger-animation {
+    animation: none;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .glass-effect {
+    background: rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-effect-strong {
+    background: rgba(0, 0, 0, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .text-gradient-blue {
+    background: linear-gradient(135deg, #60A5FA, #818CF8, #A78BFA);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-service {
+    background: linear-gradient(135deg, #34D399, #10B981, #059669);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+/* Special Service Request Enhancements */
+.service-request-card {
+  position: relative;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.service-request-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  background: linear-gradient(135deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  border-radius: inherit;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.service-request-card:hover::before {
+  opacity: 1;
+}
+
+/* Priority Indicator Animations */
+@keyframes priority-urgent {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(239, 68, 68, 0);
+  }
+}
+
+.priority-urgent {
+  animation: priority-urgent 2s infinite;
+}
+
+/* Loading State Enhancements */
+.loading-skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 0.5rem;
+}

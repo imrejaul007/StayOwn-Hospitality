@@ -1,0 +1,163 @@
+=============================================================================
+COMPLETE LIST: Admin Pages Needing Multi-Property Support
+=============================================================================
+
+Total: 53 files need multi-property support implementation
+
+=============================================================================
+TIER 1: CRITICAL OPERATIONAL PAGES (13 files) - UPDATE FIRST
+=============================================================================
+1.  AdminLaundryManagement.tsx
+2.  AdminMeetUpManagement.tsx
+3.  AdminCheckoutInventoryManagement.tsx
+4.  AdminBypassCheckout.tsx
+5.  AdminCorporateDashboard.tsx
+6.  AdminOTA.tsx
+7.  AdminReviewsManagement.tsx
+8.  AdminVIP.tsx
+9.  AdminDayUseManagement.tsx
+10. AdminBypassApprovals.tsx
+11. AdminOperationalManagement.tsx
+12. AdminTravelDashboard.tsx
+13. AdminSecurityDashboard.tsx
+
+=============================================================================
+TIER 2: CONFIGURATION & SETTINGS PAGES (10 files) - UPDATE SECOND
+=============================================================================
+14. AdminSettings.tsx
+15. AdminRoomTypes.tsx
+16. AdminRoomPricing.tsx
+17. AdminRoomTypeAllotments.tsx
+18. AdminRoomAllotmentCreate.tsx
+19. AdminCentralizedRates.tsx
+20. AdminBookingEngine.tsx
+21. AdminBookingFormBuilder.tsx
+22. AdminWebOptimization.tsx
+23. AdminUserManagement.tsx
+
+=============================================================================
+TIER 3: ADD-ON & SERVICE MANAGEMENT PAGES (6 files) - UPDATE THIRD
+=============================================================================
+24. AdminAddOnServices.tsx
+25. AdminGuestServices.tsx
+26. AdminServiceManagement.tsx
+27. AdminOfferManagement.tsx
+28. AdminInventoryRequests.tsx
+29. AdminGuestUpload.tsx
+
+=============================================================================
+TIER 4: INTEGRATION & ADVANCED PAGES (8 files) - UPDATE FOURTH
+=============================================================================
+30. AdminAPIManagement.tsx
+31. AdminAdvancedFeatures.tsx
+32. AdminAutomation.tsx
+33. AdminNotifications.tsx
+34. AdminLoginActivity.tsx
+35. AdminUserAnalytics.tsx
+36. AdminFinancialAnalytics.tsx
+37. AdminMobileApps.tsx
+
+=============================================================================
+TIER 5: COMPLIANCE & OTHER PAGES (7 files) - UPDATE LAST
+=============================================================================
+38. AdminGuestManagement.tsx
+39. AdminBillMessages.tsx
+40. AdminBlacklist.tsx
+41. AdminDocumentVerification.tsx
+42. AdminDocumentAnalytics.tsx
+43. AdminLogin.tsx
+44. AdminMultiProperty.tsx
+
+=============================================================================
+TIER 6: REVIEW/LEGACY PAGES (Not counted - may not need updates)
+=============================================================================
+- AdminDashboard.test.tsx (test file)
+- WalkInBooking_FIXED.tsx (backup/legacy)
+
+=============================================================================
+IMPLEMENTATION CHECKLIST FOR EACH FILE
+=============================================================================
+
+For each file, add:
+
+[ ] 1. Import PropertyContext hook and PropertyBreadcrumb component:
+    import { useProperty } from '../../context/PropertyContext';
+    import { PropertyBreadcrumb } from '../../components/common/PropertyBreadcrumb';
+
+[ ] 2. Get selectedPropertyId from context in component:
+    const { selectedPropertyId, selectedProperty } = useProperty();
+
+[ ] 3. Display PropertyBreadcrumb at top of page content:
+    <PropertyBreadcrumb currentPage="Page Title" />
+
+[ ] 4. Filter all API calls with propertyId parameter:
+    api.get('/endpoint', { params: { propertyId: selectedPropertyId, ... } })
+
+[ ] 5. Test that data filters correctly when property selection changes
+
+=============================================================================
+PAGES ALREADY WITH MULTI-PROPERTY SUPPORT (36 files)
+=============================================================================
+
+AdminBookings.tsx
+AdminCustomFields.tsx
+AdminDailyCheckManagement.tsx
+AdminDepartments.tsx
+AdminDigitalKeyManagement.tsx
+AdminFinancial.tsx
+AdminGuestList.tsx
+AdminHotelAreas.tsx
+AdminHousekeeping.tsx
+AdminInventory.tsx
+AdminInventoryManagement.tsx
+AdminMaintenance.tsx
+AdminMeasurementUnits.tsx
+AdminPaymentMethods.tsx
+AdminPhoneExtensions.tsx
+AdminPOS.tsx
+AdminPOSAttributes.tsx
+AdminPOSTaxes.tsx
+AdminPurchaseOrders.tsx
+AdminReasons.tsx
+AdminReports.tsx
+AdminRevenueAccounts.tsx
+AdminRevenueManagement.tsx
+AdminRooms.tsx
+AdminRoomTaxes.tsx
+AdminSalutations.tsx
+AdminSeasonalPricing.tsx
+AdminServiceRequests.tsx
+AdminStaffManagement.tsx
+AdminSupplyRequests.tsx
+AdminTapeChart.tsx
+AdminUpcomingBookings.tsx
+AdminVendorManagement.tsx
+AdminWebSettings.tsx
+AdminDashboard.tsx
+AdminDashboardWrapper.tsx
+
+=============================================================================
+SUMMARY
+=============================================================================
+
+Total Admin Pages: 89
+- Already have multi-property support: 36 (40.4%)
+- Need multi-property support: 53 (59.6%)
+
+Priority breakdown:
+- TIER 1 (Critical/Urgent): 13 pages
+- TIER 2 (High): 10 pages
+- TIER 3 (Medium): 6 pages
+- TIER 4 (Medium): 8 pages
+- TIER 5 (Low): 7 pages
+- Special/Legacy: 9 pages
+
+Estimated effort: 
+- TIER 1 (13 pages): ~39 updates (3 per page)
+- TIER 2 (10 pages): ~30 updates (3 per page)
+- TIER 3 (6 pages): ~18 updates (3 per page)
+- TIER 4 (8 pages): ~24 updates (3 per page)
+- TIER 5 (7 pages): ~21 updates (3 per page)
+TOTAL: 132 code sections to update
+
+=============================================================================

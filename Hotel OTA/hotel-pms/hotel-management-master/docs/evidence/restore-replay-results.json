@@ -1,0 +1,50 @@
+{
+  "startedAt": "2026-03-26T10:41:03.957Z",
+  "mongoUri": "***configured***",
+  "steps": [
+    {
+      "name": "Verify mongodump available",
+      "startedAt": "2026-03-26T10:41:03.967Z",
+      "passed": true,
+      "detail": "found",
+      "completedAt": "2026-03-26T10:41:04.108Z"
+    },
+    {
+      "name": "Verify mongorestore available",
+      "startedAt": "2026-03-26T10:41:04.108Z",
+      "passed": true,
+      "detail": "found",
+      "completedAt": "2026-03-26T10:41:04.265Z"
+    },
+    {
+      "name": "Create fresh mongodump from source",
+      "startedAt": "2026-03-26T10:41:04.265Z",
+      "passed": true,
+      "detail": "dumped 5 collections to backups\\drill\\replay-1774521664265\\hotel-management",
+      "completedAt": "2026-03-26T10:41:25.609Z"
+    },
+    {
+      "name": "Restore to isolated replay database",
+      "startedAt": "2026-03-26T10:41:25.610Z",
+      "passed": true,
+      "detail": "restored to hm_rr_21663966",
+      "completedAt": "2026-03-26T10:41:34.854Z"
+    },
+    {
+      "name": "Validate restored collections",
+      "startedAt": "2026-03-26T10:41:34.854Z",
+      "passed": true,
+      "detail": "{\"totalCollections\":5,\"found\":[\"bookings\",\"users\",\"rooms\",\"invoices\",\"payments\"],\"missing\":[]}",
+      "completedAt": "2026-03-26T10:41:38.494Z"
+    },
+    {
+      "name": "Cleanup replay database",
+      "startedAt": "2026-03-26T10:41:38.494Z",
+      "passed": true,
+      "detail": "dropped",
+      "completedAt": "2026-03-26T10:41:41.480Z"
+    }
+  ],
+  "status": "passed",
+  "completedAt": "2026-03-26T10:41:41.480Z"
+}

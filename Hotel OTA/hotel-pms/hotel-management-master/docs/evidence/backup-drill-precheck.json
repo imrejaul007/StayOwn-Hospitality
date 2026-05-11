@@ -1,0 +1,32 @@
+{
+  "startedAt": "2026-03-26T08:06:56.996Z",
+  "status": "passed",
+  "envChecks": {
+    "MONGO_URI": true,
+    "BACKUP_DIR": true,
+    "AWS_S3_BACKUP_ENABLED": "false"
+  },
+  "binaryChecks": [
+    {
+      "name": "mongodump",
+      "ok": true,
+      "status": 0,
+      "stdout": "mongodump version: 100.14.1\ngit version: c37ea81e07ba30acc06c5cf60c7304ed1085519f\nGo version: go1.25.5\n   os: windows\n   arch: amd64\n   compiler: gc",
+      "stderr": ""
+    },
+    {
+      "name": "mongorestore",
+      "ok": true,
+      "status": 0,
+      "stdout": "mongorestore version: 100.14.1\ngit version: c37ea81e07ba30acc06c5cf60c7304ed1085519f\nGo version: go1.25.5\n   os: windows\n   arch: amd64\n   compiler: gc",
+      "stderr": ""
+    },
+    {
+      "name": "tar",
+      "ok": true,
+      "status": 0,
+      "stdout": "bsdtar 3.8.4 - libarchive 3.8.4 zlib/1.2.13.1-motley liblzma/5.8.1 bz2lib/1.0.8 libzstd/1.5.7 cng/2.0 libb2/bundled",
+      "stderr": ""
+    }
+  ]
+}

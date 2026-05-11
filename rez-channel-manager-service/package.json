@@ -1,0 +1,11 @@
+{
+  "name": "rez-channel-manager-service",
+  "version": "1.0.0",
+  "description": "Channel Manager for hotels to sync with OTAs",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "session-1775842477828",
+  "startedAt": "2026-04-10T17:34:37.828Z",
+  "cwd": "/Users/rejaulkarim/Documents/ReZ Full App/Hotel OTA",
+  "context": {},
+  "metrics": {
+    "edits": 9,
+    "commands": 0,
+    "tasks": 0,
+    "errors": 0
+  },
+  "endedAt": "2026-04-13T06:27:49.424Z",
+  "duration": 219191596
+}

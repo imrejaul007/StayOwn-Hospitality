@@ -1,0 +1,40 @@
+{
+  "name": "pentouz-notification-tests",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Comprehensive test suite for THE PENTOUZ notification system",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:backend": "jest --selectProjects=\"Backend API Tests\"",
+    "test:frontend": "jest --selectProjects=\"Frontend Component Tests\"",
+    "test:integration": "jest --selectProjects=\"Integration Tests\"",
+    "test:performance": "jest --selectProjects=\"Performance Tests\"",
+    "test:e2e": "playwright test",
+    "test:ci": "jest --ci --coverage --watchAll=false",
+    "test:debug": "jest --runInBand --detectOpenHandles",
+    "lint:test": "eslint test/**/*.{js,ts,tsx}",
+    "report": "jest --coverage --coverageReporters=html && open-cli coverage/lcov-report/index.html"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0",
+    "@babel/preset-react": "^7.22.0",
+    "@babel/preset-typescript": "^7.23.0",
+    "@jest/globals": "^29.7.0",
+    "@testing-library/jest-dom": "^6.1.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^14.5.0",
+    "@playwright/test": "^1.40.0",
+    "babel-jest": "^29.7.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-environment-node": "^29.7.0",
+    "supertest": "^6.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

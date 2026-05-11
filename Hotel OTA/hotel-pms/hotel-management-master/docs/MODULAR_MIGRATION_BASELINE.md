@@ -1,0 +1,422 @@
+# Modular Migration Baseline (Phase 0/1)
+
+## Objectives
+- Establish a no-breaking baseline before deeper refactor work.
+- Start migrating Booking and Billing to module-owned paths.
+- Keep all existing `/api/v1` route behavior unchanged.
+
+## Current Baseline (Implemented)
+- `server.js` now imports Booking/Billing API routes from:
+  - `backend/src/modules/booking/routes.js`
+  - `backend/src/modules/billing/paymentRoutes.js`
+  - `backend/src/modules/billing/invoiceRoutes.js`
+- Each module file is a non-breaking adapter to current route implementations.
+- Existing endpoint paths and middleware execution order remain unchanged.
+- API versioning compatibility baseline added:
+  - `backend/src/middleware/apiVersioning.js`
+  - `/api/v2/*` compatibility alias routes to v1 handlers with version/deprecation headers.
+  - version capability endpoint: `GET /api/versions`
+- Route inventory snapshot generated at `docs/route-inventory.json`
+  - Current scan result: `171` route files and `1934` route declarations.
+  - Generation command: `node backend/src/scripts/audit-route-inventory.js`
+- Booking module extraction started:
+  - `backend/src/modules/booking/service.js`
+  - `backend/src/modules/booking/repository.js`
+  - `backend/src/routes/bookings.js` now delegates idempotency + room/overlap checks to module service.
+  - Added consolidated creation-prep flow in module service:
+    - `prepareBookingCreation()` now centralizes idempotency key build, idempotency safety check, room resolution, overlap validation, and nights/total derivation.
+  - Added permission/update extraction seam:
+    - `assertCanModifyBooking()` centralizes booking mutation permission checks
+    - `buildBookingUpdateData()` centralizes role-aware update payload shaping
+    - `backend/src/routes/bookings.js` update/cancel flows now delegate to these module helpers
+  - Added room-change extraction seam:
+    - `findBookingForRoomChange()`, `validateRoomAssignment()`, `assertRoomChangeDateWithinBooking()`, `applyRoomAssignment()`
+    - `backend/src/routes/bookings.js` `POST /change-room-by-guest` now delegates lookup/validation/assignment logic to module service
+  - Added existing-room-change extraction seam:
+    - `applyExistingRoomChange()` used by `POST /bookings/change-room`
+  - Added modification-request extraction seam:
+    - `assertModificationAccess()`, `buildModificationRequest()`, `findModificationRequestOrThrow()`, `applyApprovedModificationChanges()`
+    - booking modification request create/review flows now delegate core validation/update steps to module service
+  - Added check-in guard extraction seam:
+    - `assertCanCheckInBooking()` and `assertBookingCanBeCheckedIn()` used by `PATCH /bookings/:id/check-in`
+  - Added checkout + settlement guard extraction seam:
+    - `assertBookingCanBeCheckedOut()` and `getCheckoutBalanceInfo()` used by `PATCH /bookings/:id/check-out`
+    - `assertSettlementAdjustmentInput()` and `assertSettlementPaymentInput()` used by settlement mutation routes
+    - `assertBookingInUserHotel()` now reused across settlement and extra-person hotel-scope checks
+  - Added unit coverage for module extraction seam:
+    - `backend/src/tests/unit/bookingModuleService.test.js`
+- Billing module extraction started:
+  - `backend/src/modules/billing/service.js`
+  - `backend/src/modules/billing/repository.js`
+  - `backend/src/routes/payments.js` now delegates core logic for:
+    - `POST /payments/intent`
+    - `POST /payments/confirm`
+  - `backend/src/routes/invoices.js` now delegates core logic for:
+    - `POST /invoices`
+    - `PATCH /invoices/:id`
+    - `POST /invoices/:id/payments`
+    - `POST /invoices/:id/discounts`
+    - `POST /invoices/:id/split-billing`
+    - `POST /invoices/:id/splits/:splitIndex/pay`
+    - `POST /invoices/supplementary/extra-person-charges`
+    - `POST /invoices/supplementary/settlement`
+    - `PUT /invoices/:id/add-extra-charges`
+- Billing immutability/event baseline started:
+  - `backend/src/models/BillingEvent.js` (append-only event log model)
+  - `backend/src/modules/billing/repository.js` appends events
+  - `backend/src/modules/billing/service.js` now records events for invoice/payment mutations
+  - `backend/src/modules/billing/service.js` now enforces allowed invoice status transitions and blocks edits on finalized invoices
+  - Added event-sourced payment reconciliation baseline:
+    - `sumInvoiceEventAmounts()` in billing repository
+    - `buildInvoicePaymentReconciliation()` in billing service
+    - payment mutation events now include reconciliation metadata (`expectedAmountPaid`, `actualAmountPaid`, `isAligned`)
+  - Added safe rollout reconciliation policy:
+    - default `observe` mode for compatibility
+    - optional strict enforcement via `BILLING_RECONCILIATION_ENFORCE=true`
+  - Added reconciliation mismatch observability event:
+    - `BILLING_RECONCILIATION_MISMATCH`
+    - emitted when payment reconciliation mismatch is detected in observe mode
+  - Guard coverage added at:
+    - `backend/src/tests/unit/billingModuleService.test.js`
+- Ops and program guardrails baseline added:
+  - baseline drift verifier: `backend/src/scripts/verify-program-baseline.js`
+  - API hotspot profiler: `backend/src/scripts/profile-api-performance.js`
+  - queue health snapshot: `backend/src/scripts/queue-health-snapshot.js`
+  - queue health endpoint: `GET /health/queue`
+  - backend CI quality gates: `.github/workflows/backend-quality.yml`
+  - operations standards doc: `docs/OPERATIONS_BASELINE_STANDARDS.md`
+
+## Why this baseline matters
+- Enables gradual ownership transfer from `routes/*` to `modules/*`.
+- Reduces blast radius for future service/repository extraction.
+- Supports phased migration with compatibility guarantees.
+
+## Next refactor steps (non-breaking)
+- Move booking-only business logic from `routes/bookings.js` into:
+  - `modules/booking/service.js`
+  - `modules/booking/repository.js`
+- Move billing-only logic from `routes/payments.js` and `routes/invoices.js` into:
+  - `modules/billing/service.js`
+  - `modules/billing/repository.js`
+- Keep route handlers thin and delegate to module services.
+- Add integration tests that assert unchanged responses for key endpoints.
+
+## RBAC consistency progress
+- Centralized policy map added in `backend/src/middleware/rbacPolicy.js`.
+- Billing scope migrated to policy middleware:
+  - `backend/src/routes/payments.js`
+  - `backend/src/routes/invoices.js`
+- Booking mutation/operations scope migrated to policy middleware:
+  - `backend/src/routes/bookings.js`
+- Add-on services mutation scope migrated to policy middleware:
+  - `backend/src/routes/addOnServices.js`
+- Admin mutation scope migrated to policy middleware:
+  - `backend/src/routes/admin.js`
+- Admin bypass management scope migrated to policy middleware:
+  - `backend/src/routes/adminBypassManagement.js`
+- Allotment scope migrated to policy middleware:
+  - `backend/src/routes/allotment.js`
+- Notifications scope migrated to policy middleware:
+  - `backend/src/routes/notifications.js`
+- Settings scope migrated to policy middleware:
+  - `backend/src/routes/settings.js`
+- Hotel settings scope migrated to policy middleware:
+  - `backend/src/routes/hotelSettings.js`
+- Data privacy scope migrated to policy middleware:
+  - `backend/src/routes/dataPrivacy.js`
+- Day-use scope migrated to policy middleware:
+  - `backend/src/routes/dayUse.js`
+- Mapping scope migrated to policy middleware:
+  - `backend/src/routes/mapping.js`
+- Role permissions scope migrated to policy middleware:
+  - `backend/src/routes/rolePermissions.js`
+- Meet-up requests scope migrated to policy middleware:
+  - `backend/src/routes/meetUpRequests.js`
+- Hotel areas scope migrated to policy middleware:
+  - `backend/src/routes/hotelAreas.js`
+- Seasonal pricing scope migrated to policy middleware:
+  - `backend/src/routes/seasonalPricing.js`
+- System integration scope migrated to policy middleware:
+  - `backend/src/routes/systemIntegration.js`
+- Waitlist scope migrated to policy middleware:
+  - `backend/src/routes/waitlist.js`
+- Booking form scope migrated to policy middleware:
+  - `backend/src/routes/bookingForm.js`
+- Channel management scope migrated to policy middleware:
+  - `backend/src/routes/channelManagement.js`
+- GDPR scope migrated to policy middleware:
+  - `backend/src/routes/gdpr.js`
+- Revenue optimization scope migrated to policy middleware:
+  - `backend/src/routes/revenueOptimization.js`
+- Operational management scope migrated to policy middleware:
+  - `backend/src/routes/operationalManagement.js`
+- Reorder scope migrated to policy middleware:
+  - `backend/src/routes/reorder.js`
+- Service types scope migrated to policy middleware:
+  - `backend/src/routes/serviceTypes.js`
+- Web settings scope migrated to policy middleware:
+  - `backend/src/routes/webSettings.js`
+- Digital keys scope migrated to policy middleware:
+  - `backend/src/routes/digitalKeys.js`
+- Discount pricing scope migrated to policy middleware:
+  - `backend/src/routes/discountPricing.js`
+- Enhanced bookings scope migrated to policy middleware:
+  - `backend/src/routes/enhancedBookings.js`
+- Personalization scope migrated to policy middleware:
+  - `backend/src/routes/personalization.js`
+- User preferences scope migrated to policy middleware:
+  - `backend/src/routes/userPreferences.js`
+- POS scope migrated to policy middleware:
+  - `backend/src/routes/pos.js`
+- Admin hotel services scope migrated to policy middleware:
+  - `backend/src/routes/adminHotelServices.js`
+- Booking conversations scope migrated to policy middleware:
+  - `backend/src/routes/bookingConversations.js`
+- Document upload scope migrated to policy middleware:
+  - `backend/src/routes/documentUpload.js`
+- Inventory consumption scope migrated to policy middleware:
+  - `backend/src/routes/inventoryConsumption.js`
+- Meet-up resources scope migrated to policy middleware:
+  - `backend/src/routes/meetUpResources.js`
+- Scheduled updates scope migrated to policy middleware:
+  - `backend/src/routes/scheduledUpdates.js`
+- Security monitoring scope migrated to policy middleware:
+  - `backend/src/routes/securityMonitoring.js`
+- Stock movements scope migrated to policy middleware:
+  - `backend/src/routes/stockMovements.js`
+- Measurement units scope migrated to policy middleware:
+  - `backend/src/routes/measurementUnits.js`
+- Bypass financial analytics scope migrated to policy middleware:
+  - `backend/src/routes/bypassFinancialAnalytics.js`
+- External bookings scope migrated to policy middleware:
+  - `backend/src/routes/externalBookings.js`
+- Guest import scope migrated to policy middleware:
+  - `backend/src/routes/guestImport.js`
+- Guest management scope migrated to policy middleware:
+  - `backend/src/routes/guestManagement.js`
+- Staff meet-up scope migrated to policy middleware:
+  - `backend/src/routes/staffMeetUp.js`
+- One-go RBAC closeout sweep migrated additional domain routes:
+  - `backend/src/routes/adminTravelDashboard.js`
+  - `backend/src/routes/analytics.js`
+  - `backend/src/routes/billMessages.js`
+  - `backend/src/routes/cancellations.js`
+  - `backend/src/routes/channelLocalization.js`
+  - `backend/src/routes/communications.js`
+  - `backend/src/routes/dashboardUpdates.js`
+  - `backend/src/routes/departmentBudget.js`
+  - `backend/src/routes/guests.js`
+  - `backend/src/routes/integrations.js`
+  - `backend/src/routes/inventoryNotifications.js`
+  - `backend/src/routes/loyalty.js`
+  - `backend/src/routes/messageTemplates.js`
+  - `backend/src/routes/otaAmendments.js`
+  - `backend/src/routes/posAttributes.js`
+  - `backend/src/routes/reasons.js`
+  - `backend/src/routes/requestTemplates.js`
+  - `backend/src/routes/revenueAccounts.js`
+  - `backend/src/routes/reviews.js`
+  - `backend/src/routes/roomTax.js`
+  - `backend/src/routes/translations.js`
+  - `backend/src/routes/users.js`
+- High-impact legacy-authorize conversion batch migrated:
+  - `backend/src/routes/tapeChart.js`
+  - `backend/src/routes/rateManagement.js`
+  - `backend/src/routes/revenueManagement.js`
+  - `backend/src/routes/channelManager.js`
+- Additional legacy-authorize reduction batch migrated:
+  - `backend/src/routes/departments.js`
+  - `backend/src/routes/travelAgents.js`
+  - `backend/src/routes/paymentMethods.js`
+  - `backend/src/routes/billingSessions.js`
+- Additional legacy-authorize reduction batch migrated:
+  - `backend/src/routes/credentials.js`
+  - `backend/src/routes/waitingList.js`
+  - `backend/src/routes/vendors.js`
+- Additional legacy-authorize reduction batch migrated:
+  - `backend/src/routes/phoneExtensions.js`
+  - `backend/src/routes/settlements.js`
+  - `backend/src/routes/financial.js` (mutation routes)
+  - `backend/src/routes/emailCampaigns.js`
+  - `backend/src/routes/laundry.js`
+  - `backend/src/routes/roomInventory.js`
+  - `backend/src/routes/roomTypes.js`
+  - `backend/src/routes/advancedReservations.js`
+  - `backend/src/routes/currency.js`
+  - `backend/src/routes/dailyRoutineCheck.js`
+  - `backend/src/routes/propertyGroups.js`
+  - `backend/src/routes/inventoryAnalytics.js`
+  - `backend/src/routes/supplyRequests.js`
+  - `backend/src/routes/laundryTemplates.js`
+  - `backend/src/routes/purchaseOrders.js`
+  - `backend/src/routes/staffTasks.js`
+  - `backend/src/routes/approvals.js`
+  - `backend/src/routes/assignmentRules.js`
+- Additional legacy-authorize reduction batch migrated:
+  - `backend/src/routes/dailyInventoryCheck.js`
+  - `backend/src/routes/housekeepingAutomation.js`
+  - `backend/src/routes/photoUpload.js`
+- Additional legacy-authorize reduction batch migrated:
+  - `backend/src/routes/posSettlementIntegration.js`
+  - `backend/src/routes/roomBlocks.js`
+  - `backend/src/routes/rooms.js`
+- Additional legacy-authorize reduction batch migrated:
+  - `backend/src/routes/settlementNotifications.js`
+  - `backend/src/routes/adminLoyalty.js`
+  - `backend/src/routes/checkoutAutomation.js`
+  - `backend/src/routes/checkoutInventory.js`
+- Additional legacy-authorize reduction batch migrated:
+  - `backend/src/routes/crm.js`
+  - `backend/src/routes/inventory.js`
+  - `backend/src/routes/incidents.js`
+  - `backend/src/routes/language.js`
+  - `backend/src/routes/revenueOptimization.js`
+- Additional legacy-authorize reduction batch migrated:
+  - `backend/src/routes/extraPersonPricing.js`
+  - `backend/src/routes/inventoryManagement.js`
+  - `backend/src/routes/staffAlerts.js`
+- Additional legacy-authorize reduction batch migrated:
+  - `backend/src/routes/inventoryVendorIntegration.js`
+  - `backend/src/routes/requestCategories.js`
+  - `backend/src/routes/apiManagement.js`
+  - `backend/src/routes/attractions.js`
+- Additional legacy-authorize reduction batch migrated:
+  - `backend/src/routes/auditTrail.js`
+  - `backend/src/routes/housekeeping.js`
+  - `backend/src/routes/maintenance.js`
+  - `backend/src/routes/ota.js`
+- Additional legacy-authorize reduction batch migrated:
+  - `backend/src/routes/audit.js`
+  - `backend/src/routes/availability.js`
+  - `backend/src/routes/health.js`
+  - `backend/src/routes/inventoryAutomation.js`
+  - `backend/src/routes/nightAudit.js`
+  - `backend/src/routes/noShow.js`
+- Additional legacy-authorize reduction batch migrated:
+  - `backend/src/routes/adminDashboard.js` (`POST /bypass-checkout`)
+  - `backend/src/routes/assignmentRules.js` (`POST /auto-assign`)
+  - `backend/src/routes/enhancedAnalytics.js` (`POST /export`)
+  - `backend/src/routes/featureFlags.js` (`POST /:flagName`)
+  - `backend/src/routes/offerFavorites.js` (`POST /:offerId`, `DELETE /:offerId`)
+  - `backend/src/routes/reports.js` (`POST /kpi/calculate`, `POST /kpi/batch-calculate`)
+  - `backend/src/routes/reviews.js` (`POST /:id/response`, `PATCH /:id/moderate`)
+  - `backend/src/routes/segmentation.js` (`POST /analyze`)
+- Existing access rules preserved while moving authorization to a single source of truth.
+- RBAC coverage audit script added:
+  - `backend/src/scripts/audit-rbac-coverage.js`
+  - Run with: `npm run audit:rbac` (from `backend/`)
+  - Report output: `docs/rbac-coverage.json`
+  - Current snapshot: `875` protected mutations, `875` policy-covered, `0` legacy authorize, `0` missing policy.
+
+## Validation coverage progress
+- Validation coverage audit script added:
+  - `backend/src/scripts/audit-validation-coverage.js`
+  - Run with: `npm run audit:validation` (from `backend/`)
+  - Report output: `docs/validation-coverage.json`
+  - Current snapshot: `918` mutation routes, `918` validation-covered, `0` missing validation.
+- Scheduled updates mutation routes now include schema validation middleware.
+- Settings mutation routes now include baseline Joi validation middleware.
+- Allotment, booking engine, and bookings mutation routes now include baseline Joi validation middleware.
+- Channel manager and centralized rates mutation routes now include baseline Joi validation middleware.
+- Additional baseline validation batches applied to:
+  - `backend/src/routes/phoneExtensions.js`
+  - `backend/src/routes/settlements.js`
+  - `backend/src/routes/financial.js` (mutation routes)
+  - `backend/src/routes/emailCampaigns.js`
+  - `backend/src/routes/analytics.js`
+  - `backend/src/routes/rateManagement.js`
+  - `backend/src/routes/laundry.js`
+  - `backend/src/routes/webOptimization.js`
+  - `backend/src/routes/roomInventory.js`
+  - `backend/src/routes/notifications.js`
+  - `backend/src/routes/propertyGroups.js`
+  - `backend/src/routes/revenueManagement.js`
+  - `backend/src/routes/billMessages.js`
+  - `backend/src/routes/inventoryAnalytics.js`
+  - `backend/src/routes/supplyRequests.js`
+  - `backend/src/routes/dayUse.js`
+  - `backend/src/routes/laundryTemplates.js`
+  - `backend/src/routes/mapping.js`
+  - `backend/src/routes/invoices.js`
+  - `backend/src/routes/dailyInventoryCheck.js`
+  - `backend/src/routes/housekeepingAutomation.js`
+  - `backend/src/routes/photoUpload.js`
+  - `backend/src/routes/pos.js`
+  - `backend/src/routes/addOnServices.js`
+  - `backend/src/routes/rooms.js`
+  - `backend/src/routes/settlementNotifications.js`
+  - `backend/src/routes/checkoutAutomation.js`
+  - `backend/src/routes/checkoutInventory.js`
+  - `backend/src/routes/billingSessions.js`
+  - `backend/src/routes/inventory.js`
+  - `backend/src/routes/incidents.js`
+  - `backend/src/routes/language.js`
+  - `backend/src/routes/revenueOptimization.js`
+  - `backend/src/routes/hotelSettings.js`
+  - `backend/src/routes/extraPersonPricing.js`
+  - `backend/src/routes/inventoryManagement.js`
+  - `backend/src/routes/staffAlerts.js`
+  - `backend/src/routes/tapeChart.js`
+  - `backend/src/routes/admin.js`
+  - `backend/src/routes/requestCategories.js`
+  - `backend/src/routes/apiManagement.js`
+  - `backend/src/routes/attractions.js`
+  - `backend/src/routes/channelLocalization.js`
+  - `backend/src/routes/enhancedBookings.js`
+  - `backend/src/routes/personalization.js`
+  - `backend/src/routes/seasonalPricing.js`
+  - `backend/src/routes/auditTrail.js`
+  - `backend/src/routes/housekeeping.js`
+  - `backend/src/routes/maintenance.js`
+  - `backend/src/routes/ota.js`
+  - `backend/src/routes/systemIntegration.js`
+  - `backend/src/routes/waitingList.js`
+  - `backend/src/routes/waitlist.js`
+  - `backend/src/routes/adminBypassManagement.js`
+  - `backend/src/routes/audit.js`
+  - `backend/src/routes/availability.js`
+  - `backend/src/routes/health.js`
+  - `backend/src/routes/inventoryAutomation.js`
+  - `backend/src/routes/nightAudit.js`
+  - `backend/src/routes/noShow.js`
+  - `backend/src/routes/bookingForm.js`
+  - `backend/src/routes/channelManagement.js`
+  - `backend/src/routes/documentUpload.js`
+  - `backend/src/routes/messageTemplates.js`
+  - `backend/src/routes/operationalManagement.js`
+  - `backend/src/routes/paymentMethods.js`
+  - `backend/src/routes/adminDashboard.js`
+  - `backend/src/routes/assignmentRules.js`
+  - `backend/src/routes/enhancedAnalytics.js`
+  - `backend/src/routes/featureFlags.js`
+  - `backend/src/routes/offerFavorites.js`
+  - `backend/src/routes/reports.js`
+  - `backend/src/routes/reviews.js`
+  - `backend/src/routes/payments.js`
+  - `backend/src/routes/reasons.js`
+  - `backend/src/routes/reorder.js`
+  - `backend/src/routes/serviceTypes.js`
+  - `backend/src/routes/vendors.js`
+  - `backend/src/routes/roomCharges.js`
+  - `backend/src/routes/workflow.js`
+  - `backend/src/routes/approvals.js`
+  - `backend/src/routes/bookingConversations.js`
+  - `backend/src/routes/departments.js`
+  - `backend/src/routes/otaAmendments.js`
+  - `backend/src/routes/posSettlementIntegration.js`
+  - `backend/src/routes/revenueAccounts.js`
+  - `backend/src/routes/roomBlocks.js`
+  - `backend/src/routes/roomTax.js`
+  - `backend/src/routes/translations.js`
+  - `backend/src/routes/adminHotelServices.js`
+  - `backend/src/routes/communications.js`
+  - `backend/src/routes/crm.js`
+  - `backend/src/routes/departmentBudget.js`
+  - `backend/src/routes/hotelAreas.js`
+  - `backend/src/routes/inventoryConsumption.js`
+  - `backend/src/routes/meetUpRequests.js`
+
+## Critical compatibility rules
+- Do not change URL paths in this phase.
+- Do not change response envelope keys in this phase.
+- Do not remove existing middleware checks while extracting logic.

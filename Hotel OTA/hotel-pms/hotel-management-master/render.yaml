@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: hotel-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile
+    dockerContext: ./frontend
+    plan: free
+    autoDeploy: true
+
+  - type: web
+    name: hotel-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: INTENT_CAPTURE_URL
+        value: https://rez-intent-graph.onrender.com

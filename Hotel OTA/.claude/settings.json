@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm install:*)",
+      "Bash(npx prisma:*)",
+      "Bash(npx tsc:*)",
+      "Read(//Users/rejaulkarim/Documents/Hotel OTA/apps/api/**)",
+      "Bash(docker-compose up:*)",
+      "Bash(docker compose:*)",
+      "Bash(brew list:*)",
+      "Bash(psql -h localhost -p 5432 -U postgres -c \"SELECT 1\")",
+      "Bash(brew install:*)",
+      "Bash(brew services:*)",
+      "Bash(psql -h localhost -U postgres -c \"CREATE DATABASE hotel_ota;\")",
+      "Bash(psql -h localhost -U postgres -c \"CREATE USER ota_user WITH PASSWORD ''ota_password'';\")",
+      "Bash(psql -h localhost -U postgres -c \"GRANT ALL PRIVILEGES ON DATABASE hotel_ota TO ota_user;\")",
+      "Bash(psql -h localhost -U postgres -d hotel_ota -c \"GRANT ALL ON SCHEMA public TO ota_user;\")",
+      "Bash(psql -h localhost -U postgres -c \"ALTER USER ota_user CREATEDB;\")",
+      "Bash(npx ts-node:*)",
+      "Bash(timeout 8 npx ts-node-dev --transpile-only apps/api/src/index.ts)",
+      "Bash(npx create-next-app@latest hotel-panel --typescript --tailwind --eslint --app --src-dir --no-import-alias --use-npm)",
+      "Bash(kill %1)",
+      "Bash(lsof -ti:3000 -ti:3001 -ti:3002)",
+      "Bash(xargs kill:*)",
+      "Bash(lsof -ti:3000)",
+      "Bash(pg_isready -h localhost -p 5432)",
+      "Bash(redis-cli ping:*)",
+      "Read(//private/tmp/**)",
+      "Bash(npx expo:*)",
+      "Bash(npx jest:*)",
+      "Bash(node -e \"require\\(''dotenv''\\).config\\(\\); console.log\\(process.env.NODE_ENV\\)\")",
+      "Read(//Users/rejaulkarim/Documents/**)",
+      "Bash(find '/Users/rejaulkarim/Documents/Hotel OTA/apps/ota-web/src/components' -name *.tsx)",
+      "Bash(find '/Users/rejaulkarim/Documents/Hotel OTA/apps/mobile/src/components' -name *.tsx)",
+      "Bash(find '/Users/rejaulkarim/Documents/Hotel OTA' -name *.tsx -newer '/Users/rejaulkarim/Documents/Hotel OTA/apps/api/src/middleware/sanitize.ts' -not -path */node_modules/* -not -path */.next/*)",
+      "Bash(find '/Users/rejaulkarim/Documents/Hotel OTA/apps/api/src' -name *.ts -newer '/Users/rejaulkarim/Documents/Hotel OTA/apps/api/src/middleware/sanitize.ts')"
+    ],
+    "additionalDirectories": [
+      "/Users/rejaulkarim/Documents/Hotel OTA/apps/ota-web/src/app/hotel",
+      "/Users/rejaulkarim/Documents/Hotel OTA/apps/ota-web/src/app/trips"
+    ]
+  }
+}

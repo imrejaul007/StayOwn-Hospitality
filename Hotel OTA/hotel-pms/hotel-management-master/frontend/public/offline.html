@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Hotel Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .offline-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        .offline-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: #f3f4f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .offline-icon::before {
+            content: "📡";
+            font-size: 60px;
+            opacity: 0.3;
+        }
+        
+        .offline-icon::after {
+            content: "❌";
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font-size: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .features {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .features h3 {
+            color: #374151;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+            color: #4b5563;
+        }
+        
+        .feature-list li::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+        
+        .retry-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            min-width: 140px;
+        }
+        
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .retry-btn:active {
+            transform: translateY(0);
+        }
+        
+        .home-btn {
+            background: transparent;
+            color: #667eea;
+            border: 2px solid #667eea;
+        }
+        
+        .home-btn:hover {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
+        }
+        
+        .status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 12px;
+            background: #fef3c7;
+            border-radius: 8px;
+            color: #92400e;
+            font-weight: 500;
+        }
+        
+        .status.online {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: #f59e0b;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .pulse.online {
+            background: #10b981;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.1);
+            }
+        }
+        
+        .sync-queue {
+            background: #e0f2fe;
+            border: 1px solid #0288d1;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .sync-queue.visible {
+            display: block;
+        }
+        
+        .sync-queue h4 {
+            color: #01579b;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .sync-queue p {
+            color: #0277bd;
+            margin: 5px 0;
+            font-size: 0.95rem;
+        }
+        
+        @media (max-width: 600px) {
+            .offline-container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .offline-icon {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .offline-icon::before {
+                font-size: 50px;
+            }
+            
+            .offline-icon::after {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon"></div>
+        
+        <h1>You're Offline</h1>
+        
+        <div id="connection-status" class="status">
+            <div class="pulse"></div>
+            <span>Checking connection...</span>
+        </div>
+        
+        <p>Don't worry! The Hotel Management System works offline too. Your work will be automatically synchronized when you reconnect.</p>
+        
+        <div class="features">
+            <h3>Available Offline:</h3>
+            <ul class="feature-list">
+                <li>View and complete housekeeping tasks</li>
+                <li>Capture photos and voice notes</li>
+                <li>Update room status and inventory</li>
+                <li>Access cached reports and data</li>
+                <li>Record maintenance requests</li>
+                <li>Manage guest service requests</li>
+            </ul>
+        </div>
+        
+        <div id="sync-queue" class="sync-queue">
+            <h4>📤 Pending Sync</h4>
+            <p id="sync-items">Checking for items to sync...</p>
+        </div>
+        
+        <div>
+            <button onclick="retry()" class="retry-btn">
+                🔄 Try Again
+            </button>
+            <button onclick="goHome()" class="retry-btn home-btn">
+                🏠 Go to Home
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Check online status
+        function updateConnectionStatus() {
+            const statusEl = document.getElementById('connection-status');
+            const pulseEl = statusEl.querySelector('.pulse');
+            const textEl = statusEl.querySelector('span');
+            
+            if (navigator.onLine) {
+                statusEl.className = 'status online';
+                pulseEl.className = 'pulse online';
+                textEl.textContent = 'Connection restored!';
+                
+                // Auto-retry after 2 seconds when online
+                setTimeout(() => {
+                    window.location.reload();
+                }, 2000);
+            } else {
+                statusEl.className = 'status';
+                pulseEl.className = 'pulse';
+                textEl.textContent = 'No internet connection';
+            }
+        }
+        
+        // Check for sync queue
+        function checkSyncQueue() {
+            const syncQueueEl = document.getElementById('sync-queue');
+            const syncItemsEl = document.getElementById('sync-items');
+            
+            // Check localStorage for offline data
+            try {
+                const offlineData = localStorage.getItem('housekeeping_offline_data');
+                if (offlineData) {
+                    const data = JSON.parse(offlineData);
+                    const totalItems = (data.tasks?.length || 0) + 
+                                     (data.photos?.length || 0) + 
+                                     (data.voiceNotes?.length || 0);
+                    
+                    if (totalItems > 0) {
+                        syncQueueEl.classList.add('visible');
+                        syncItemsEl.innerHTML = `
+                            ${data.tasks?.length || 0} tasks to sync<br>
+                            ${data.photos?.length || 0} photos to upload<br>
+                            ${data.voiceNotes?.length || 0} voice notes to upload
+                        `;
+                        return;
+                    }
+                }
+                
+                syncQueueEl.classList.remove('visible');
+                syncItemsEl.textContent = 'No items pending sync';
+            } catch (error) {
+                console.error('Error checking sync queue:', error);
+                syncQueueEl.classList.remove('visible');
+            }
+        }
+        
+        // Retry connection
+        function retry() {
+            const button = event.target;
+            button.textContent = '🔄 Checking...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }
+        
+        // Go to home
+        function goHome() {
+            // Try to navigate to cached home page
+            window.location.href = '/';
+        }
+        
+        // Listen for online/offline events
+        window.addEventListener('online', updateConnectionStatus);
+        window.addEventListener('offline', updateConnectionStatus);
+        
+        // Service Worker messaging
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.addEventListener('message', (event) => {
+                const { type, data } = event.data;
+                
+                switch (type) {
+                    case 'sync-success':
+                        checkSyncQueue();
+                        break;
+                    case 'sync-complete':
+                        checkSyncQueue();
+                        if (navigator.onLine) {
+                            // Show success message and redirect
+                            setTimeout(() => {
+                                window.location.href = '/';
+                            }, 1500);
+                        }
+                        break;
+                }
+            });
+        }
+        
+        // Initialize
+        updateConnectionStatus();
+        checkSyncQueue();
+        
+        // Periodic checks
+        setInterval(updateConnectionStatus, 5000);
+        setInterval(checkSyncQueue, 10000);
+        
+        // Auto-retry when online
+        if (navigator.onLine) {
+            setTimeout(() => {
+                window.location.reload();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "code-reviewer-agent",
+  "version": "1.0.0",
+  "description": "Autonomous Code Reviewer Agent System for Hotel Management PMS",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "review": "node index.js",
+    "review:security": "node index.js --agents=security",
+    "review:bugs": "node index.js --agents=bugs",
+    "review:architecture": "node index.js --agents=architecture",
+    "review:performance": "node index.js --agents=performance",
+    "review:dataflow": "node index.js --agents=dataflow",
+    "review:all": "node index.js --agents=all",
+    "fix": "node index.js --mode=fix",
+    "report": "node index.js --mode=report-only"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

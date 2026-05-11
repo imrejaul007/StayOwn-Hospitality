@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"logId":{"$numberInt":"1"}},"name":"logId_1","background":true,"unique":true}],"uuid":"db405c5eac4a4c79b12ff22e87719ce7","collectionName":"ratepuritylogs","type":"collection"}

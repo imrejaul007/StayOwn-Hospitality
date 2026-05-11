@@ -1,0 +1,57 @@
+{
+  "campaign": "week4-formal-load-test",
+  "executedAt": "",
+  "environment": {
+    "name": "",
+    "baseUrl": "",
+    "commitSha": "",
+    "branch": ""
+  },
+  "scenario": {
+    "tool": "k6",
+    "script": "backend/src/scripts/load-test.k6.js",
+    "durationMinutes": 12,
+    "peakVirtualUsers": 500
+  },
+  "thresholds": {
+    "p95LatencyMs": {
+      "target": 500,
+      "actual": null,
+      "pass": false
+    },
+    "p99LatencyMs": {
+      "target": 1200,
+      "actual": null,
+      "pass": false
+    },
+    "errorRatePercent": {
+      "target": 1,
+      "actual": null,
+      "pass": false
+    }
+  },
+  "throughput": {
+    "targetRps": null,
+    "actualRps": null,
+    "pass": false
+  },
+  "dependencies": {
+    "database": {
+      "status": "unknown",
+      "notes": ""
+    },
+    "redis": {
+      "status": "unknown",
+      "notes": ""
+    },
+    "queue": {
+      "status": "unknown",
+      "notes": ""
+    }
+  },
+  "result": {
+    "goLiveEligible": false,
+    "summary": "",
+    "openIssues": []
+  }
+}

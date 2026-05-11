@@ -1,0 +1,44 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e5]:
+  - generic [ref=e6]:
+    - heading "Join The Pentouz" [level=1] [ref=e7]:
+      - text: Join
+      - generic [ref=e8]: The Pentouz
+    - paragraph [ref=e9]: Create your account and unlock exclusive benefits
+  - generic [ref=e10]:
+    - generic [ref=e11]:
+      - generic [ref=e12]:
+        - generic [ref=e13]: Full Name *
+        - textbox "Full Name *" [ref=e14]: Test User
+      - generic [ref=e15]:
+        - generic [ref=e16]: Email Address *
+        - textbox "Email Address *" [ref=e17]: test.1758105336892@example.com
+      - generic [ref=e18]:
+        - generic [ref=e19]: Phone Number
+        - textbox "Phone Number" [ref=e20]
+      - generic [ref=e21]:
+        - generic [ref=e22]: Password *
+        - textbox "Password *" [ref=e23]: Test@123456
+      - generic [ref=e24]:
+        - generic [ref=e25]: Confirm Password *
+        - textbox "Confirm Password *" [active] [ref=e26]: Test@123456
+      - button "Create Account" [ref=e27] [cursor=pointer]
+    - paragraph [ref=e29]:
+      - text: Already have an account?
+      - link "Sign in here" [ref=e30] [cursor=pointer]:
+        - /url: /login
+    - generic [ref=e31]:
+      - heading "Member Benefits:" [level=3] [ref=e32]
+      - list [ref=e33]:
+        - listitem [ref=e34]:
+          - img [ref=e35]
+          - text: Exclusive member rates and discounts
+        - listitem [ref=e37]:
+          - img [ref=e38]
+          - text: Priority booking and room upgrades
+        - listitem [ref=e40]:
+          - img [ref=e41]
+          - text: Loyalty points and rewards program
+```

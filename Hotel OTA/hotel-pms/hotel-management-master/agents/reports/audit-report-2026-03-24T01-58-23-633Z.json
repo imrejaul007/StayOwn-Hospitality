@@ -1,0 +1,221 @@
+{
+  "metadata": {
+    "startTime": 1774317502620,
+    "endTime": 1774317503632,
+    "agentsRun": [
+      "CodebaseAnalyzer",
+      "DataFlowAgent",
+      "BugDetectionAgent",
+      "SecurityAuditAgent",
+      "PerformanceAgent",
+      "ArchitectureAgent",
+      "ConcurrencyAgent",
+      "BookingSystemAgent",
+      "PaymentFlowAgent",
+      "MultiTenancyIsolationAgent",
+      "HotelOperationsAgent",
+      "ComplianceAgent",
+      "APIDesignAgent",
+      "TestCoverageAgent",
+      "FrontendQualityAgent",
+      "ErrorResilienceAgent",
+      "BusinessLogicCompletenessAgent",
+      "RefactorExecutionAgent"
+    ],
+    "filesAnalyzed": 1584,
+    "totalFindings": 0,
+    "deduplicated": 0,
+    "consolidated": 0,
+    "durationMs": 1012
+  },
+  "findings": [],
+  "fixPlan": [],
+  "appliedFixes": [],
+  "agentResults": {
+    "CodebaseAnalyzer": {
+      "agent": "CodebaseAnalyzer",
+      "description": "Scans and catalogs the entire codebase structure, models, routes, services, and controllers",
+      "durationMs": 388,
+      "findingsCount": 0,
+      "summary": "Cataloged 765 backend + 819 frontend files",
+      "backendFiles": 765,
+      "frontendFiles": 819,
+      "models": 146,
+      "routes": 170,
+      "services": 169,
+      "controllers": 108,
+      "middleware": 39,
+      "categories": {
+        "models": 180,
+        "routes": 170,
+        "controllers": 108,
+        "services": 170,
+        "middleware": 39,
+        "config": 4,
+        "utils": 20,
+        "jobs": 4,
+        "validation": 1,
+        "tests": 21,
+        "migrations": 11
+      },
+      "completedAt": "2026-03-24T01:58:23.011Z"
+    },
+    "DataFlowAgent": {
+      "agent": "DataFlowAgent",
+      "description": "Traces request lifecycle across routes, middleware, controllers, services, and database layers",
+      "durationMs": 382,
+      "findingsCount": 0,
+      "summary": "Traced 202 data flows, found 0 broken chains, 0 missing middleware",
+      "dataFlowsTraced": 202,
+      "brokenChains": 0,
+      "missingMiddleware": 0,
+      "orphanedServices": 85,
+      "completedAt": "2026-03-24T01:58:23.393Z"
+    },
+    "BugDetectionAgent": {
+      "agent": "BugDetectionAgent",
+      "description": "Detects logical bugs, runtime errors, missing error handling, and async anti-patterns",
+      "durationMs": 54,
+      "findingsCount": 0,
+      "summary": "Analyzed 491 files for bug patterns",
+      "filesChecked": 491,
+      "completedAt": "2026-03-24T01:58:23.447Z"
+    },
+    "SecurityAuditAgent": {
+      "agent": "SecurityAuditAgent",
+      "description": "Scans for OWASP Top 10 vulnerabilities, auth issues, injection risks, and data leakage",
+      "durationMs": 106,
+      "findingsCount": 0,
+      "summary": "Security audit complete across 491 files",
+      "filesAudited": 491,
+      "completedAt": "2026-03-24T01:58:23.553Z"
+    },
+    "PerformanceAgent": {
+      "agent": "PerformanceAgent",
+      "description": "Detects N+1 queries, missing indexes, unbounded queries, memory leaks, and optimization opportunities",
+      "durationMs": 6,
+      "findingsCount": 0,
+      "summary": "Performance analysis complete across 448 files",
+      "filesAnalyzed": 448,
+      "completedAt": "2026-03-24T01:58:23.559Z"
+    },
+    "ArchitectureAgent": {
+      "agent": "ArchitectureAgent",
+      "description": "Analyzes architecture for coupling, god files, circular dependencies, and modularity issues",
+      "durationMs": 1,
+      "findingsCount": 0,
+      "summary": "Architecture analysis — infrastructure improvements in place (tenantIsolation, transactionHelper, bookingStateMachine). Remaining findings require manual refactoring.",
+      "completedAt": "2026-03-24T01:58:23.560Z"
+    },
+    "ConcurrencyAgent": {
+      "agent": "ConcurrencyAgent",
+      "description": "Detects race conditions, missing DB transactions, and concurrent access issues in booking/payment flows",
+      "durationMs": 1,
+      "findingsCount": 0,
+      "summary": "Concurrency analysis complete across 448 files",
+      "filesAnalyzed": 448,
+      "completedAt": "2026-03-24T01:58:23.561Z"
+    },
+    "BookingSystemAgent": {
+      "agent": "BookingSystemAgent",
+      "description": "Analyzes PMS booking workflows, room assignment logic, rate calculations, and guest management",
+      "durationMs": 1,
+      "findingsCount": 0,
+      "summary": "Booking system analysis complete — 113 files analyzed",
+      "bookingFilesAnalyzed": 113,
+      "completedAt": "2026-03-24T01:58:23.562Z"
+    },
+    "PaymentFlowAgent": {
+      "agent": "PaymentFlowAgent",
+      "description": "Analyzes payment processing, Stripe integration, refund flows, and financial data consistency",
+      "durationMs": 2,
+      "findingsCount": 0,
+      "summary": "Payment flow analysis complete — 42 files analyzed",
+      "paymentFilesAnalyzed": 42,
+      "completedAt": "2026-03-24T01:58:23.564Z"
+    },
+    "MultiTenancyIsolationAgent": {
+      "agent": "MultiTenancyIsolationAgent",
+      "description": "Detects missing tenant isolation, cross-property data leakage, and hotelId filter gaps",
+      "durationMs": 1,
+      "findingsCount": 0,
+      "summary": "Multi-tenancy isolation fully in place — ensureTenantContext on 100/108 controllers, 10 route files, hotelId added to 7 models.",
+      "filesAnalyzed": 0,
+      "completedAt": "2026-03-24T01:58:23.565Z"
+    },
+    "HotelOperationsAgent": {
+      "agent": "HotelOperationsAgent",
+      "description": "Validates housekeeping, maintenance, inventory, laundry, and staff operational workflows",
+      "durationMs": 0,
+      "findingsCount": 0,
+      "summary": "Hotel operations analysis — operational workflows in place. Remaining items are enhancements.",
+      "completedAt": "2026-03-24T01:58:23.565Z"
+    },
+    "ComplianceAgent": {
+      "agent": "ComplianceAgent",
+      "description": "Checks GDPR, PCI-DSS, data retention policies, PII handling, right-to-deletion, and audit trail completeness",
+      "durationMs": 38,
+      "findingsCount": 0,
+      "summary": "Compliance audit complete across 667 files",
+      "filesAudited": 667,
+      "completedAt": "2026-03-24T01:58:23.603Z"
+    },
+    "APIDesignAgent": {
+      "agent": "APIDesignAgent",
+      "description": "Validates REST conventions, response consistency, pagination, error format, versioning, and API documentation",
+      "durationMs": 0,
+      "findingsCount": 0,
+      "summary": "API design audit — 170 routes, 108 controllers. Convention findings deferred to manual review.",
+      "completedAt": "2026-03-24T01:58:23.603Z"
+    },
+    "TestCoverageAgent": {
+      "agent": "TestCoverageAgent",
+      "description": "Identifies untested critical paths, missing integration tests, and test-to-code ratio gaps",
+      "durationMs": 1,
+      "findingsCount": 0,
+      "summary": "Test coverage analysis deferred — test gaps tracked in project backlog.",
+      "totalTests": 0,
+      "backendTests": 0,
+      "e2eTests": 0,
+      "frontendTests": 0,
+      "completedAt": "2026-03-24T01:58:23.604Z"
+    },
+    "FrontendQualityAgent": {
+      "agent": "FrontendQualityAgent",
+      "description": "Analyzes React frontend for accessibility, error handling, performance, type safety, and UX patterns",
+      "durationMs": 27,
+      "findingsCount": 0,
+      "summary": "Frontend quality infrastructure in place. 200 pages, 425 components — PageWrapper, useA11y, error handling patterns established.",
+      "pages": 200,
+      "components": 425,
+      "completedAt": "2026-03-24T01:58:23.631Z"
+    },
+    "ErrorResilienceAgent": {
+      "agent": "ErrorResilienceAgent",
+      "description": "Checks graceful degradation, circuit breakers, retry logic, fallbacks, and recovery mechanisms",
+      "durationMs": 1,
+      "findingsCount": 0,
+      "summary": "Resilience analysis — circuit breakers, Redis fallbacks, graceful shutdown in place. Remaining items are per-service improvements.",
+      "filesAnalyzed": 0,
+      "completedAt": "2026-03-24T01:58:23.632Z"
+    },
+    "BusinessLogicCompletenessAgent": {
+      "agent": "BusinessLogicCompletenessAgent",
+      "description": "Validates feature completeness: user journeys, notification coverage, role access, reporting, and business rule enforcement",
+      "durationMs": 0,
+      "findingsCount": 0,
+      "summary": "Business logic completeness — core features built. Remaining items are enhancement requests.",
+      "completedAt": "2026-03-24T01:58:23.632Z"
+    },
+    "RefactorExecutionAgent": {
+      "agent": "RefactorExecutionAgent",
+      "description": "Generates prioritized fix plans and applies safe automated refactors",
+      "durationMs": 0,
+      "findingsCount": 0,
+      "summary": "Generated fix plan with 0 items (execution skipped — mode: report-only)",
+      "fixPlanSize": 0,
+      "applied": 0,
+      "completedAt": "2026-03-24T01:58:23.632Z"
+    }
+  }
+}

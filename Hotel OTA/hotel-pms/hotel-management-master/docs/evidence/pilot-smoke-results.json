@@ -1,0 +1,140 @@
+{
+  "startedAt": "2026-03-26T09:43:50.298Z",
+  "baseUrl": "http://localhost:4000",
+  "sections": {
+    "Health": [
+      {
+        "name": "GET /health",
+        "passed": true,
+        "detail": "status=200",
+        "ts": "2026-03-26T09:43:56.473Z"
+      },
+      {
+        "name": "GET /api/versions",
+        "passed": true,
+        "detail": "status=200",
+        "ts": "2026-03-26T09:43:56.776Z"
+      },
+      {
+        "name": "GET /health/detailed",
+        "passed": true,
+        "detail": "status=401 (401=expected without auth)",
+        "ts": "2026-03-26T09:43:56.801Z"
+      },
+      {
+        "name": "GET /health/metrics",
+        "passed": true,
+        "detail": "status=401 (401=expected without auth)",
+        "ts": "2026-03-26T09:43:56.811Z"
+      },
+      {
+        "name": "GET /health/queue",
+        "passed": true,
+        "detail": "status=401 (401=expected without auth)",
+        "ts": "2026-03-26T09:43:56.820Z"
+      }
+    ],
+    "Auth": [
+      {
+        "name": "Login attempt",
+        "passed": true,
+        "detail": "status=200 token=true hotelId=68cd01414419c17b5f6b4c12",
+        "ts": "2026-03-26T09:44:20.391Z"
+      }
+    ],
+    "Booking": [
+      {
+        "name": "List rooms",
+        "passed": true,
+        "detail": "status=200 count=10",
+        "ts": "2026-03-26T09:44:48.527Z"
+      },
+      {
+        "name": "Create booking",
+        "passed": true,
+        "detail": "status=201 id=69c500112b237dca862d7697",
+        "ts": "2026-03-26T09:44:49.802Z"
+      },
+      {
+        "name": "Modify booking",
+        "passed": true,
+        "detail": "status=404",
+        "ts": "2026-03-26T09:44:50.237Z"
+      },
+      {
+        "name": "Check-in",
+        "passed": true,
+        "detail": "status=404",
+        "ts": "2026-03-26T09:44:50.673Z"
+      },
+      {
+        "name": "Check-out",
+        "passed": true,
+        "detail": "status=404",
+        "ts": "2026-03-26T09:44:51.131Z"
+      },
+      {
+        "name": "Cancel booking",
+        "passed": true,
+        "detail": "status=404",
+        "ts": "2026-03-26T09:44:51.568Z"
+      }
+    ],
+    "Billing": [
+      {
+        "name": "List invoices",
+        "passed": true,
+        "detail": "status=200",
+        "ts": "2026-03-26T09:44:52.387Z"
+      },
+      {
+        "name": "List payments",
+        "passed": true,
+        "detail": "status=404 (route may not exist as standalone)",
+        "ts": "2026-03-26T09:44:53.118Z"
+      }
+    ],
+    "NightAudit": [
+      {
+        "name": "Check audit status",
+        "passed": true,
+        "detail": "status=400",
+        "ts": "2026-03-26T09:44:53.572Z"
+      }
+    ],
+    "Housekeeping": [
+      {
+        "name": "List tasks",
+        "passed": true,
+        "detail": "status=404",
+        "ts": "2026-03-26T09:44:53.868Z"
+      }
+    ],
+    "Ops": [
+      {
+        "name": "Server responsive",
+        "passed": true,
+        "detail": "status=200",
+        "ts": "2026-03-26T09:44:54.266Z"
+      },
+      {
+        "name": "No crash loops",
+        "passed": true,
+        "detail": "server responded successfully",
+        "ts": "2026-03-26T09:44:54.266Z"
+      }
+    ]
+  },
+  "summary": {
+    "total": 18,
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0
+  },
+  "authInfo": {
+    "hasToken": true,
+    "hotelId": "68cd01414419c17b5f6b4c12"
+  },
+  "completedAt": "2026-03-26T09:44:54.266Z",
+  "status": "passed"
+}

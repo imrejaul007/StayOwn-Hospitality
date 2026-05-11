@@ -1,0 +1,1962 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── ENUMS ──────────────────────────────────────────────────
+
+enum UserTier {
+  basic
+  silver
+  gold
+}
+
+enum AttributionSource {
+  ota_app
+  rez_app
+  corporate
+  hotel_qr
+  seo
+  direct
+}
+
+enum HotelCategory {
+  budget
+  midscale
+  upscale
+  boutique
+  serviced_apartment
+}
+
+enum OnboardingStatus {
+  pending
+  active
+  suspended
+  churned
+}
+
+enum ChannelSource {
+  ota_app
+  rez_app
+  corporate
+  hotel_qr
+}
+
+enum BookingStatus {
+  init
+  hold
+  confirmed
+  checked_in
+  stayed
+  cancelled
+  no_show
+  completed
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  refunded
+  partial_refund
+}
+
+enum PaymentMethod {
+  upi
+  card
+  netbanking
+  ota_wallet
+  rez_wallet
+  corporate_credit
+}
+
+enum RefundStatus {
+  not_applicable
+  pending
+  processed
+}
+
+enum BookingEventType {
+  created
+  hold_placed
+  confirmed
+  payment_received
+  checked_in
+  stayed
+  cancelled
+  refunded
+  coin_earned
+  coin_burned
+  mining_triggered
+  settlement_triggered
+}
+
+enum EventTriggeredBy {
+  user
+  system
+  admin
+  rez_webhook
+}
+
+enum CoinType {
+  ota
+  rez
+  hotel_brand
+}
+
+enum CoinTransactionType {
+  earn
+  burn
+  expire
+  refund_credit
+  admin_adjust
+  earn_reversal
+}
+
+enum CoinDirection {
+  credit
+  debit
+}
+
+enum EarnRuleChannel {
+  ota_app
+  rez_app
+  corporate
+  hotel_qr
+  all
+}
+
+enum EarnRuleTier {
+  basic
+  silver
+  gold
+  all
+}
+
+enum SettlementStatus {
+  pending
+  approved
+  paid
+  disputed
+  cancelled
+}
+
+enum PayoutBatchStatus {
+  processing
+  completed
+  failed
+}
+
+enum CoinExpiryStatus {
+  pending
+  expired
+  used
+}
+
+// ─── PHASE 1: CORE TABLES ──────────────────────────────────
+
+model User {
+  id                  String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  phone               String            @unique @db.VarChar(15)
+  email               String?           @unique @db.VarChar(255)
+  fullName            String?           @map("full_name") @db.VarChar(255)
+  profilePhotoUrl     String?           @map("profile_photo_url")
+  tier                UserTier          @default(basic)
+  rezUserId           String?           @map("rez_user_id") @db.VarChar(255)
+  attributionSource   AttributionSource @default(ota_app) @map("attribution_source")
+  attributionPartner  String?           @map("attribution_partner") @db.VarChar(50)
+  attributionExpiryTs DateTime?         @map("attribution_expiry_ts") @db.Timestamptz()
+  lastCampaignClickTs DateTime?         @map("last_campaign_click_ts") @db.Timestamptz()
+  lastCampaignId      String?           @map("last_campaign_id") @db.VarChar(100)
+  createdAt           DateTime          @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt           DateTime          @updatedAt @map("updated_at") @db.Timestamptz()
+  isActive            Boolean           @default(true) @map("is_active")
+  fcmToken            String?           @map("fcm_token")
+
+  bookings                Booking[]
+  coinWallet              CoinWallet?
+  coinTransactions        CoinTransaction[]
+  coinExpirySchedules     CoinExpirySchedule[]
+  stayRegistrations       StayRegistration[]
+  attributionLogs         AttributionLog[]
+  offlinePayments         OfflinePayment[]
+  corporateUsers          CorporateUser[]
+  referralsMade           Referral[]                    @relation("referrer")
+  referralsReceived       Referral[]                    @relation("referred")
+  reviews                 Review[]
+  wishlists               Wishlist[]
+  hotelBrandCoinBalances  HotelBrandCoinBalance[]
+  bookingCoinTransactions HotelBookingCoinTransaction[]
+
+  @@map("users")
+}
+
+model Hotel {
+  id                           String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name                         String           @db.VarChar(255)
+  slug                         String           @unique @db.VarChar(255)
+  legalName                    String?          @map("legal_name") @db.VarChar(255)
+  gstin                        String?          @db.VarChar(15)
+  pan                          String?          @db.VarChar(10)
+  addressLine1                 String?          @map("address_line1") @db.VarChar(255)
+  addressLine2                 String?          @map("address_line2") @db.VarChar(255)
+  city                         String           @default("Bangalore") @db.VarChar(100)
+  pincode                      String?          @db.VarChar(10)
+  latitude                     Decimal?         @db.Decimal(10, 7)
+  longitude                    Decimal?         @db.Decimal(10, 7)
+  starRating                   Int?             @map("star_rating") @db.SmallInt
+  category                     HotelCategory?
+  description                  String?
+  amenities                    Json?            @db.JsonB
+  images                       Json?            @db.JsonB
+  primaryContactName           String?          @map("primary_contact_name") @db.VarChar(255)
+  primaryContactPhone          String?          @map("primary_contact_phone") @db.VarChar(15)
+  primaryContactEmail          String?          @map("primary_contact_email") @db.VarChar(255)
+  bankAccountNumber            String?          @map("bank_account_number") @db.VarChar(50)
+  bankIfsc                     String?          @map("bank_ifsc") @db.VarChar(11)
+  bankAccountName              String?          @map("bank_account_name") @db.VarChar(255)
+  onboardingStatus             OnboardingStatus @default(pending) @map("onboarding_status")
+  participationAgreementSigned Boolean          @default(false) @map("participation_agreement_signed")
+  participationAgreementDate   DateTime?        @map("participation_agreement_date") @db.Date
+  otaCommissionPct             Decimal          @default(6.00) @map("ota_commission_pct") @db.Decimal(4, 2)
+  miningEligible               Boolean          @default(true) @map("mining_eligible")
+  brandCoinEnabled             Boolean          @default(false) @map("brand_coin_enabled")
+  brandCoinName                String?          @map("brand_coin_name") @db.VarChar(100)
+  brandCoinSymbol              String?          @map("brand_coin_symbol") @db.VarChar(20)
+  pmsWebhookUrl                String?          @map("pms_webhook_url") @db.VarChar(500)
+  pmsWebhookSecret             String?          @map("pms_webhook_secret") @db.VarChar(255)
+  pmsWebhookActive             Boolean          @default(false) @map("pms_webhook_active")
+  pmsWebhookLastTriggeredAt    DateTime?        @map("pms_webhook_last_triggered_at") @db.Timestamptz()
+  pmsWebhookErrorCount         Int              @default(0) @map("pms_webhook_error_count")
+  hotelId                      String?          @unique @map("hotel_id") @db.Uuid
+  createdAt                    DateTime         @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt                    DateTime         @updatedAt @map("updated_at") @db.Timestamptz()
+
+  roomTypes               RoomType[]
+  rooms                   Room[]
+  inventorySlots          InventorySlot[]
+  bookings                Booking[]
+  hotelWallet             HotelWallet?
+  settlementEntries       SettlementEntry[]
+  earnRules               EarnRule[]
+  stayRegistrations       StayRegistration[]
+  contributionScores      HotelContributionScore[]
+  ownershipTokens         OwnershipTokenLedger[]
+  vestingSchedules        VestingSchedule[]
+  offlinePayments         OfflinePayment[]
+  apiKeys                 HotelApiKey[]
+  channelManagerConfigs   ChannelManagerConfig[]
+  seoLandingPages         SeoLandingPage[]
+  pricingSuggestions      PricingSuggestion[]
+  demandForecasts         DemandForecast[]
+  miningDisputes          MiningDispute[]
+  reviews                 Review[]
+  wishlists               Wishlist[]
+  brandCoinBalances       HotelBrandCoinBalance[]
+  brandCoinTransactions   CoinTransaction[]             @relation("BrandCoinTransactions")
+  coinExpirySchedules     CoinExpirySchedule[]          @relation("ExpiryScheduleHotel")
+  pmsWebhookEvents        PmsWebhookEvent[]
+  bookingCoinTransactions HotelBookingCoinTransaction[]
+  RoomServiceRequest      RoomServiceRequest[]
+  hotelStaffInvite       StaffInvite[]
+
+  @@map("hotels")
+}
+
+model RoomType {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId       String   @map("hotel_id") @db.Uuid
+  name          String   @db.VarChar(255)
+  description   String?
+  maxOccupancy  Int      @default(2) @map("max_occupancy") @db.SmallInt
+  bedType       String?  @map("bed_type") @db.VarChar(100)
+  sizeSqft      Int?     @map("size_sqft") @db.SmallInt
+  amenities     Json?    @db.JsonB
+  images        Json?    @db.JsonB
+  baseRatePaise Int      @map("base_rate_paise")
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  hotel              Hotel               @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  inventorySlots     InventorySlot[]
+  bookings           Booking[]
+  pricingSuggestions PricingSuggestion[]
+  rooms              Room[]
+
+  @@map("room_types")
+}
+
+model InventorySlot {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId        String   @map("hotel_id") @db.Uuid
+  roomTypeId     String   @map("room_type_id") @db.Uuid
+  date           DateTime @db.Date
+  totalRooms     Int      @map("total_rooms") @db.SmallInt
+  availableRooms Int      @map("available_rooms") @db.SmallInt
+  ratePaise      Int      @map("rate_paise")
+  minStayNights  Int      @default(1) @map("min_stay_nights") @db.SmallInt
+  isBlocked      Boolean  @default(false) @map("is_blocked")
+  blockReason    String?  @map("block_reason") @db.VarChar(255)
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  hotel    Hotel    @relation(fields: [hotelId], references: [id])
+  roomType RoomType @relation(fields: [roomTypeId], references: [id])
+
+  @@unique([roomTypeId, date])
+  @@index([hotelId, date])
+  @@index([roomTypeId, date, availableRooms])
+  @@map("inventory_slots")
+}
+
+model Booking {
+  id                          String         @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingRef                  String         @unique @map("booking_ref") @db.VarChar(20)
+  userId                      String         @map("user_id") @db.Uuid
+  hotelId                     String         @map("hotel_id") @db.Uuid
+  roomTypeId                  String         @map("room_type_id") @db.Uuid
+  channelSource               ChannelSource  @map("channel_source")
+  attributionPartner          String?        @map("attribution_partner") @db.VarChar(50)
+  campaignId                  String?        @map("campaign_id") @db.VarChar(100)
+  checkinDate                 DateTime       @map("checkin_date") @db.Date
+  checkoutDate                DateTime       @map("checkout_date") @db.Date
+  checkIn                     DateTime?      @map("check_in") @db.Timestamptz()
+  checkOut                    DateTime?      @map("check_out") @db.Timestamptz()
+  numNights                   Int            @map("num_nights") @db.SmallInt
+  numRooms                    Int            @default(1) @map("num_rooms") @db.SmallInt
+  numGuests                   Int            @default(1) @map("num_guests") @db.SmallInt
+  guestName                   String?        @map("guest_name") @db.VarChar(255)
+  guestPhone                  String?        @map("guest_phone") @db.VarChar(15)
+  specialRequests             String?        @map("special_requests")
+  roomRatePaise               Int            @map("room_rate_paise")
+  totalValuePaise             Int            @map("total_value_paise")
+  otaCommissionPaise          Int            @map("ota_commission_paise")
+  otaCoinBurnedPaise          Int            @default(0) @map("ota_coin_burned_paise")
+  rezCoinBurnedPaise          Int            @default(0) @map("rez_coin_burned_paise")
+  hotelBrandCoinBurnedPaise   Int            @default(0) @map("hotel_brand_coin_burned_paise")
+  pgAmountPaise               Int            @map("pg_amount_paise")
+  paymentStatus               PaymentStatus  @default(pending) @map("payment_status")
+  paymentMethod               PaymentMethod? @map("payment_method")
+  razorpayOrderId             String?        @map("razorpay_order_id") @db.VarChar(255)
+  razorpayPaymentId           String?        @map("razorpay_payment_id") @db.VarChar(255)
+  status                      BookingStatus  @default(init)
+  cancellationReason          String?        @map("cancellation_reason")
+  cancelledAt                 DateTime?      @map("cancelled_at") @db.Timestamptz()
+  deletedAt                   DateTime?      @map("deleted_at") @db.Timestamptz() // M-1: Soft delete for GDPR/data retention
+  refundAmountPaise           Int            @default(0) @map("refund_amount_paise")
+  cancellationPenaltyPaise    Int            @default(0) @map("cancellation_penalty_paise")
+  refundStatus                RefundStatus   @default(not_applicable) @map("refund_status")
+  stayCompletedFlag           Boolean        @default(false) @map("stay_completed_flag")
+  stayCompletedAt             DateTime?      @map("stay_completed_at") @db.Timestamptz()
+  holdExpiresAt               DateTime?      @map("hold_expires_at") @db.Timestamptz()
+  // BUG-20: Mining eligibility snapshot — stores the hotel's mining eligibility
+  // at the time of booking confirmation to prevent rule changes from affecting past bookings
+  miningEligible              Boolean        @default(false) @map("mining_eligible")
+  miningRulesVersion          String         @default("v1") @map("mining_rules_version") @db.VarChar(20)
+  miningEligibilitySnapshotAt DateTime?      @map("mining_eligibility_snapshot_at") @db.Timestamptz()
+  createdAt                   DateTime       @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt                   DateTime       @updatedAt @map("updated_at") @db.Timestamptz()
+
+  user               User                 @relation(fields: [userId], references: [id])
+  hotel              Hotel                @relation(fields: [hotelId], references: [id])
+  roomType           RoomType             @relation(fields: [roomTypeId], references: [id])
+  bookingEvents      BookingEvent[]
+  coinTransactions   CoinTransaction[]
+  settlementEntry    SettlementEntry?
+  attributionLogs    AttributionLog[]
+  rezBookingSyncs    RezBookingSync[]
+  review             Review?
+  corporateAccount   CorporateAccount?    @relation(fields: [corporateAccountId], references: [id])
+  corporateAccountId String?              @map("corporate_account_id") @db.Uuid
+  refunds            Refund[]
+  RoomServiceRequest RoomServiceRequest[]
+
+  @@index([userId, createdAt])
+  @@index([hotelId, checkinDate])
+  @@index([status, checkinDate])
+  @@index([channelSource, attributionPartner])
+  @@map("bookings")
+}
+
+model BookingEvent {
+  id          String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingId   String           @map("booking_id") @db.Uuid
+  eventType   BookingEventType @map("event_type")
+  eventData   Json?            @map("event_data") @db.JsonB
+  triggeredBy EventTriggeredBy @map("triggered_by")
+  createdAt   DateTime         @default(now()) @map("created_at") @db.Timestamptz()
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+
+  @@index([bookingId, createdAt])
+  @@index([bookingId, eventType]) // M-2: Index for event type queries by booking
+  @@map("booking_events")
+}
+
+// ─── PHASE 1: COIN SYSTEM ──────────────────────────────────
+
+model CoinWallet {
+  id                         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                     String    @unique @map("user_id") @db.Uuid
+  otaCoinBalancePaise        Int       @default(0) @map("ota_coin_balance_paise")
+  otaCoinLifetimeEarnedPaise Int       @default(0) @map("ota_coin_lifetime_earned_paise")
+  otaCoinLifetimeBurnedPaise Int       @default(0) @map("ota_coin_lifetime_burned_paise")
+  rezCoinBalancePaise        Int       @default(0) @map("rez_coin_balance_paise")
+  hotelCoinsEarned           Int       @default(0) @map("hotel_coins_earned")
+  hotelCoinsSpent            Int       @default(0) @map("hotel_coins_spent")
+  coinExpiry                 DateTime? @map("coin_expiry") @db.Timestamptz()
+  expiringCoins              Int       @default(0) @map("expiring_coins")
+  updatedAt                  DateTime  @updatedAt @map("updated_at") @db.Timestamptz()
+
+  user                User                          @relation(fields: [userId], references: [id])
+  coinTransactions    CoinTransaction[]
+  expiryNotifications HotelCoinExpiryNotification[]
+
+  @@map("coin_wallets")
+}
+
+model CoinTransaction {
+  id                String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String              @map("user_id") @db.Uuid
+  walletId          String              @map("wallet_id") @db.Uuid
+  coinType          CoinType            @map("coin_type")
+  transactionType   CoinTransactionType @map("transaction_type")
+  amountPaise       Int                 @map("amount_paise")
+  direction         CoinDirection
+  bookingId         String?             @map("booking_id") @db.Uuid
+  earnRuleId        String?             @map("earn_rule_id") @db.Uuid
+  hotelId           String?             @map("hotel_id") @db.Uuid
+  expiryDate        DateTime?           @map("expiry_date") @db.Date
+  balanceAfterPaise Int                 @map("balance_after_paise")
+  notes             String?
+  idempotencyKey    String?             @map("idempotency_key") @db.VarChar(255)
+  createdAt         DateTime            @default(now()) @map("created_at") @db.Timestamptz()
+
+  user       User       @relation(fields: [userId], references: [id])
+  wallet     CoinWallet @relation(fields: [walletId], references: [id])
+  booking    Booking?   @relation(fields: [bookingId], references: [id])
+  earnRule   EarnRule?  @relation(fields: [earnRuleId], references: [id])
+  brandHotel Hotel?     @relation("BrandCoinTransactions", fields: [hotelId], references: [id])
+
+  coinExpirySchedules CoinExpirySchedule[]
+
+  @@index([userId, coinType, createdAt])
+  @@index([expiryDate])
+  @@index([idempotencyKey])
+  @@map("coin_transactions")
+}
+
+model EarnRule {
+  id                     String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ruleName               String          @map("rule_name") @db.VarChar(255)
+  coinType               CoinType        @map("coin_type")
+  channelSource          EarnRuleChannel @default(all) @map("channel_source")
+  hotelId                String?         @map("hotel_id") @db.Uuid
+  userTier               EarnRuleTier    @default(all) @map("user_tier")
+  campaignId             String?         @map("campaign_id") @db.VarChar(100)
+  earnPct                Decimal         @map("earn_pct") @db.Decimal(5, 2)
+  minBookingValuePaise   Int             @default(0) @map("min_booking_value_paise")
+  maxEarnPerBookingPaise Int?            @map("max_earn_per_booking_paise")
+  validFrom              DateTime        @map("valid_from") @db.Date
+  validUntil             DateTime?       @map("valid_until") @db.Date
+  isActive               Boolean         @default(true) @map("is_active")
+  createdAt              DateTime        @default(now()) @map("created_at") @db.Timestamptz()
+
+  hotel            Hotel?            @relation(fields: [hotelId], references: [id])
+  coinTransactions CoinTransaction[]
+
+  @@map("earn_rules")
+}
+
+model BurnRule {
+  id         String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  coinType   CoinType     @map("coin_type")
+  userTier   EarnRuleTier @default(all) @map("user_tier")
+  hotelId    String?      @map("hotel_id") @db.Uuid
+  maxBurnPct Decimal      @map("max_burn_pct") @db.Decimal(5, 2)
+  minCashPct Decimal      @default(0.00) @map("min_cash_pct") @db.Decimal(5, 2)
+  isActive   Boolean      @default(true) @map("is_active")
+  createdAt  DateTime     @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@map("burn_rules")
+}
+
+model CoinExpirySchedule {
+  id                  String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String           @map("user_id") @db.Uuid
+  coinType            CoinType         @map("coin_type")
+  hotelId             String?          @map("hotel_id") @db.Uuid
+  amountPaise         Int              @map("amount_paise")
+  expiryDate          DateTime         @map("expiry_date") @db.Date
+  sourceTransactionId String           @map("source_transaction_id") @db.Uuid
+  status              CoinExpiryStatus @default(pending)
+  processedAt         DateTime?        @map("processed_at") @db.Timestamptz()
+
+  user              User            @relation(fields: [userId], references: [id])
+  sourceTransaction CoinTransaction @relation(fields: [sourceTransactionId], references: [id])
+  hotel             Hotel?          @relation("ExpiryScheduleHotel", fields: [hotelId], references: [id])
+
+  @@index([expiryDate, status])
+  @@map("coin_expiry_schedule")
+}
+
+model HotelBrandCoinBalance {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String   @map("user_id") @db.Uuid
+  hotelId             String   @map("hotel_id") @db.Uuid
+  balancePaise        Int      @default(0) @map("balance_paise")
+  lifetimeEarnedPaise Int      @default(0) @map("lifetime_earned_paise")
+  lifetimeBurnedPaise Int      @default(0) @map("lifetime_burned_paise")
+  updatedAt           DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  user  User  @relation(fields: [userId], references: [id])
+  hotel Hotel @relation(fields: [hotelId], references: [id])
+
+  @@unique([userId, hotelId])
+  @@index([userId])
+  @@map("hotel_brand_coin_balances")
+}
+
+// ─── PHASE 1: HOTEL SETTLEMENT ─────────────────────────────
+
+model HotelWallet {
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId               String   @unique @map("hotel_id") @db.Uuid
+  availableBalancePaise Int      @default(0) @map("available_balance_paise")
+  pendingBalancePaise   Int      @default(0) @map("pending_balance_paise")
+  lifetimeEarnedPaise   Int      @default(0) @map("lifetime_earned_paise")
+  lifetimeSettledPaise  Int      @default(0) @map("lifetime_settled_paise")
+  updatedAt             DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  hotel Hotel @relation(fields: [hotelId], references: [id])
+
+  @@map("hotel_wallets")
+}
+
+model SettlementEntry {
+  id                 String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId            String           @map("hotel_id") @db.Uuid
+  bookingId          String           @unique @map("booking_id") @db.Uuid
+  grossAmountPaise   Int              @map("gross_amount_paise")
+  commissionPaise    Int              @map("commission_paise")
+  coinLiabilityPaise Int              @default(0) @map("coin_liability_paise")
+  netPayablePaise    Int              @map("net_payable_paise")
+  status             SettlementStatus @default(pending)
+  payoutBatchId      String?          @map("payout_batch_id") @db.Uuid
+  createdAt          DateTime         @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt          DateTime         @updatedAt @map("updated_at") @db.Timestamptz()
+
+  hotel       Hotel        @relation(fields: [hotelId], references: [id])
+  booking     Booking      @relation(fields: [bookingId], references: [id])
+  payoutBatch PayoutBatch? @relation(fields: [payoutBatchId], references: [id])
+
+  @@map("settlement_entries")
+}
+
+model PayoutBatch {
+  id               String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  batchRef         String            @unique @map("batch_ref") @db.VarChar(50)
+  totalHotels      Int               @map("total_hotels")
+  totalAmountPaise Int               @map("total_amount_paise")
+  status           PayoutBatchStatus @default(processing)
+  razorpayPayoutId String?           @map("razorpay_payout_id") @db.VarChar(255)
+  initiatedAt      DateTime          @default(now()) @map("initiated_at") @db.Timestamptz()
+  completedAt      DateTime?         @map("completed_at") @db.Timestamptz()
+
+  settlementEntries SettlementEntry[]
+
+  @@map("payout_batches")
+}
+
+// ─── OTP STORAGE ────────────────────────────────────────────
+
+model OtpRecord {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  phone     String   @db.VarChar(15)
+  otpHash   String   @map("otp_hash")
+  otpRef    String   @unique @map("otp_ref") @db.VarChar(50)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz()
+  verified  Boolean  @default(false)
+  attempts  Int      @default(0)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@index([phone, createdAt])
+  @@map("otp_records")
+}
+
+// ─── ADMIN USERS ────────────────────────────────────────────
+
+model AdminUser {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email        String   @unique @db.VarChar(255)
+  passwordHash String   @map("password_hash")
+  fullName     String   @map("full_name") @db.VarChar(255)
+  role         String   @default("admin") @db.VarChar(50)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("admin_users")
+}
+
+// ─── HOTEL STAFF AUTH ───────────────────────────────────────
+
+model HotelStaff {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId   String   @map("hotel_id") @db.Uuid
+  phone     String   @db.VarChar(15)
+  name      String?  @db.VarChar(255)
+  fullName  String   @map("full_name") @db.VarChar(255)
+  role      String   @default("manager") @db.VarChar(50)
+  skills    String[] @default([])
+  isActive  Boolean  @default(true) @map("is_active")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@unique([hotelId, phone])
+  @@map("hotel_staff")
+}
+
+// ─── STAY REGISTRATION (Phase 1: manual review) ────────────
+
+enum VerificationStatus {
+  pending
+  approved
+  rejected
+}
+
+model StayRegistration {
+  id                 String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId             String             @map("user_id") @db.Uuid
+  hotelId            String             @map("hotel_id") @db.Uuid
+  stayDate           DateTime           @map("stay_date") @db.Date
+  receiptImageUrl    String             @map("receipt_image_url")
+  ocrExtractedData   Json?              @map("ocr_extracted_data") @db.JsonB
+  verificationStatus VerificationStatus @default(pending) @map("verification_status")
+  reviewerId         String?            @map("reviewer_id") @db.Uuid
+  rejectionReason    String?            @map("rejection_reason")
+  coinsAwardedPaise  Int                @default(0) @map("coins_awarded_paise")
+  coinTransactionId  String?            @map("coin_transaction_id") @db.Uuid
+  createdAt          DateTime           @default(now()) @map("created_at") @db.Timestamptz()
+  reviewedAt         DateTime?          @map("reviewed_at") @db.Timestamptz()
+
+  user  User  @relation(fields: [userId], references: [id])
+  hotel Hotel @relation(fields: [hotelId], references: [id])
+
+  @@map("stay_registrations")
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PHASE 2 TABLES
+// ═══════════════════════════════════════════════════════════════
+
+// ─── OWNERSHIP MINING ───────────────────────────────────────
+
+model HotelContributionScore {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId             String   @map("hotel_id") @db.Uuid
+  periodMonth         DateTime @map("period_month") @db.Date
+  roomsAllocated      Int      @map("rooms_allocated") @db.SmallInt
+  availabilityPct     Decimal  @map("availability_pct") @db.Decimal(5, 2)
+  adrPaise            Int      @map("adr_paise")
+  roomNightsBooked    Int      @map("room_nights_booked")
+  repeatBookingCount  Int      @default(0) @map("repeat_booking_count")
+  averageRating       Decimal? @map("average_rating") @db.Decimal(3, 2)
+  cancellationRatePct Decimal? @map("cancellation_rate_pct") @db.Decimal(5, 2)
+  rawScore            Decimal  @map("raw_score") @db.Decimal(10, 4)
+  normalizedScore     Decimal  @map("normalized_score") @db.Decimal(10, 8)
+  networkTotalScore   Decimal  @map("network_total_score") @db.Decimal(10, 4)
+  calculatedAt        DateTime @default(now()) @map("calculated_at") @db.Timestamptz()
+
+  hotel Hotel @relation(fields: [hotelId], references: [id])
+
+  @@unique([hotelId, periodMonth])
+  @@map("hotel_contribution_scores")
+}
+
+model OwnershipPoolSchedule {
+  id                  String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  yearNumber          Int     @map("year_number") @db.SmallInt
+  poolPct             Decimal @map("pool_pct") @db.Decimal(5, 2)
+  totalUnitsAvailable Int     @map("total_units_available")
+  notes               String?
+  isLocked            Boolean @default(false) @map("is_locked")
+
+  @@map("ownership_pool_schedule")
+}
+
+enum VestingStatus {
+  locked
+  vested
+  converted
+  forfeited
+}
+
+model OwnershipTokenLedger {
+  id                  String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId             String        @map("hotel_id") @db.Uuid
+  periodMonth         DateTime      @map("period_month") @db.Date
+  unitsIssued         Decimal       @map("units_issued") @db.Decimal(12, 6)
+  normalizedScoreUsed Decimal       @map("normalized_score_used") @db.Decimal(10, 8)
+  poolUnitsThisMonth  Int           @map("pool_units_this_month")
+  vestingStartDate    DateTime      @map("vesting_start_date") @db.Date
+  vestingEndDate      DateTime      @map("vesting_end_date") @db.Date
+  vestingStatus       VestingStatus @default(locked) @map("vesting_status")
+  conversionEquityPct Decimal?      @map("conversion_equity_pct") @db.Decimal(12, 8)
+  createdAt           DateTime      @default(now()) @map("created_at") @db.Timestamptz()
+
+  hotel            Hotel             @relation(fields: [hotelId], references: [id])
+  vestingSchedules VestingSchedule[]
+
+  @@index([hotelId, periodMonth])
+  @@index([vestingEndDate, vestingStatus])
+  @@map("ownership_token_ledger")
+}
+
+enum VestingScheduleStatus {
+  pending
+  unlocked
+  forfeited
+}
+
+model VestingSchedule {
+  id            String                @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  ledgerId      String                @map("ledger_id") @db.Uuid
+  hotelId       String                @map("hotel_id") @db.Uuid
+  unlockDate    DateTime              @map("unlock_date") @db.Date
+  unitsToUnlock Decimal               @map("units_to_unlock") @db.Decimal(12, 6)
+  status        VestingScheduleStatus @default(pending)
+  processedAt   DateTime?             @map("processed_at") @db.Timestamptz()
+
+  ledger OwnershipTokenLedger @relation(fields: [ledgerId], references: [id])
+  hotel  Hotel                @relation(fields: [hotelId], references: [id])
+
+  @@index([unlockDate, status])
+  @@map("vesting_schedule")
+}
+
+// ─── ATTRIBUTION LOG ────────────────────────────────────────
+
+enum AttributionType {
+  first_touch
+  campaign_override
+  none
+}
+
+model AttributionLog {
+  id                         String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingId                  String          @map("booking_id") @db.Uuid
+  userId                     String          @map("user_id") @db.Uuid
+  partner                    String?         @db.VarChar(50)
+  attributionType            AttributionType @map("attribution_type")
+  campaignId                 String?         @map("campaign_id") @db.VarChar(100)
+  demandFeePct               Decimal         @default(0.00) @map("demand_fee_pct") @db.Decimal(5, 2)
+  demandFeePaise             Int             @default(0) @map("demand_fee_paise")
+  attributionWindowExpiresAt DateTime?       @map("attribution_window_expires_at") @db.Timestamptz()
+  createdAt                  DateTime        @default(now()) @map("created_at") @db.Timestamptz()
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@map("attribution_log")
+}
+
+// ─── REZ BOOKING SYNC ───────────────────────────────────────
+
+model RezBookingSync {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingId           String    @map("booking_id") @db.Uuid
+  rezSessionId        String?   @map("rez_session_id") @db.VarChar(255)
+  rezUserId           String?   @map("rez_user_id") @db.VarChar(255)
+  rezCampaignId       String?   @map("rez_campaign_id") @db.VarChar(255)
+  deepLinkRef         String?   @map("deep_link_ref") @db.VarChar(255)
+  webhookSent         Boolean   @default(false) @map("webhook_sent")
+  webhookSentAt       DateTime? @map("webhook_sent_at") @db.Timestamptz()
+  webhookResponseCode Int?      @map("webhook_response_code") @db.SmallInt
+  rezCoinTriggered    Boolean   @default(false) @map("rez_coin_triggered")
+  rezCoinAmountPaise  Int       @default(0) @map("rez_coin_amount_paise")
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+
+  @@map("rez_booking_sync")
+}
+
+// ─── OFFLINE PAYMENTS (Hotel QR) ────────────────────────────
+
+model OfflinePayment {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId            String   @map("hotel_id") @db.Uuid
+  userId             String   @map("user_id") @db.Uuid
+  amountPaise        Int      @map("amount_paise")
+  paymentRef         String   @unique @map("payment_ref") @db.VarChar(255)
+  razorpayPaymentId  String?  @map("razorpay_payment_id") @db.VarChar(255)
+  linkedBookingId    String?  @map("linked_booking_id") @db.Uuid
+  stayRegistrationId String?  @map("stay_registration_id") @db.Uuid
+  otaCoinEarnedPaise Int      @default(0) @map("ota_coin_earned_paise")
+  rezCoinEarnedPaise Int      @default(0) @map("rez_coin_earned_paise")
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  // Extended fields for Hotel Bill Pay
+  billAmountPaise     Int?      @map("bill_amount_paise")
+  razorpayOrderId     String?   @map("razorpay_order_id") @db.VarChar(255)
+  paymentMethod       String?   @map("payment_method") @db.VarChar(20)
+  otaCoinBurnedPaise  Int       @default(0) @map("ota_coin_burned_paise")
+  rezCoinBurnedPaise  Int       @default(0) @map("rez_coin_burned_paise")
+  transactionFeePaise Int       @default(0) @map("transaction_fee_paise")
+  shadowStayCreated   Boolean   @default(false) @map("shadow_stay_created")
+  stayDate            DateTime? @map("stay_date") @db.Date
+  notes               String?
+  status              String    @default("pending") @db.VarChar(20)
+
+  hotel Hotel @relation(fields: [hotelId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@map("offline_payments")
+}
+
+// ─── CORPORATE ──────────────────────────────────────────────
+
+model CorporateAccount {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  companyName      String   @map("company_name") @db.VarChar(255)
+  gstin            String?  @db.VarChar(15)
+  billingEmail     String?  @map("billing_email") @db.VarChar(255)
+  billingAddress   String?  @map("billing_address")
+  creditLimitPaise Int      @default(0) @map("credit_limit_paise")
+  usedCreditPaise  Int      @default(0) @map("used_credit_paise")
+  paymentTermsDays Int      @default(30) @map("payment_terms_days") @db.SmallInt
+  accountManagerId String?  @map("account_manager_id") @db.Uuid
+  isActive         Boolean  @default(true) @map("is_active")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  corporateUsers CorporateUser[]
+  bookings       Booking[]
+
+  @@map("corporate_accounts")
+}
+
+enum CorporateRole {
+  admin
+  traveller
+  approver
+}
+
+model CorporateUser {
+  id                 String        @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  corporateAccountId String        @map("corporate_account_id") @db.Uuid
+  userId             String        @map("user_id") @db.Uuid
+  role               CorporateRole @default(traveller)
+  costCenter         String?       @map("cost_center") @db.VarChar(100)
+  travelPolicyId     String?       @map("travel_policy_id") @db.Uuid
+  isActive           Boolean       @default(true) @map("is_active")
+  createdAt          DateTime      @default(now()) @map("created_at") @db.Timestamptz()
+
+  corporateAccount CorporateAccount @relation(fields: [corporateAccountId], references: [id])
+  user             User             @relation(fields: [userId], references: [id])
+
+  @@map("corporate_users")
+}
+
+// ─── PMS INTEGRATION ────────────────────────────────────────
+
+model HotelApiKey {
+  id         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId    String    @map("hotel_id") @db.Uuid
+  apiKey     String    @unique @map("api_key") @db.VarChar(255)
+  label      String?   @db.VarChar(255)
+  isActive   Boolean   @default(true) @map("is_active")
+  lastUsedAt DateTime? @map("last_used_at") @db.Timestamptz()
+  createdAt  DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz()
+
+  hotel Hotel @relation(fields: [hotelId], references: [id])
+
+  @@map("hotel_api_keys")
+}
+
+// FIX-BUG-3: Partner API Keys with per-partner scoping
+model PartnerApiKey {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  partnerId    String    @map("partner_id") @db.VarChar(100)
+  partnerName  String    @map("partner_name") @db.VarChar(255)
+  apiKeyHash   String    @map("api_key_hash") @db.VarChar(64) // SHA-256 hash (64 hex chars)
+  apiKeyPrefix String    @map("api_key_prefix") @db.VarChar(8)
+  scopes       String[]  @default([]) @db.VarChar(50)
+  label        String?   @db.VarChar(255)
+  isActive     Boolean   @default(true) @map("is_active")
+  lastUsedAt   DateTime? @map("last_used_at") @db.Timestamptz()
+  expiresAt    DateTime? @map("expires_at") @db.Timestamptz()
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  revokedAt    DateTime? @map("revoked_at") @db.Timestamptz()
+
+  @@index([partnerId])
+  @@index([apiKeyPrefix])
+  @@map("partner_api_keys")
+}
+
+// ─── REFERRAL PROGRAMME ─────────────────────────────────────
+
+model Referral {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  referrerId          String    @map("referrer_id") @db.Uuid
+  referredUserId      String?   @map("referred_user_id") @db.Uuid
+  referralCode        String    @unique @map("referral_code") @db.VarChar(20)
+  status              String    @default("pending") @db.VarChar(20)
+  referrerRewardPaise Int       @default(0) @map("referrer_reward_paise")
+  referredRewardPaise Int       @default(0) @map("referred_reward_paise")
+  completedAt         DateTime? @map("completed_at") @db.Timestamptz()
+  createdAt           DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  referrer     User  @relation("referrer", fields: [referrerId], references: [id])
+  referredUser User? @relation("referred", fields: [referredUserId], references: [id])
+
+  @@map("referrals")
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PHASE 3 TABLES
+// ═══════════════════════════════════════════════════════════════
+
+// ─── CHANNEL MANAGER INTEGRATION ────────────────────────────
+
+enum ChannelManagerProvider {
+  siteminder
+  staah
+  rategain
+  custom
+}
+
+model ChannelManagerConfig {
+  id          String                 @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId     String                 @map("hotel_id") @db.Uuid
+  provider    ChannelManagerProvider
+  apiKey      String?                @map("api_key") @db.VarChar(255)
+  apiSecret   String?                @map("api_secret") @db.VarChar(255)
+  propertyId  String?                @map("property_id") @db.VarChar(255)
+  syncEnabled Boolean                @default(true) @map("sync_enabled")
+  lastSyncAt  DateTime?              @map("last_sync_at") @db.Timestamptz()
+  syncStatus  String                 @default("idle") @map("sync_status") @db.VarChar(20)
+  createdAt   DateTime               @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime               @updatedAt @map("updated_at") @db.Timestamptz()
+
+  hotel    Hotel                   @relation(fields: [hotelId], references: [id])
+  syncLogs ChannelManagerSyncLog[]
+
+  @@unique([hotelId, provider])
+  @@map("channel_manager_configs")
+}
+
+model ChannelManagerSyncLog {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  configId     String   @map("config_id") @db.Uuid
+  direction    String   @db.VarChar(10) // inbound | outbound
+  eventType    String   @map("event_type") @db.VarChar(50)
+  payload      Json?    @db.JsonB
+  status       String   @db.VarChar(20) // success | failed
+  errorMessage String?  @map("error_message")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  config ChannelManagerConfig @relation(fields: [configId], references: [id])
+
+  @@index([configId, createdAt])
+  @@map("channel_manager_sync_logs")
+}
+
+// ─── SEO LANDING PAGES ──────────────────────────────────────
+
+model SeoLandingPage {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  slug        String   @unique @db.VarChar(255)
+  hotelId     String?  @map("hotel_id") @db.Uuid
+  city        String?  @db.VarChar(100)
+  category    String?  @db.VarChar(50)
+  title       String   @db.VarChar(255)
+  metaDesc    String?  @map("meta_desc") @db.VarChar(500)
+  h1          String?  @db.VarChar(255)
+  bodyHtml    String?  @map("body_html")
+  isPublished Boolean  @default(false) @map("is_published")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  hotel Hotel? @relation(fields: [hotelId], references: [id])
+
+  @@map("seo_landing_pages")
+}
+
+// ─── AFFILIATE / INFLUENCER TRACKING ────────────────────────
+
+model AffiliatePartner {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name             String   @db.VarChar(255)
+  code             String   @unique @db.VarChar(50)
+  commissionPct    Decimal  @map("commission_pct") @db.Decimal(5, 2)
+  type             String   @db.VarChar(20) // affiliate | influencer
+  contactEmail     String?  @map("contact_email") @db.VarChar(255)
+  isActive         Boolean  @default(true) @map("is_active")
+  totalClickCount  Int      @default(0) @map("total_click_count")
+  totalBookings    Int      @default(0) @map("total_bookings")
+  totalEarnedPaise Int      @default(0) @map("total_earned_paise")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  trackingEvents AffiliateTrackingEvent[]
+
+  @@map("affiliate_partners")
+}
+
+model AffiliateTrackingEvent {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  partnerId       String   @map("partner_id") @db.Uuid
+  eventType       String   @map("event_type") @db.VarChar(20) // click | booking | payout
+  bookingId       String?  @map("booking_id") @db.Uuid
+  userId          String?  @map("user_id") @db.Uuid
+  commissionPaise Int      @default(0) @map("commission_paise")
+  metadata        Json?    @db.JsonB
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  partner AffiliatePartner @relation(fields: [partnerId], references: [id])
+
+  @@index([partnerId, createdAt])
+  @@map("affiliate_tracking_events")
+}
+
+// ─── DYNAMIC PRICING ────────────────────────────────────────
+
+model PricingSuggestion {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId            String   @map("hotel_id") @db.Uuid
+  roomTypeId         String   @map("room_type_id") @db.Uuid
+  date               DateTime @db.Date
+  currentRatePaise   Int      @map("current_rate_paise")
+  suggestedRatePaise Int      @map("suggested_rate_paise")
+  confidenceScore    Decimal  @map("confidence_score") @db.Decimal(3, 2)
+  reason             String?  @db.VarChar(500)
+  status             String   @default("pending") @db.VarChar(20) // pending | accepted | rejected
+  createdAt          DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  hotel    Hotel    @relation(fields: [hotelId], references: [id])
+  roomType RoomType @relation(fields: [roomTypeId], references: [id])
+
+  @@index([hotelId, date])
+  @@map("pricing_suggestions")
+}
+
+// ─── DEMAND FORECASTING ─────────────────────────────────────
+
+model DemandForecast {
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId               String   @map("hotel_id") @db.Uuid
+  date                  DateTime @db.Date
+  predictedOccupancyPct Decimal  @map("predicted_occupancy_pct") @db.Decimal(5, 2)
+  predictedAdrPaise     Int      @map("predicted_adr_paise")
+  predictedRevenuePaise Int      @map("predicted_revenue_paise")
+  confidenceLevel       String   @db.VarChar(10) // low | medium | high
+  modelVersion          String   @map("model_version") @db.VarChar(20)
+  createdAt             DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  hotel Hotel @relation(fields: [hotelId], references: [id])
+
+  @@unique([hotelId, date, modelVersion])
+  @@map("demand_forecasts")
+}
+
+// ─── GOVERNANCE (HOT) ───────────────────────────────────────
+
+model GovernanceProposal {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title         String    @db.VarChar(255)
+  description   String
+  proposalType  String    @map("proposal_type") @db.VarChar(50) // commission_change | policy | strategic
+  proposedBy    String    @map("proposed_by") @db.Uuid
+  status        String    @default("draft") @db.VarChar(20) // draft | voting | passed | rejected | executed
+  votingStartAt DateTime? @map("voting_start_at") @db.Timestamptz()
+  votingEndAt   DateTime? @map("voting_end_at") @db.Timestamptz()
+  quorumPct     Decimal   @default(50.00) @map("quorum_pct") @db.Decimal(5, 2)
+  createdAt     DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  votes GovernanceVote[]
+
+  @@map("governance_proposals")
+}
+
+model GovernanceVote {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  proposalId  String   @map("proposal_id") @db.Uuid
+  hotelId     String   @map("hotel_id") @db.Uuid
+  vote        String   @db.VarChar(10) // for | against | abstain
+  weightUnits Decimal  @map("weight_units") @db.Decimal(12, 6)
+  castAt      DateTime @default(now()) @map("cast_at") @db.Timestamptz()
+
+  proposal GovernanceProposal @relation(fields: [proposalId], references: [id])
+
+  @@unique([proposalId, hotelId])
+  @@map("governance_votes")
+}
+
+model DividendDistribution {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  periodYear         Int       @map("period_year")
+  totalAmountPaise   Int       @map("total_amount_paise")
+  totalUnitsEligible Decimal   @map("total_units_eligible") @db.Decimal(12, 6)
+  perUnitPaise       Decimal   @map("per_unit_paise") @db.Decimal(10, 4)
+  status             String    @default("pending") @db.VarChar(20) // pending | approved | distributed
+  distributedAt      DateTime? @map("distributed_at") @db.Timestamptz()
+  createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  payouts DividendPayout[]
+
+  @@map("dividend_distributions")
+}
+
+model DividendPayout {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  distributionId    String    @map("distribution_id") @db.Uuid
+  hotelId           String    @map("hotel_id") @db.Uuid
+  unitsHeld         Decimal   @map("units_held") @db.Decimal(12, 6)
+  payoutAmountPaise Int       @map("payout_amount_paise")
+  status            String    @default("pending") @db.VarChar(20) // pending | paid
+  paidAt            DateTime? @map("paid_at") @db.Timestamptz()
+
+  distribution DividendDistribution @relation(fields: [distributionId], references: [id])
+
+  @@map("dividend_payouts")
+}
+
+// ─── MINING DISPUTES ────────────────────────────────────────
+
+enum MiningDisputeStatus {
+  submitted
+  under_review
+  resolved
+  rejected
+}
+
+model MiningDispute {
+  id           String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId      String              @map("hotel_id") @db.Uuid
+  periodMonth  DateTime            @map("period_month") @db.Date
+  disputeField String              @map("dispute_field") @db.VarChar(100)
+  claim        String
+  evidenceUrl  String?             @map("evidence_url") @db.VarChar(500)
+  status       MiningDisputeStatus @default(submitted)
+  adminNote    String?             @map("admin_note")
+  resolvedAt   DateTime?           @map("resolved_at") @db.Timestamptz()
+  createdAt    DateTime            @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt    DateTime            @updatedAt @map("updated_at") @db.Timestamptz()
+
+  hotel Hotel @relation(fields: [hotelId], references: [id])
+
+  @@index([hotelId, periodMonth])
+  @@map("mining_disputes")
+}
+
+// ─── MULTI-CITY SUPPORT ─────────────────────────────────────
+
+model City {
+  id           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name         String    @unique @db.VarChar(100)
+  slug         String    @unique @db.VarChar(100)
+  state        String    @db.VarChar(100)
+  isActive     Boolean   @default(true) @map("is_active")
+  launchDate   DateTime? @map("launch_date") @db.Date
+  heroImageUrl String?   @map("hero_image_url")
+  description  String?
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@map("cities")
+}
+
+// ─── RISK & FRAUD ───────────────────────────────────────────
+
+model RiskEvent {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  hotelId   String?  @map("hotel_id") @db.Uuid
+  bookingId String?  @map("booking_id") @db.Uuid
+  eventType String   @map("event_type") @db.VarChar(50)
+  riskScore Int      @map("risk_score")
+  action    String   @db.VarChar(20) // allow | review | block
+  details   Json     @db.JsonB
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@index([userId, createdAt])
+  @@index([eventType, createdAt])
+  @@map("risk_events")
+}
+
+// ─── RECONCILIATION ─────────────────────────────────────────
+
+model ReconciliationRun {
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  runType              String   @map("run_type") @db.VarChar(50) // daily | manual | payment
+  stuckHolds           Int      @default(0) @map("stuck_holds")
+  missedCheckouts      Int      @default(0) @map("missed_checkouts")
+  missingSettlements   Int      @default(0) @map("missing_settlements")
+  orphanedTransactions Int      @default(0) @map("orphaned_transactions")
+  walletDiscrepancies  Int      @default(0) @map("wallet_discrepancies")
+  issuesFound          Int      @default(0) @map("issues_found")
+  issuesResolved       Int      @default(0) @map("issues_resolved")
+  details              Json?    @db.JsonB
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@map("reconciliation_runs")
+}
+
+// ─── ADMIN AUDIT LOG ────────────────────────────────────────
+
+model AdminAuditLog {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  adminUserId String   @map("admin_user_id") @db.Uuid
+  action      String   @db.VarChar(100)
+  entityType  String   @map("entity_type") @db.VarChar(50)
+  entityId    String?  @map("entity_id") @db.Uuid
+  oldValue    Json?    @map("old_value") @db.JsonB
+  newValue    Json?    @map("new_value") @db.JsonB
+  ipAddress   String?  @map("ip_address") @db.VarChar(50)
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@index([adminUserId, createdAt])
+  @@index([entityType, entityId])
+  @@map("admin_audit_log")
+}
+
+// ─── REVIEWS & RATINGS ──────────────────────────────────────
+
+model Review {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  hotelId     String   @map("hotel_id") @db.Uuid
+  bookingId   String   @unique @map("booking_id") @db.Uuid
+  rating      Int      @db.SmallInt // 1-5
+  cleanliness Int?     @db.SmallInt
+  location    Int?     @db.SmallInt
+  value       Int?     @db.SmallInt
+  service     Int?     @db.SmallInt
+  comment     String?
+  isPublished Boolean  @default(true) @map("is_published")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  user    User    @relation(fields: [userId], references: [id])
+  hotel   Hotel   @relation(fields: [hotelId], references: [id])
+  booking Booking @relation(fields: [bookingId], references: [id])
+
+  @@index([hotelId, createdAt])
+  @@map("reviews")
+}
+
+// ─── WISHLISTS ──────────────────────────────────────────────
+
+model Wishlist {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  hotelId   String   @map("hotel_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  user  User  @relation(fields: [userId], references: [id])
+  hotel Hotel @relation(fields: [hotelId], references: [id])
+
+  @@unique([userId, hotelId])
+  @@map("wishlists")
+}
+
+// ─── COIN EXPIRATION & PMS WEBHOOK ────────────────────────────────────
+
+model CoinExpirationPolicy {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String
+  expirationDays Int      @map("expiration_days")
+  description    String?
+  createdAt      DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt      DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@map("coin_expiration_policies")
+}
+
+model PmsWebhookEvent {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId     String    @map("hotel_id") @db.Uuid
+  eventType   String    @map("event_type")
+  eventData   Json      @map("event_data") @db.JsonB
+  processed   Boolean   @default(false)
+  processedAt DateTime? @map("processed_at") @db.Timestamptz()
+  error       String?
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  hotel Hotel @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+
+  @@index([hotelId, eventType])
+  @@index([processed])
+  @@map("pms_webhook_events")
+}
+
+model HotelBookingCoinTransaction {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId         String   @map("hotel_id") @db.Uuid
+  bookingId       String   @map("booking_id")
+  userId          String   @map("user_id") @db.Uuid
+  coinAmount      Int      @map("coin_amount")
+  bookingAmount   Decimal  @map("booking_amount") @db.Decimal(10, 2)
+  coinRate        Decimal  @default(0.01) @map("coin_rate") @db.Decimal(5, 2)
+  transactionType String   @default("booking") @map("transaction_type")
+  status          String   @default("completed")
+  notes           String?
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  hotel Hotel @relation(fields: [hotelId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@index([hotelId, bookingId])
+  @@index([userId])
+  @@index([status])
+  @@map("hotel_booking_coin_transactions")
+}
+
+model HotelCoinExpiryNotification {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  walletId         String    @map("wallet_id") @db.Uuid
+  daysUntilExpiry  Int       @map("days_until_expiry")
+  notificationSent Boolean   @default(false) @map("notification_sent")
+  sentAt           DateTime? @map("sent_at") @db.Timestamptz()
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  wallet CoinWallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@map("hotel_coin_expiry_notifications")
+}
+
+// ─── REFUNDS (BUG-14: Track refunds in database) ─────────────
+
+model Refund {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingId        String   @map("booking_id") @db.Uuid
+  amountPaise      Int      @map("amount_paise")
+  status           String   @default("pending") @db.VarChar(20) // pending | processed | failed
+  razorpayRefundId String?  @map("razorpay_refund_id") @db.VarChar(255)
+  failureReason    String?  @map("failure_reason")
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+
+  @@index([bookingId])
+  @@index([razorpayRefundId])
+  @@index([status, createdAt])
+  @@map("refunds")
+}
+
+// ─── AUDIT LOG ───────────────────────────────────────────────
+
+model SettlementAuditLog {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  settlementId String?  @map("settlement_id") @db.Uuid
+  action       String   @db.VarChar(50) // reversal_failed | reversal_success | entry_created
+  bookingId    String?  @map("booking_id") @db.Uuid
+  hotelId      String?  @map("hotel_id") @db.Uuid
+  errorMessage String?  @map("error_message")
+  metadata     Json?    @map("metadata") @db.JsonB
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@index([settlementId])
+  @@index([bookingId])
+  @@index([action, createdAt])
+  @@map("settlement_audit_logs")
+}
+
+// ─── ROOM SERVICE (Room QR Feature) ──────────────────────────
+
+model RoomServiceRequest {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingId        String    @map("booking_id") @db.Uuid
+  hotelId          String    @map("hotel_id") @db.Uuid
+  roomId           String    @map("room_id") @db.Uuid
+  roomNumber       String    @map("room_number") @db.VarChar(20)
+  guestName        String    @map("guest_name") @db.VarChar(100)
+  serviceType      String    @map("service_type") @db.VarChar(50) // housekeeping, room_service, laundry, etc.
+  description      String?   @db.Text
+  items            String?   @map("items") @db.Text // JSON array of items
+  totalAmountPaise Int       @default(0) @map("total_amount_paise")
+  status           String    @default("pending") @db.VarChar(20) // pending, assigned, in_progress, completed, cancelled
+  priority         String    @default("now") @db.VarChar(10) // low, medium, high, now
+  requestedBy      String?   @map("requested_by") @db.Uuid // staff who created (if any)
+  assignedTo       String?   @map("assigned_to") @db.Uuid // staff assigned
+  assignedToName  String?   @map("assigned_to_name") @db.VarChar(255)
+  assignedAt       DateTime? @map("assigned_at") @db.Timestamptz()
+  notes            String?   @db.Text // Staff notes about the request
+  guestUserId      String?   @map("guest_user_id") @db.Uuid // user who requested
+  checkIn          DateTime? @map("check_in") @db.Timestamptz() // When guest checks in
+  checkOut         DateTime? @map("check_out") @db.Timestamptz() // When guest checks out
+  completedAt      DateTime? @map("completed_at") @db.Timestamptz()
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz()
+
+  booking Booking @relation(fields: [bookingId], references: [id])
+  hotel   Hotel   @relation(fields: [hotelId], references: [id])
+  room    Room    @relation(fields: [roomId], references: [id])
+
+  @@index([hotelId, status])
+  @@index([bookingId])
+  @@index([roomId])
+  @@index([guestUserId])
+  @@index([createdAt])
+  @@map("room_service_requests")
+}
+
+// ─── ROOM ENGAGEMENT (Hotel QR Coin Rewards) ─────────────────
+
+model RoomEngagement {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  rezUserId      String   @map("rez_user_id") @db.VarChar(100)
+  otaUserId      String   @map("ota_user_id") @db.Uuid
+  bookingId      String   @map("booking_id") @db.Uuid
+  hotelId        String   @map("hotel_id") @db.Uuid
+  roomId         String   @map("room_id") @db.Uuid
+  roomNumber     String   @map("room_number") @db.VarChar(20)
+  engagementType String   @map("engagement_type") @db.VarChar(50) // qr_scan, service_request, order, chat
+  metadata       Json?    @map("metadata") @db.JsonB
+  engagedAt      DateTime @default(now()) @map("engaged_at") @db.Timestamptz()
+
+  @@index([bookingId])
+  @@index([hotelId])
+  @@index([otaUserId])
+  @@index([engagementType])
+  @@map("room_engagements")
+}
+
+// ─── ROOM CHAT (Guest ↔ Staff Real-time Chat) ───────────────
+
+model RoomChatThread {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  bookingId   String   @map("booking_id") @db.Uuid
+  roomId      String   @map("room_id") @db.Uuid
+  hotelId     String   @map("hotel_id") @db.Uuid
+  guestUserId String   @map("guest_user_id") @db.Uuid
+  staffUserId String?  @map("staff_user_id") @db.Uuid
+  status      String   @default("active") @db.VarChar(20) // active, closed
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  messages RoomChatMessage[]
+
+  @@index([bookingId])
+  @@index([hotelId])
+  @@index([guestUserId])
+  @@map("room_chat_threads")
+}
+
+model RoomChatMessage {
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  threadId    String    @map("thread_id") @db.Uuid
+  senderId    String    @map("sender_id") @db.Uuid
+  senderType  String    @map("sender_type") @db.VarChar(20) // guest, staff, system
+  senderName  String    @map("sender_name") @db.VarChar(100)
+  messageType String    @map("message_type") @db.VarChar(30) // text, service_request, status_update, image, quick_reply
+  content     String    @db.Text
+  metadata    Json?     @map("metadata") @db.JsonB
+  readAt      DateTime? @map("read_at") @db.Timestamptz()
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  thread RoomChatThread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  @@index([threadId, createdAt])
+  @@index([senderId])
+  @@map("room_chat_messages")
+}
+
+// ─── HOTEL CHAT (Guest ↔ Staff Department Chat) ───────────────
+
+model HotelChatConversation {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId          String    @map("hotel_id") @db.Uuid
+  bookingId        String?   @map("booking_id")
+  roomNumber       String?   @map("room_number") @db.VarChar(20)
+  type             String    @default("general") @map("type") @db.VarChar(30) // room_service, concierge, housekeeping, maintenance, spa, transport, general
+  department       String    @default("front_desk") @map("department") @db.VarChar(30) // front_desk, concierge, housekeeping, room_service, maintenance, spa, transport, manager
+  guestUserId      String    @map("guest_user_id") @db.Uuid
+  guestName        String    @map("guest_name") @db.VarChar(100)
+  staffId          String?   @map("staff_id")
+  staffName        String?   @map("staff_name") @db.VarChar(100)
+  status           String    @default("active") @map("status") @db.VarChar(20) // active, archived, resolved
+  priority         String    @default("normal") @map("priority") @db.VarChar(20) // low, normal, high
+  unreadGuestCount Int       @default(0) @map("unread_guest_count")
+  unreadStaffCount Int       @default(0) @map("unread_staff_count")
+  lastMessage      String?   @map("last_message") @db.VarChar(255)
+  lastMessageAt    DateTime? @map("last_message_at") @db.Timestamptz
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz()
+
+  messages HotelChatMessage[]
+
+  @@index([hotelId])
+  @@index([hotelId, status])
+  @@index([hotelId, department])
+  @@index([guestUserId])
+  @@index([staffId])
+  @@index([createdAt])
+  @@map("hotel_chat_conversations")
+}
+
+model HotelChatMessage {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  conversationId String    @map("conversation_id") @db.Uuid
+  senderId       String    @map("sender_id") @db.Uuid
+  senderType     String    @map("sender_type") @db.VarChar(20) // guest, staff, system
+  senderName     String    @map("sender_name") @db.VarChar(100)
+  content        String    @db.Text
+  messageType    String    @default("text") @map("message_type") @db.VarChar(20) // text, image, file, quick_reply
+  metadata       Json?     @map("metadata") @db.JsonB
+  readAt         DateTime? @map("read_at") @db.Timestamptz()
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  conversation HotelChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+  @@map("hotel_chat_messages")
+}
+
+model HotelChatStaff {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  hotelId     String   @map("hotel_id") @db.Uuid
+  staffId     String   @unique @map("staff_id") @db.Uuid
+  name        String   @db.VarChar(100)
+  department  String   @map("department") @db.VarChar(30)
+  isOnline    Boolean  @default(false) @map("is_online")
+  isOnDuty    Boolean  @default(true) @map("is_on_duty")
+  activeChats Int      @default(0) @map("active_chats")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@index([hotelId])
+  @@index([department])
+  @@map("hotel_chat_staff")
+}
+
+// ─── UNIFIED CHAT (Cross-platform Support Chat) ──────────────────────────────
+
+model UnifiedChatConversation {
+  id               String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  // Context
+  userId           String    @map("user_id") @db.Uuid
+  userName         String    @map("user_name") @db.VarChar(100)
+  appType          String    @map("app_type") @db.VarChar(30) // hotel, restaurant, retail, support, general
+  merchantId       String?   @map("merchant_id") @db.Uuid
+  // Conversation metadata
+  type             String    @default("support") @map("type") @db.VarChar(30) // support, order, booking, inquiry
+  status           String    @default("active") @map("status") @db.VarChar(20) // active, pending_staff, resolved, closed
+  priority         String    @default("normal") @map("priority") @db.VarChar(20) // low, normal, high, urgent
+  // Staff assignment
+  assignedStaffId  String?   @map("assigned_staff_id") @db.Uuid
+  assignedStaffName String?  @map("assigned_staff_name") @db.VarChar(100)
+  department       String?   @map("department") @db.VarChar(50)
+  // Tracking
+  unreadUserCount  Int       @default(0) @map("unread_user_count")
+  unreadStaffCount Int       @default(0) @map("unread_staff_count")
+  messageCount     Int       @default(0) @map("message_count")
+  lastMessage      String?   @map("last_message") @db.VarChar(255)
+  lastMessageAt    DateTime? @map("last_message_at") @db.Timestamptz
+  // Customer context (JSON for flexibility)
+  customerContext  Json?     @map("customer_context") @db.JsonB
+  // Timestamps
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz()
+  resolvedAt       DateTime? @map("resolved_at") @db.Timestamptz()
+
+  messages UnifiedChatMessage[]
+
+  @@index([userId])
+  @@index([appType])
+  @@index([merchantId])
+  @@index([status])
+  @@index([assignedStaffId])
+  @@index([createdAt])
+  @@map("unified_chat_conversations")
+}
+
+model UnifiedChatMessage {
+  id             String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  conversationId String    @map("conversation_id") @db.Uuid
+  senderId       String    @map("sender_id") @db.Uuid
+  senderType     String    @map("sender_type") @db.VarChar(20) // user, staff, system, ai
+  senderName     String    @map("sender_name") @db.VarChar(100)
+  content        String    @db.Text
+  messageType    String    @default("text") @map("message_type") @db.VarChar(20) // text, image, file, quick_reply, system
+  // Read tracking
+  readAt         DateTime? @map("read_at") @db.Timestamptz()
+  readBy         String?   @map("read_by") @db.Uuid
+  // Metadata (for AI actions, suggestions, etc.)
+  metadata       Json?     @map("metadata") @db.JsonB
+  // Confidence score (for AI messages)
+  aiConfidence   Decimal?  @map("ai_confidence") @db.Decimal(3, 2)
+  // Timestamps
+  createdAt      DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  conversation UnifiedChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@index([conversationId, createdAt])
+  @@index([senderId])
+  @@map("unified_chat_messages")
+}
+
+// ─── RTMN COMMERCE MEMORY: INTENT GRAPH ───────────────────────────────────────
+
+// Intent: Captures user purchase intent signals
+model Intent {
+  id            String    @id @default(cuid())
+  userId        String    @map("user_id") @db.Uuid
+  appType       String    @map("app_type") @db.VarChar(50) // hotel_ota, restaurant, retail, hotel_guest
+  category      String    @db.VarChar(20) // TRAVEL, DINING, RETAIL, HOTEL_SERVICE, GENERAL
+  intentKey     String    @map("intent_key") @db.VarChar(255) // e.g., "hotel_goa_weekend"
+  intentQuery   String?   @map("intent_query") @db.VarChar(500)
+  confidence    Decimal   @db.Decimal(3, 2) @default(0.30)
+  status        String    @default("ACTIVE") @db.VarChar(20) // ACTIVE, DORMANT, FULFILLED, EXPIRED
+  firstSeenAt   DateTime  @default(now()) @map("first_seen_at") @db.Timestamptz()
+  lastSeenAt    DateTime  @updatedAt @map("last_seen_at") @db.Timestamptz()
+
+  signals        IntentSignal[]
+  dormantIntents DormantIntent[]
+  sequences      IntentSequence[]
+
+  @@unique([userId, appType, intentKey])
+  @@index([userId, status])
+  @@index([status, lastSeenAt])
+  @@index([category, status])
+  @@index([appType, category])
+  @@map("intents")
+}
+
+// IntentSignal: Individual events that contribute to intent confidence
+model IntentSignal {
+  id          String    @id @default(cuid())
+  intentId    String    @map("intent_id") @db.Uuid
+  eventType   String    @map("event_type") @db.VarChar(30) // search, view, wishlist, cart_add, hold, checkout_start, fulfilled, abandoned
+  weight      Decimal   @db.Decimal(3, 2)
+  data        Json?     @db.JsonB
+  capturedAt  DateTime  @default(now()) @map("captured_at") @db.Timestamptz()
+
+  intent Intent @relation(fields: [intentId], references: [id], onDelete: Cascade)
+
+  @@index([intentId])
+  @@index([eventType, capturedAt])
+  @@index([intentId, capturedAt])
+  @@map("intent_signals")
+}
+
+// DormantIntent: Intents that have gone cold and are candidates for revival
+model DormantIntent {
+  id              String    @id @default(cuid())
+  intentId        String    @map("intent_id") @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  appType         String    @map("app_type") @db.VarChar(50)
+  category        String    @db.VarChar(20)
+  intentKey       String    @map("intent_key") @db.VarChar(255)
+  dormancyScore   Decimal   @db.Decimal(4, 3) @default(0.500)
+  revivalScore    Decimal   @db.Decimal(4, 3) @default(0.000)
+  daysDormant     Int       @map("days_dormant") @default(0)
+  lastNudgeSent   DateTime? @map("last_nudge_sent") @db.Timestamptz()
+  nudgeCount      Int       @map("nudge_count") @default(0)
+  idealRevivalAt  DateTime? @map("ideal_revival_at") @db.Timestamptz()
+  status          String    @default("active") @db.VarChar(20) // active, paused, revived
+  revivedAt       DateTime? @map("revived_at") @db.Timestamptz()
+
+  intent Intent @relation(fields: [intentId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, appType, intentKey])
+  @@index([userId, status])
+  @@index([status, revivalScore])
+  @@index([idealRevivalAt])
+  @@map("dormant_intents")
+}
+
+// IntentSequence: Tracks the order of events in an intent journey
+model IntentSequence {
+  id            String    @id @default(cuid())
+  intentId      String    @map("intent_id") @db.Uuid
+  userId        String    @map("user_id") @db.Uuid
+  eventType     String    @map("event_type") @db.VarChar(30)
+  sequenceOrder Int       @map("sequence_order")
+  durationMs    Int?      @map("duration_ms")
+  occurredAt    DateTime  @default(now()) @map("occurred_at") @db.Timestamptz()
+
+  intent Intent @relation(fields: [intentId], references: [id], onDelete: Cascade)
+
+  @@index([intentId, sequenceOrder])
+  @@index([userId, occurredAt])
+  @@map("intent_sequences")
+}
+
+// CrossAppIntentProfile: Aggregated cross-app intent profile for a user
+model CrossAppIntentProfile {
+  id                 String    @id @default(cuid())
+  userId             String    @unique @map("user_id") @db.Uuid
+  travelIntentCount   Int       @map("travel_intent_count") @default(0)
+  diningIntentCount  Int       @map("dining_intent_count") @default(0)
+  retailIntentCount  Int       @map("retail_intent_count") @default(0)
+  dormantTravelCount Int       @map("dormant_travel_count") @default(0)
+  dormantDiningCount Int       @map("dormant_dining_count") @default(0)
+  dormantRetailCount Int       @map("dormant_retail_count") @default(0)
+  totalConversions   Int       @map("total_conversions") @default(0)
+  travelAffinity    Int       @map("travel_affinity") @default(50)
+  diningAffinity    Int       @map("dining_affinity") @default(50)
+  retailAffinity    Int       @map("retail_affinity") @default(50)
+  updatedAt        DateTime  @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@index([travelAffinity])
+  @@index([diningAffinity])
+  @@index([totalConversions])
+  @@map("cross_app_intent_profiles")
+}
+
+// Nudge: Record of nudge messages sent to users
+model Nudge {
+  id               String    @id @default(cuid())
+  dormantIntentId  String    @map("dormant_intent_id") @db.Uuid
+  userId           String    @map("user_id") @db.Uuid
+  channel          String    @db.VarChar(20) // push, email, sms, in_app
+  message          String    @db.Text
+  status           String    @default("pending") @db.VarChar(20) // pending, sent, delivered, clicked, converted, failed
+  sentAt           DateTime? @map("sent_at") @db.Timestamptz()
+  deliveredAt      DateTime? @map("delivered_at") @db.Timestamptz()
+  clickedAt        DateTime? @map("clicked_at") @db.Timestamptz()
+  convertedAt      DateTime? @map("converted_at") @db.Timestamptz()
+  error            String?   @db.Text
+  createdAt        DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+
+  @@index([dormantIntentId])
+  @@index([userId, status])
+  @@index([status, createdAt])
+  @@index([channel, status])
+  @@map("nudges")
+}
+
+// ─── MERCHANT KNOWLEDGE BASE ───────────────────────────────────────────────
+
+// MerchantKnowledge: Stores merchant knowledge for autonomous chat
+model MerchantKnowledge {
+  id          String    @id @default(cuid())
+  merchantId  String    @map("merchant_id") @db.VarChar(100)
+  type        String    @db.VarChar(50) // menu, policy, faq, offer, hours, contact, custom
+  title       String    @db.VarChar(255)
+  content     String    @db.Text
+  tags        String[]  @db.VarChar(50)
+  metadata    Json?     @db.JsonB
+  active      Boolean   @default(true)
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz()
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz()
+
+  @@index([merchantId, active])
+  @@index([type, merchantId])
+  @@map("merchant_knowledge")
+}
+
+// ─── ROOM BUNDLES ─────────────────────────────────────────────────
+
+model HotelBundle {
+  id               String   @id @default(cuid())
+  hotelId          String   @map("hotel_id")
+  name             String   @db.VarChar(255)
+  description      String?
+  roomTypeIds      String[] @map("room_type_ids")
+  basePricePaise   Int      @map("base_price_paise")
+  pricePaise      Int?     @map("price_paise")
+  originalPricePaise Int?   @map("original_price_paise")
+  discountPct      Int      @default(0) @map("discount_pct")
+  category         String?  @db.VarChar(100)
+  services         String?  @db.Text
+  duration         Int?     @map("duration")
+  badges           String?  @db.Text
+  amenities        String[] @default([])
+  images           String[] @default([])
+  isActive         Boolean  @default(true) @map("is_active")
+  isPopular        Boolean  @default(false) @map("is_popular")
+  isAiSuggested    Boolean  @default(false) @map("is_ai_suggested")
+  suggestedReason  String?  @map("suggested_reason") @db.Text
+  available        Boolean  @default(true)
+  createdAt        DateTime @default(now()) @map("created_at")
+  updatedAt        DateTime @updatedAt @map("updated_at")
+
+  orders BundleOrder[]
+
+  @@map("hotel_bundles")
+}
+
+model BundleOrder {
+  id              String    @id @default(cuid())
+  bundleId        String    @map("bundle_id")
+  bundleName     String?   @map("bundle_name") @db.VarChar(255)
+  userId          String    @map("user_id")
+  hotelId         String    @map("hotel_id")
+  bookingId       String?   @map("booking_id")
+  roomId          String?   @map("room_id")
+  checkInDate     DateTime  @map("check_in_date") @db.Date
+  checkOutDate    DateTime  @map("check_out_date") @db.Date
+  scheduledFor    DateTime? @map("scheduled_for") @db.Timestamptz()
+  guestName       String?   @map("guest_name") @db.VarChar(255)
+  guestPhone      String?   @map("guest_phone") @db.VarChar(15)
+  totalPricePaise Int       @map("total_price_paise")
+  totalAmountPaise Int?     @map("total_amount_paise")
+  status          String    @default("pending") @db.VarChar(20)
+  notes           String?   @map("notes") @db.Text
+  completedAt     DateTime? @map("completed_at") @db.Timestamptz()
+  razorpayOrderId String?   @map("razorpay_order_id") @db.VarChar(255)
+  razorpayPaymentId String? @map("razorpay_payment_id") @db.VarChar(255)
+  createdAt       DateTime  @default(now()) @map("created_at")
+  updatedAt       DateTime  @updatedAt @map("updated_at")
+
+  bundle HotelBundle @relation(fields: [bundleId], references: [id])
+
+  @@index([userId])
+  @@index([hotelId])
+  @@index([bundleId])
+  @@map("bundle_orders")
+}
+
+// ─── ROOM SERVICES ─────────────────────────────────────────────
+
+model MinibarConsumption {
+  id          String    @id @default(cuid())
+  bookingId   String    @map("booking_id")
+  hotelId    String    @map("hotel_id")
+  roomId     String    @map("room_id")
+  itemId     String?   @map("item_id") @db.VarChar(100)
+  items      Json
+  totalPaise Int       @map("total_paise")
+  pricePaise Int?      @map("price_paise")
+  quantity   Int?      @default(1)
+  isCharged  Boolean   @default(false) @map("is_charged")
+  consumedAt DateTime? @map("consumed_at") @db.Timestamptz()
+  status     String    @default("pending") @db.VarChar(20)
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  @@index([bookingId])
+  @@index([hotelId])
+  @@map("minibar_consumptions")
+}
+
+model GuestFeedback {
+  id              String   @id @default(cuid())
+  bookingId       String   @map("booking_id")
+  hotelId        String   @map("hotel_id")
+  roomId         String   @map("room_id")
+  guestUserId    String?  @map("guest_user_id")
+  serviceType     String  @map("service_type") @db.VarChar(50)
+  rating         Int
+  overallRating  Int?     @map("overall_rating")
+  cleanlinessRating Int? @map("cleanliness_rating")
+  serviceRating  Int?     @map("service_rating")
+  amenitiesRating Int?    @map("amenities_rating")
+  comfortRating  Int?     @map("comfort_rating")
+  comment        String?
+  issues         Json?
+  wouldRecommend Boolean? @map("would_recommend")
+  staffId        String?  @map("staff_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  @@index([bookingId])
+  @@index([hotelId])
+  @@map("guest_feedbacks")
+}
+
+model RoomPreferences {
+  id                   String   @id @default(cuid())
+  userId               String  @map("user_id")
+  guestUserId         String? @map("guest_user_id")
+  hotelId             String  @map("hotel_id")
+  roomId               String? @map("room_id")
+  roomTypeId          String? @map("room_type_id")
+  preferences         Json
+  temperature         String? @db.VarChar(20)
+  lighting            String? @db.VarChar(50)
+  pillowType          String? @db.VarChar(50)
+  dietaryRestrictions Json?
+  dietaryNeeds        String[] @default([]) @map("dietary_needs")
+  allergies           Json?
+  language            String?  @db.VarChar(50)
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@unique([userId, hotelId])
+  @@map("room_preferences")
+}
+
+model HotelService {
+  id           String   @id @default(cuid())
+  hotelId     String   @map("hotel_id")
+  name        String   @db.VarChar(255)
+  serviceName String?  @map("service_name") @db.VarChar(255)
+  category    String   @db.VarChar(100)
+  description String?
+  pricePaise  Int      @map("price_paise")
+  isActive    Boolean  @default(true) @map("is_active")
+  isEnabled   Boolean  @default(true) @map("is_enabled")
+  serviceConfig Json?  @map("service_config") @db.JsonB
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([hotelId])
+  @@index([category])
+  @@map("hotel_services")
+}
+
+model StaffInvite {
+  id          String    @id @default(cuid())
+  hotelId    String    @map("hotel_id")
+  email      String    @db.VarChar(255)
+  name       String?   @db.VarChar(255)
+  phone      String?   @db.VarChar(15)
+  role       String    @default("staff") @db.VarChar(50)
+  inviteToken String   @unique @map("invite_token") @db.VarChar(255)
+  status     String    @default("pending") @db.VarChar(20)
+  invitedBy  String?   @map("invited_by")
+  acceptedAt DateTime? @map("accepted_at")
+  expiresAt  DateTime? @map("expires_at")
+  createdAt  DateTime  @default(now()) @map("created_at")
+
+  hotel Hotel @relation(fields: [hotelId], references: [id])
+
+  @@index([hotelId])
+  @@index([email])
+  @@map("staff_invites")
+}
+
+model Room {
+  id         String   @id @default(cuid())
+  hotelId    String   @map("hotel_id")
+  roomTypeId String   @map("room_type_id")
+  roomNumber String   @map("room_number") @db.VarChar(20)
+  floor      String?  @db.VarChar(10)
+  status     String   @default("available") @db.VarChar(20)
+  isActive   Boolean  @default(true) @map("is_active")
+  amenities  String[] @default([]) @db.VarChar(100)
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  hotel          Hotel                @relation(fields: [hotelId], references: [id])
+  roomType       RoomType             @relation(fields: [roomTypeId], references: [id])
+  serviceRequests RoomServiceRequest[]
+
+  @@unique([hotelId, roomNumber])
+  @@index([hotelId])
+  @@index([status])
+  @@map("rooms")
+}
+
+model StaffNotification {
+  id        String   @id @default(cuid())
+  staffId   String   @map("staff_id")
+  hotelId   String   @map("hotel_id")
+  type      String   @db.VarChar(50)
+  title     String   @db.VarChar(255)
+  body      String   @db.Text
+  data      Json?
+  isRead    Boolean  @default(false) @map("is_read")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([staffId, isRead])
+  @@index([hotelId])
+  @@map("staff_notifications")
+}

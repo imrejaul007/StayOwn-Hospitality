@@ -1,0 +1,325 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Brands
+model Brand {
+  id            String    @id @default(uuid())
+  name          String
+  slug          String    @unique
+  email         String    @unique
+  phone         String?
+  logo          String?
+  secretKey     String    // For HMAC signing
+  status        BrandStatus @default(ACTIVE)
+  plan          BrandPlan   @default(STARTER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  products      Product[]
+  campaigns     Campaign[]
+  coinSettings  BrandCoinSettings?
+  fraudFlags    FraudFlag[]
+
+  @@index([slug])
+  @@map("brands")
+}
+
+enum BrandStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum BrandPlan {
+  STARTER    // ₹5K/mo
+  GROWTH     // ₹20K/mo
+  ENTERPRISE // ₹50K/mo
+}
+
+// Products
+model Product {
+  id            String    @id @default(uuid())
+  brandId       String
+  name          String
+  description   String?
+  category      String?
+  image         String?
+  totalSerials  Int       @default(0)
+  scannedSerials Int      @default(0)
+  status        ProductStatus @default(ACTIVE)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  brand         Brand     @relation(fields: [brandId], references: [id])
+  serials       Serial[]
+  campaigns     Campaign[]
+
+  @@index([brandId])
+  @@map("products")
+}
+
+enum ProductStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+// Serial Numbers
+model Serial {
+  id              String    @id @default(uuid())
+  productId       String
+  serialNumber    String    @unique
+  signature       String    // HMAC signature
+  batchId         String?
+  batchName       String?
+  status          SerialStatus @default(ACTIVE)
+  firstScanAt    DateTime?
+  firstUserId    String?
+  scanCount      Int       @default(0)
+  isGenuine      Boolean   @default(true)
+  lastScannedAt  DateTime?
+  createdAt       DateTime  @default(now())
+
+  product        Product   @relation(fields: [productId], references: [id])
+  scans         Scan[]
+  fraudFlags    FraudFlag[]
+  ownership     Ownership?
+  rewards       Reward[]
+
+  @@index([serialNumber])
+  @@index([productId])
+  @@index([status])
+  @@map("serials")
+}
+
+enum SerialStatus {
+  CREATED     // Generated, not in market
+  ACTIVE      // In market
+  SCANNED_FIRST // First scan happened
+  MULTI_SCAN  // Multiple scans
+  FLAGGED     // Fraud suspected
+  EXPIRED     // Product lifecycle ended
+  INVALID     // Fake
+}
+
+// Scans
+model Scan {
+  id            String    @id @default(uuid())
+  serialId      String
+  userId        String?
+  deviceId      String?
+  ipAddress     String?
+  userAgent     String?
+  location      Json?     // { lat, lng, accuracy }
+  fingerprint   Json?     // Device fingerprint data
+  fraudScore    Float     @default(0)
+  fraudDecision FraudDecision @default(ALLOW)
+  fraudReasons  String[]  @default([])
+  isRewarded    Boolean   @default(false)
+  rewardId      String?
+  campaignId    String?
+  createdAt     DateTime  @default(now())
+
+  serial        Serial    @relation(fields: [serialId], references: [id])
+
+  @@index([serialId])
+  @@index([userId])
+  @@index([createdAt])
+  // PERFORMANCE FIX: Add compound index for fraud pattern analytics queries
+  @@index([fraudScore, createdAt])
+  @@map("scans")
+}
+
+enum FraudDecision {
+  ALLOW
+  FLAG
+  BLOCK
+}
+
+// Fraud Flags
+model FraudFlag {
+  id            String    @id @default(uuid())
+  serialId      String?
+  brandId       String
+  reason        FraudReason
+  severity      FraudSeverity
+  details       Json?
+  resolved      Boolean   @default(false)
+  resolvedAt    DateTime?
+  resolvedBy    String?
+  resolution    String?
+  createdAt     DateTime  @default(now())
+
+  serial        Serial?   @relation(fields: [serialId], references: [id])
+  brand         Brand     @relation(fields: [brandId], references: [id])
+
+  @@index([brandId])
+  @@index([serialId])
+  @@index([resolved])
+  @@map("fraud_flags")
+}
+
+enum FraudReason {
+  VELOCITY_EXCEEDED
+  IMPOSSIBLE_TRAVEL
+  MULTI_USER_SERIAL
+  VPN_DETECTED
+  PROXY_DETECTED
+  GPS_SPOOFING
+  DEVICE_FINGERPRINT_MISMATCH
+  SUSPICIOUS_PATTERN
+  MANUAL_REVIEW
+}
+
+enum FraudSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+// Campaigns
+model Campaign {
+  id            String    @id @default(uuid())
+  brandId       String
+  productId     String?
+  name          String
+  description   String?
+  type          CampaignType @default(PER_SCAN)
+  rewardType    RewardType   @default(COINS)
+  rewardAmount  Int       @default(50)
+  cap           Int?      // Max total rewards
+  usedCount     Int       @default(0)
+  status        CampaignStatus @default(DRAFT)
+  targeting     Json?     // { locations, timeSlots, etc }
+  startDate     DateTime
+  endDate       DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  brand         Brand     @relation(fields: [brandId], references: [id])
+  product       Product?  @relation(fields: [productId], references: [id])
+  rewards       Reward[]
+
+  @@index([brandId])
+  @@index([status])
+  @@map("campaigns")
+}
+
+enum CampaignType {
+  PER_SCAN      // Every scan gets reward
+  FIRST_N        // First N scanners only
+  GEO_TARGETED   // Location-based rewards
+  TIME_BOOST     // Time-based boost
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  COMPLETED
+  BUDGET_EXHAUSTED
+}
+
+// Brand Coin Settings
+model BrandCoinSettings {
+  id              String    @id @default(uuid())
+  brandId         String    @unique
+  coinName        String    @default("Brand Coins")
+  coinSymbol      String    @default("BC")
+  valuePerCoin    Float     @default(1.0) // ₹1
+  minRedeem       Int       @default(100)
+  expiryDays      Int       @default(90)
+  allowRedemption Boolean   @default(true)
+  allowConversion Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+
+  brand           Brand     @relation(fields: [brandId], references: [id])
+
+  @@map("brand_coin_settings")
+}
+
+// Rewards
+model Reward {
+  id            String    @id @default(uuid())
+  serialId      String
+  campaignId    String?
+  brandId       String
+  userId        String
+  type          RewardType @default(COINS)
+  coinType      CoinType    @default(BRANDED)
+  amount        Int
+  status        RewardStatus @default(PENDING)
+  claimedAt     DateTime?
+  expiresAt     DateTime?
+  createdAt     DateTime  @default(now())
+
+  serial        Serial    @relation(fields: [serialId], references: [id])
+  campaign      Campaign? @relation(fields: [campaignId], references: [id])
+
+  @@index([userId])
+  @@index([brandId])
+  @@index([campaignId])
+  @@map("rewards")
+}
+
+enum RewardType {
+  COINS
+  DISCOUNT
+  FREE_PRODUCT
+}
+
+enum CoinType {
+  BRANDED
+  REZ
+}
+
+enum RewardStatus {
+  PENDING
+  CLAIMED
+  EXPIRED
+  CANCELLED
+}
+
+// Ownership (Proof of Purchase)
+model Ownership {
+  id            String    @id @default(uuid())
+  serialId      String    @unique
+  userId        String
+  scannedAt     DateTime
+  purchaseProof Boolean   @default(true)
+  warrantyStart DateTime?
+  warrantyEnd   DateTime?
+  warrantyClaimed Boolean @default(false)
+  transferredAt DateTime?
+  previousOwnerId String?
+  createdAt     DateTime  @default(now())
+
+  serial        Serial    @relation(fields: [serialId], references: [id])
+
+  @@index([userId])
+  @@map("ownership")
+}
+
+// Admin Users
+model Admin {
+  id            String    @id @default(uuid())
+  email         String    @unique
+  passwordHash  String
+  role          AdminRole @default(SUPPORT)
+  createdAt     DateTime  @default(now())
+
+  @@map("admins")
+}
+
+enum AdminRole {
+  SUPPORT
+  MODERATOR
+  ADMIN
+}

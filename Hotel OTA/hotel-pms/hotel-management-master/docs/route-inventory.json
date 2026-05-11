@@ -1,0 +1,8591 @@
+{
+  "generatedAt": "2026-03-25T07:44:09.982Z",
+  "routeFiles": 171,
+  "totalRoutes": 1934,
+  "files": [
+    {
+      "file": "routes/addOnServices.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/categories"
+        },
+        {
+          "method": "GET",
+          "route": "/featured"
+        },
+        {
+          "method": "GET",
+          "route": "/upsell-recommendations"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/:serviceId/availability"
+        },
+        {
+          "method": "GET",
+          "route": "/:serviceId/pricing"
+        },
+        {
+          "method": "POST",
+          "route": "/:serviceId/book"
+        },
+        {
+          "method": "GET",
+          "route": "/:serviceId/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/inclusions/list"
+        },
+        {
+          "method": "GET",
+          "route": "/inclusions/package/:packageId"
+        },
+        {
+          "method": "POST",
+          "route": "/inclusions/:id/redeem"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk"
+        },
+        {
+          "method": "POST",
+          "route": "/inclusions"
+        },
+        {
+          "method": "PUT",
+          "route": "/inclusions/:id"
+        }
+      ]
+    },
+    {
+      "file": "routes/admin.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/hotels"
+        },
+        {
+          "method": "GET",
+          "route": "/users"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "POST",
+          "route": "/users"
+        },
+        {
+          "method": "PATCH",
+          "route": "/users/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/users/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels"
+        },
+        {
+          "method": "PATCH",
+          "route": "/hotels/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/hotels/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/hotels/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/bookings"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/current-hotel"
+        }
+      ]
+    },
+    {
+      "file": "routes/adminBypassManagement.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/security/metrics"
+        },
+        {
+          "method": "GET",
+          "route": "/security/events"
+        },
+        {
+          "method": "GET",
+          "route": "/security/alerts"
+        },
+        {
+          "method": "POST",
+          "route": "/security/validate"
+        },
+        {
+          "method": "POST",
+          "route": "/enhanced-checkout"
+        },
+        {
+          "method": "GET",
+          "route": "/security/high-risk"
+        },
+        {
+          "method": "GET",
+          "route": "/security/bypass/:bypassId"
+        },
+        {
+          "method": "GET",
+          "route": "/security/export"
+        },
+        {
+          "method": "GET",
+          "route": "/approvals/pending"
+        },
+        {
+          "method": "POST",
+          "route": "/approvals/:workflowId/process"
+        },
+        {
+          "method": "POST",
+          "route": "/approvals/:workflowId/delegate"
+        },
+        {
+          "method": "POST",
+          "route": "/approvals/:workflowId/escalate"
+        },
+        {
+          "method": "GET",
+          "route": "/approvals/statistics"
+        },
+        {
+          "method": "GET",
+          "route": "/approvals/:workflowId"
+        },
+        {
+          "method": "GET",
+          "route": "/approvals/status/:status"
+        },
+        {
+          "method": "POST",
+          "route": "/security/alerts/:alertId/acknowledge"
+        }
+      ]
+    },
+    {
+      "file": "routes/adminDashboard.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/hotel"
+        },
+        {
+          "method": "GET",
+          "route": "/real-time"
+        },
+        {
+          "method": "GET",
+          "route": "/kpis"
+        },
+        {
+          "method": "GET",
+          "route": "/occupancy"
+        },
+        {
+          "method": "GET",
+          "route": "/revenue"
+        },
+        {
+          "method": "GET",
+          "route": "/staff-performance"
+        },
+        {
+          "method": "GET",
+          "route": "/guest-satisfaction"
+        },
+        {
+          "method": "GET",
+          "route": "/operations"
+        },
+        {
+          "method": "GET",
+          "route": "/marketing"
+        },
+        {
+          "method": "GET",
+          "route": "/alerts"
+        },
+        {
+          "method": "GET",
+          "route": "/system-health"
+        },
+        {
+          "method": "GET",
+          "route": "/reports"
+        },
+        {
+          "method": "POST",
+          "route": "/bypass-checkout"
+        },
+        {
+          "method": "GET",
+          "route": "/checked-in-bookings"
+        }
+      ]
+    },
+    {
+      "file": "routes/adminHotelServices.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/bulk-operations"
+        },
+        {
+          "method": "GET",
+          "route": "/available-staff"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/toggle-status"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id/staff/:staffId"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id/images/:imageIndex"
+        }
+      ]
+    },
+    {
+      "file": "routes/adminLoyalty.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/offers"
+        },
+        {
+          "method": "POST",
+          "route": "/offers"
+        },
+        {
+          "method": "GET",
+          "route": "/offers/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/offers/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/offers/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/offers/bulk"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/offers/:id/stats"
+        }
+      ]
+    },
+    {
+      "file": "routes/adminTravelDashboard.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/overview"
+        },
+        {
+          "method": "GET",
+          "route": "/agents"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/pending-commissions"
+        },
+        {
+          "method": "GET",
+          "route": "/rates"
+        },
+        {
+          "method": "GET",
+          "route": "/export"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/trends"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/forecast"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/commission-projections"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/performance"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/time-series"
+        },
+        {
+          "method": "POST",
+          "route": "/export/comprehensive"
+        }
+      ]
+    },
+    {
+      "file": "routes/advancedReservations.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/available-bookings"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/assign-room"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/add-upgrade"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/add-flag"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        }
+      ]
+    },
+    {
+      "file": "routes/ai.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/insights"
+        },
+        {
+          "method": "GET",
+          "route": "/forecast/demand"
+        },
+        {
+          "method": "GET",
+          "route": "/forecast/revenue"
+        },
+        {
+          "method": "GET",
+          "route": "/pricing/recommendations"
+        },
+        {
+          "method": "GET",
+          "route": "/model/health"
+        }
+      ]
+    },
+    {
+      "file": "routes/allotment.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/room-type/:roomTypeId"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/date-range"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/apply-rule"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/update-allocation"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/optimize"
+        },
+        {
+          "method": "POST",
+          "route": "/bookings/process"
+        },
+        {
+          "method": "POST",
+          "route": "/bookings/release"
+        },
+        {
+          "method": "GET",
+          "route": "/availability"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/channel-performance"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/recommendations"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/export"
+        },
+        {
+          "method": "GET",
+          "route": "/settings/hotel"
+        },
+        {
+          "method": "GET",
+          "route": "/settings/summary"
+        },
+        {
+          "method": "PUT",
+          "route": "/settings/global"
+        },
+        {
+          "method": "PUT",
+          "route": "/settings/integrations"
+        },
+        {
+          "method": "PUT",
+          "route": "/settings/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/settings/templates"
+        },
+        {
+          "method": "DELETE",
+          "route": "/settings/templates/:templateId"
+        },
+        {
+          "method": "POST",
+          "route": "/settings/test/:type"
+        },
+        {
+          "method": "POST",
+          "route": "/settings/validate"
+        },
+        {
+          "method": "POST",
+          "route": "/settings/reset"
+        },
+        {
+          "method": "GET",
+          "route": "/settings/export"
+        },
+        {
+          "method": "POST",
+          "route": "/settings/import"
+        },
+        {
+          "method": "GET",
+          "route": "/settings/channels/defaults"
+        }
+      ]
+    },
+    {
+      "file": "routes/analytics.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/reports/generate"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/status/:reportId"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/cached/:cacheKey"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/templates"
+        },
+        {
+          "method": "DELETE",
+          "route": "/reports/cache/:reportType?"
+        },
+        {
+          "method": "DELETE",
+          "route": "/dashboard/cache/:cacheKey?"
+        },
+        {
+          "method": "POST",
+          "route": "/reports/schedule"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/export/:reportId/:format"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard/metrics"
+        },
+        {
+          "method": "GET",
+          "route": "/kpis/realtime"
+        },
+        {
+          "method": "GET",
+          "route": "/staff/operational"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/executive-summary"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/revenue-analysis"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/occupancy-analysis"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/guest-segmentation"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/booking-trends"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/performance-comparison"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/channel-analysis"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/seasonal-analysis"
+        },
+        {
+          "method": "POST",
+          "route": "/etl/run"
+        },
+        {
+          "method": "GET",
+          "route": "/etl/status"
+        },
+        {
+          "method": "GET",
+          "route": "/forecast/occupancy/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/predict/demand/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/market/trends/:hotelId"
+        },
+        {
+          "method": "POST",
+          "route": "/staff-productivity"
+        },
+        {
+          "method": "POST",
+          "route": "/staff-productivity/housekeeping"
+        },
+        {
+          "method": "POST",
+          "route": "/staff-productivity/front-desk"
+        },
+        {
+          "method": "POST",
+          "route": "/corporate-bookings"
+        },
+        {
+          "method": "POST",
+          "route": "/corporate-payments"
+        },
+        {
+          "method": "POST",
+          "route": "/booking-channels"
+        },
+        {
+          "method": "POST",
+          "route": "/booking-channels/roi"
+        },
+        {
+          "method": "GET",
+          "route": "/room-type-profitability"
+        },
+        {
+          "method": "GET",
+          "route": "/revenue-forecast"
+        },
+        {
+          "method": "GET",
+          "route": "/smart-recommendations"
+        },
+        {
+          "method": "GET",
+          "route": "/profitability-metrics"
+        },
+        {
+          "method": "GET",
+          "route": "/hotel/:hotelId/metrics"
+        },
+        {
+          "method": "POST",
+          "route": "/notification-events"
+        },
+        {
+          "method": "GET",
+          "route": "/notifications/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/notifications/delivery-stats"
+        },
+        {
+          "method": "GET",
+          "route": "/notifications/user-engagement"
+        },
+        {
+          "method": "GET",
+          "route": "/notifications/category-performance"
+        },
+        {
+          "method": "GET",
+          "route": "/notifications/channel-performance"
+        },
+        {
+          "method": "GET",
+          "route": "/notifications/real-time"
+        },
+        {
+          "method": "GET",
+          "route": "/notifications/export"
+        }
+      ]
+    },
+    {
+      "file": "routes/apiManagement.js",
+      "routes": [
+        {
+          "method": "PATCH",
+          "route": "/api-keys/:id/toggle"
+        },
+        {
+          "method": "POST",
+          "route": "/webhooks/:id/test"
+        },
+        {
+          "method": "POST",
+          "route": "/webhooks/:id/regenerate-secret"
+        },
+        {
+          "method": "GET",
+          "route": "/endpoints"
+        },
+        {
+          "method": "GET",
+          "route": "/metrics"
+        },
+        {
+          "method": "GET",
+          "route": "/metrics/endpoints"
+        },
+        {
+          "method": "GET",
+          "route": "/metrics/endpoints/:endpoint"
+        },
+        {
+          "method": "GET",
+          "route": "/metrics/api-keys"
+        },
+        {
+          "method": "GET",
+          "route": "/metrics/webhooks"
+        },
+        {
+          "method": "GET",
+          "route": "/export/logs"
+        },
+        {
+          "method": "GET",
+          "route": "/documentation"
+        }
+      ]
+    },
+    {
+      "file": "routes/approvals.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/my-requests"
+        },
+        {
+          "method": "GET",
+          "route": "/pending-count"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/approve"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/reject"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/cancel"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        }
+      ]
+    },
+    {
+      "file": "routes/assignmentRules.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/test"
+        },
+        {
+          "method": "POST",
+          "route": "/auto-assign"
+        }
+      ]
+    },
+    {
+      "file": "routes/attractions.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/categories"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        }
+      ]
+    },
+    {
+      "file": "routes/audit.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/ota-payloads"
+        },
+        {
+          "method": "GET",
+          "route": "/ota-payloads/:payloadId"
+        },
+        {
+          "method": "GET",
+          "route": "/ota-payloads/:payloadId/audit"
+        },
+        {
+          "method": "GET",
+          "route": "/bookings/:bookingId/payloads"
+        },
+        {
+          "method": "POST",
+          "route": "/bookings/:bookingId/reconcile"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/compliance/report"
+        },
+        {
+          "method": "GET",
+          "route": "/logs"
+        },
+        {
+          "method": "GET",
+          "route": "/correlations/:correlationId"
+        },
+        {
+          "method": "GET",
+          "route": "/retention/stats"
+        },
+        {
+          "method": "POST",
+          "route": "/retention/cleanup"
+        },
+        {
+          "method": "GET",
+          "route": "/export"
+        }
+      ]
+    },
+    {
+      "file": "routes/auditLog.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/statistics"
+        },
+        {
+          "method": "GET",
+          "route": "/heatmap"
+        },
+        {
+          "method": "GET",
+          "route": "/time-savings"
+        },
+        {
+          "method": "GET",
+          "route": "/recent"
+        },
+        {
+          "method": "GET",
+          "route": "/export"
+        },
+        {
+          "method": "GET",
+          "route": "/user/:userId"
+        },
+        {
+          "method": "GET",
+          "route": "/property/:propertyId"
+        },
+        {
+          "method": "GET",
+          "route": "/:logId"
+        }
+      ]
+    },
+    {
+      "file": "routes/auditTrail.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/entity/:entityType/:entityId"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "DELETE",
+          "route": "/cleanup"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/reconcile"
+        }
+      ]
+    },
+    {
+      "file": "routes/auth.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/register"
+        },
+        {
+          "method": "POST",
+          "route": "/login"
+        },
+        {
+          "method": "GET",
+          "route": "/me"
+        },
+        {
+          "method": "PATCH",
+          "route": "/profile"
+        },
+        {
+          "method": "PATCH",
+          "route": "/change-password"
+        },
+        {
+          "method": "POST",
+          "route": "/refresh"
+        },
+        {
+          "method": "POST",
+          "route": "/logout"
+        }
+      ]
+    },
+    {
+      "file": "routes/availability.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/check"
+        },
+        {
+          "method": "GET",
+          "route": "/calendar"
+        },
+        {
+          "method": "GET",
+          "route": "/room-status"
+        },
+        {
+          "method": "POST",
+          "route": "/block"
+        },
+        {
+          "method": "POST",
+          "route": "/unblock"
+        },
+        {
+          "method": "GET",
+          "route": "/occupancy"
+        },
+        {
+          "method": "GET",
+          "route": "/alternatives"
+        },
+        {
+          "method": "GET",
+          "route": "/overbooking"
+        },
+        {
+          "method": "GET",
+          "route": "/with-rates"
+        },
+        {
+          "method": "GET",
+          "route": "/search"
+        }
+      ]
+    },
+    {
+      "file": "routes/billingHistory.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/test"
+        },
+        {
+          "method": "GET",
+          "route": "/user"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/export"
+        }
+      ]
+    },
+    {
+      "file": "routes/billingSessions.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/items"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/items/:itemId"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id/items/:itemId"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/checkout"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/void"
+        },
+        {
+          "method": "GET",
+          "route": "/hotel/:hotelId"
+        }
+      ]
+    },
+    {
+      "file": "routes/billMessages.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/options"
+        },
+        {
+          "method": "POST",
+          "route": "/validate-template"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/export"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/process"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/preview"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/duplicate"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId/applicable"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId/auto-generate"
+        },
+        {
+          "method": "PATCH",
+          "route": "/hotels/:hotelId/bulk-update"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId/import"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        }
+      ]
+    },
+    {
+      "file": "routes/blacklist.js",
+      "routes": []
+    },
+    {
+      "file": "routes/bookingConversations.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/messages"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/read"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/assign"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/status"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        }
+      ]
+    },
+    {
+      "file": "routes/bookingEngine.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/widgets"
+        },
+        {
+          "method": "GET",
+          "route": "/widgets"
+        },
+        {
+          "method": "PUT",
+          "route": "/widgets/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/widgets/:widgetId/code"
+        },
+        {
+          "method": "POST",
+          "route": "/widgets/:widgetId/booking"
+        },
+        {
+          "method": "POST",
+          "route": "/widget/track"
+        },
+        {
+          "method": "GET",
+          "route": "/widgets/:widgetId/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/widgets/performance/summary"
+        },
+        {
+          "method": "POST",
+          "route": "/promo-codes"
+        },
+        {
+          "method": "GET",
+          "route": "/promo-codes"
+        },
+        {
+          "method": "PUT",
+          "route": "/promo-codes/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/promo-codes/validate"
+        },
+        {
+          "method": "GET",
+          "route": "/crm/guests"
+        },
+        {
+          "method": "GET",
+          "route": "/crm/guests/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/crm/guests/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/campaigns"
+        },
+        {
+          "method": "GET",
+          "route": "/campaigns"
+        },
+        {
+          "method": "POST",
+          "route": "/campaigns/:campaignId/send"
+        },
+        {
+          "method": "GET",
+          "route": "/campaigns/:id/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/loyalty-programs"
+        },
+        {
+          "method": "GET",
+          "route": "/loyalty-programs"
+        },
+        {
+          "method": "POST",
+          "route": "/loyalty/points"
+        },
+        {
+          "method": "POST",
+          "route": "/landing-pages"
+        },
+        {
+          "method": "GET",
+          "route": "/landing-pages"
+        },
+        {
+          "method": "GET",
+          "route": "/landing-pages/:id/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/reviews"
+        },
+        {
+          "method": "GET",
+          "route": "/reviews"
+        },
+        {
+          "method": "POST",
+          "route": "/reviews/:id/respond"
+        },
+        {
+          "method": "PUT",
+          "route": "/reviews/:id/moderate"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        }
+      ]
+    },
+    {
+      "file": "routes/bookingForm.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/templates"
+        },
+        {
+          "method": "GET",
+          "route": "/templates"
+        },
+        {
+          "method": "GET",
+          "route": "/templates/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/templates/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/templates/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/templates/:id/duplicate"
+        },
+        {
+          "method": "GET",
+          "route": "/templates/:id/export"
+        },
+        {
+          "method": "POST",
+          "route": "/templates/import"
+        },
+        {
+          "method": "GET",
+          "route": "/templates/:id/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/templates/:id/ab-test"
+        }
+      ]
+    },
+    {
+      "file": "routes/bookings.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/current-hotel"
+        },
+        {
+          "method": "GET",
+          "route": "/upcoming"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/room/:roomId"
+        },
+        {
+          "method": "POST",
+          "route": "/check-availability"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/cancel"
+        },
+        {
+          "method": "POST",
+          "route": "/change-room"
+        },
+        {
+          "method": "POST",
+          "route": "/change-room-by-guest"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/modification-request"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/modification-requests"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/audit-trail"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/modification-requests/:requestId/review"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/check-in"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/check-out"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/extra-persons"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id/extra-persons/:personId"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/extra-persons/:personId/update-charge"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/extra-persons/calculate-charges"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/extra-persons/:personId/approve"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/extra-persons/payment"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/settlement"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/settlement/adjustment"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/settlement/payment"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/no-show"
+        }
+      ]
+    },
+    {
+      "file": "routes/bypassFinancialAnalytics.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/summary"
+        },
+        {
+          "method": "GET",
+          "route": "/trends"
+        },
+        {
+          "method": "GET",
+          "route": "/cost-drivers"
+        },
+        {
+          "method": "GET",
+          "route": "/impact/:impactId"
+        },
+        {
+          "method": "GET",
+          "route": "/impacts"
+        },
+        {
+          "method": "GET",
+          "route": "/budget-impact"
+        },
+        {
+          "method": "GET",
+          "route": "/recovery"
+        },
+        {
+          "method": "GET",
+          "route": "/predictive"
+        },
+        {
+          "method": "GET",
+          "route": "/executive-report"
+        },
+        {
+          "method": "PUT",
+          "route": "/impact/:impactId"
+        },
+        {
+          "method": "POST",
+          "route": "/impact/:impactId/recovery-action"
+        },
+        {
+          "method": "PUT",
+          "route": "/impact/:impactId/recovery-action/:actionId/complete"
+        }
+      ]
+    },
+    {
+      "file": "routes/cancellations.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/:bookingId/cancel"
+        },
+        {
+          "method": "GET",
+          "route": "/:bookingId/cancel-preview"
+        }
+      ]
+    },
+    {
+      "file": "routes/centralizedRates.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:rateId"
+        },
+        {
+          "method": "PUT",
+          "route": "/:rateId"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:rateId"
+        },
+        {
+          "method": "POST",
+          "route": "/:rateId/distribute"
+        },
+        {
+          "method": "POST",
+          "route": "/:rateId/calculate"
+        },
+        {
+          "method": "GET",
+          "route": "/:rateId/validate"
+        },
+        {
+          "method": "POST",
+          "route": "/:rateId/duplicate"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:rateId/status"
+        },
+        {
+          "method": "POST",
+          "route": "/:rateId/preview-distribution"
+        },
+        {
+          "method": "POST",
+          "route": "/group/:groupId/sync"
+        },
+        {
+          "method": "GET",
+          "route": "/:rateId/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/:rateId/history"
+        },
+        {
+          "method": "GET",
+          "route": "/group/:groupId/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/export"
+        },
+        {
+          "method": "GET",
+          "route": "/conflicts"
+        },
+        {
+          "method": "POST",
+          "route": "/conflicts/:conflictId/resolve"
+        }
+      ]
+    },
+    {
+      "file": "routes/channelLocalization.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/channels"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId/channels"
+        },
+        {
+          "method": "PUT",
+          "route": "/hotels/:hotelId/channels/:channelId"
+        },
+        {
+          "method": "DELETE",
+          "route": "/hotels/:hotelId/channels/:channelId"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId/channels/:channelId/test"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId/distribute-rates"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/distribution-status"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId/translate-content"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId/queue-translation"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/supported-currencies"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/supported-languages"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/channel-metrics"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/channels/:channelId/report"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/translation-analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId/sync-all"
+        },
+        {
+          "method": "POST",
+          "route": "/webhooks/channels/:channelId"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/real-time-status"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/export-metrics"
+        }
+      ]
+    },
+    {
+      "file": "routes/channelManagement.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/initialize"
+        },
+        {
+          "method": "POST",
+          "route": "/:channelId/test"
+        },
+        {
+          "method": "GET",
+          "route": "/:channelId/mappings"
+        },
+        {
+          "method": "POST",
+          "route": "/:channelId/mappings"
+        },
+        {
+          "method": "POST",
+          "route": "/:channelId/sync"
+        },
+        {
+          "method": "GET",
+          "route": "/sync/status"
+        },
+        {
+          "method": "POST",
+          "route": "/sync/trigger"
+        },
+        {
+          "method": "GET",
+          "route": "/:channelId/metrics"
+        },
+        {
+          "method": "PUT",
+          "route": "/:channelId"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:channelId"
+        },
+        {
+          "method": "GET",
+          "route": "/room-types"
+        }
+      ]
+    },
+    {
+      "file": "routes/channelManager.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/channels"
+        },
+        {
+          "method": "GET",
+          "route": "/channels"
+        },
+        {
+          "method": "GET",
+          "route": "/channels/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/channels/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/channels/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/channels/:channelId/test-connection"
+        },
+        {
+          "method": "POST",
+          "route": "/sync/channel/:channelId"
+        },
+        {
+          "method": "POST",
+          "route": "/sync/all-channels"
+        },
+        {
+          "method": "GET",
+          "route": "/sync/history"
+        },
+        {
+          "method": "POST",
+          "route": "/reservations/pull/:channelId"
+        },
+        {
+          "method": "GET",
+          "route": "/reservations/mappings"
+        },
+        {
+          "method": "POST",
+          "route": "/rate-parity/monitor"
+        },
+        {
+          "method": "GET",
+          "route": "/rate-parity/logs"
+        },
+        {
+          "method": "GET",
+          "route": "/performance/:channelId"
+        },
+        {
+          "method": "GET",
+          "route": "/performance"
+        },
+        {
+          "method": "POST",
+          "route": "/overbooking/check"
+        },
+        {
+          "method": "POST",
+          "route": "/overbooking/rules"
+        },
+        {
+          "method": "GET",
+          "route": "/overbooking/rules"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        }
+      ]
+    },
+    {
+      "file": "routes/checkoutAutomation.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/config"
+        },
+        {
+          "method": "PUT",
+          "route": "/config"
+        },
+        {
+          "method": "GET",
+          "route": "/status/:bookingId"
+        },
+        {
+          "method": "POST",
+          "route": "/process/:bookingId"
+        },
+        {
+          "method": "POST",
+          "route": "/retry/:bookingId"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/logs"
+        },
+        {
+          "method": "POST",
+          "route": "/toggle"
+        }
+      ]
+    },
+    {
+      "file": "routes/checkoutInventory.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/complete"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/payment"
+        },
+        {
+          "method": "GET",
+          "route": "/booking/:bookingId"
+        }
+      ]
+    },
+    {
+      "file": "routes/communications.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/cancel"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/track/open"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/track/click"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk"
+        }
+      ]
+    },
+    {
+      "file": "routes/contact.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/info"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels"
+        }
+      ]
+    },
+    {
+      "file": "routes/corporate.js",
+      "routes": []
+    },
+    {
+      "file": "routes/credentials.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:service/:environment?"
+        },
+        {
+          "method": "PUT",
+          "route": "/:service/:environment?"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:service/:environment?"
+        },
+        {
+          "method": "POST",
+          "route": "/:service/:environment?/rotate"
+        },
+        {
+          "method": "POST",
+          "route": "/tokens/generate"
+        },
+        {
+          "method": "POST",
+          "route": "/tokens/validate"
+        },
+        {
+          "method": "POST",
+          "route": "/tokens/:tokenId/revoke"
+        },
+        {
+          "method": "GET",
+          "route": "/usage"
+        },
+        {
+          "method": "GET",
+          "route": "/audit"
+        },
+        {
+          "method": "GET",
+          "route": "/health"
+        }
+      ]
+    },
+    {
+      "file": "routes/crm.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/guests/:userId/profile"
+        },
+        {
+          "method": "GET",
+          "route": "/guests/:userId/insights"
+        },
+        {
+          "method": "PUT",
+          "route": "/guests/:userId/profile"
+        },
+        {
+          "method": "GET",
+          "route": "/guests/:userId/personalization"
+        },
+        {
+          "method": "GET",
+          "route": "/guests/:userId/behavior"
+        },
+        {
+          "method": "POST",
+          "route": "/guests/:userId/behavior"
+        },
+        {
+          "method": "GET",
+          "route": "/segments"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/guests/:userId/refresh-metrics"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk-update-metrics"
+        }
+      ]
+    },
+    {
+      "file": "routes/currency.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/active"
+        },
+        {
+          "method": "GET",
+          "route": "/convert"
+        },
+        {
+          "method": "GET",
+          "route": "/rate/:from/:to"
+        },
+        {
+          "method": "GET",
+          "route": "/conversion-rates"
+        },
+        {
+          "method": "GET",
+          "route": "/format"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/channel/:channel"
+        },
+        {
+          "method": "GET",
+          "route": "/:code"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PUT",
+          "route": "/:code"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:code"
+        },
+        {
+          "method": "POST",
+          "route": "/rates/update"
+        },
+        {
+          "method": "GET",
+          "route": "/providers/status"
+        },
+        {
+          "method": "POST",
+          "route": "/:code/channels"
+        },
+        {
+          "method": "POST",
+          "route": "/batch/convert"
+        }
+      ]
+    },
+    {
+      "file": "routes/customFields.js",
+      "routes": []
+    },
+    {
+      "file": "routes/dailyInventoryCheck.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/today"
+        },
+        {
+          "method": "GET",
+          "route": "/overdue"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/complete"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/issues"
+        },
+        {
+          "method": "GET",
+          "route": "/room/:roomId"
+        },
+        {
+          "method": "GET",
+          "route": "/pending-replacements"
+        },
+        {
+          "method": "GET",
+          "route": "/guest-charges/:guestId"
+        },
+        {
+          "method": "GET",
+          "route": "/template/:roomId"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:checkId"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        }
+      ]
+    },
+    {
+      "file": "routes/dailyRoutineCheck.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/rooms"
+        },
+        {
+          "method": "GET",
+          "route": "/rooms/:roomId/inventory"
+        },
+        {
+          "method": "POST",
+          "route": "/rooms/:roomId/complete"
+        },
+        {
+          "method": "GET",
+          "route": "/summary"
+        },
+        {
+          "method": "GET",
+          "route": "/my-assignments"
+        },
+        {
+          "method": "POST",
+          "route": "/rooms/:roomId/mark-checked"
+        },
+        {
+          "method": "POST",
+          "route": "/assign"
+        },
+        {
+          "method": "GET",
+          "route": "/templates"
+        },
+        {
+          "method": "POST",
+          "route": "/templates"
+        },
+        {
+          "method": "PUT",
+          "route": "/templates/:roomType"
+        },
+        {
+          "method": "DELETE",
+          "route": "/templates/:roomType"
+        },
+        {
+          "method": "GET",
+          "route": "/admin/overview"
+        },
+        {
+          "method": "GET",
+          "route": "/admin/unassigned-rooms"
+        }
+      ]
+    },
+    {
+      "file": "routes/dashboard.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/counts"
+        },
+        {
+          "method": "GET",
+          "route": "/room-status"
+        },
+        {
+          "method": "GET",
+          "route": "/activities"
+        }
+      ]
+    },
+    {
+      "file": "routes/dashboardUpdates.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/notifications"
+        },
+        {
+          "method": "GET",
+          "route": "/activity-feed"
+        },
+        {
+          "method": "GET",
+          "route": "/summary"
+        },
+        {
+          "method": "PATCH",
+          "route": "/mark-read"
+        }
+      ]
+    },
+    {
+      "file": "routes/dataPrivacy.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/consent"
+        },
+        {
+          "method": "GET",
+          "route": "/consent/:userId/check"
+        },
+        {
+          "method": "GET",
+          "route": "/consent/:userId/history"
+        },
+        {
+          "method": "POST",
+          "route": "/processing-agreements"
+        },
+        {
+          "method": "GET",
+          "route": "/processing-agreements"
+        },
+        {
+          "method": "POST",
+          "route": "/minimize"
+        },
+        {
+          "method": "POST",
+          "route": "/anonymize"
+        },
+        {
+          "method": "GET",
+          "route": "/retention-compliance"
+        },
+        {
+          "method": "POST",
+          "route": "/privacy-impact-assessment"
+        },
+        {
+          "method": "POST",
+          "route": "/privacy-notice"
+        },
+        {
+          "method": "GET",
+          "route": "/preferences/:userId"
+        },
+        {
+          "method": "PUT",
+          "route": "/preferences/:userId"
+        },
+        {
+          "method": "GET",
+          "route": "/my-preferences"
+        },
+        {
+          "method": "PUT",
+          "route": "/my-preferences"
+        },
+        {
+          "method": "GET",
+          "route": "/compliance-dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/retention-rules"
+        },
+        {
+          "method": "POST",
+          "route": "/validate-processing"
+        }
+      ]
+    },
+    {
+      "file": "routes/dayUse.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/slots"
+        },
+        {
+          "method": "GET",
+          "route": "/slots/available/:date"
+        },
+        {
+          "method": "GET",
+          "route": "/slots/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/slots/:slotId/availability"
+        },
+        {
+          "method": "POST",
+          "route": "/bookings"
+        },
+        {
+          "method": "GET",
+          "route": "/bookings"
+        },
+        {
+          "method": "GET",
+          "route": "/bookings/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/bookings/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/bookings/:id/cancel"
+        },
+        {
+          "method": "POST",
+          "route": "/bookings/:id/notes"
+        },
+        {
+          "method": "POST",
+          "route": "/bookings/:id/checkin"
+        },
+        {
+          "method": "POST",
+          "route": "/bookings/:id/checkout"
+        },
+        {
+          "method": "POST",
+          "route": "/slots"
+        },
+        {
+          "method": "PUT",
+          "route": "/slots/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/slots/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/slots/:slotId/performance"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/revenue"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/occupancy/:date"
+        },
+        {
+          "method": "GET",
+          "route": "/schedule/today"
+        }
+      ]
+    },
+    {
+      "file": "routes/departmentBudget.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/:department"
+        },
+        {
+          "method": "GET",
+          "route": "/:department/alerts"
+        },
+        {
+          "method": "GET",
+          "route": "/summary"
+        },
+        {
+          "method": "GET",
+          "route": "/:department/trends"
+        },
+        {
+          "method": "POST",
+          "route": "/:department"
+        },
+        {
+          "method": "POST",
+          "route": "/:department/spending"
+        },
+        {
+          "method": "POST",
+          "route": "/:department/commitments"
+        },
+        {
+          "method": "POST",
+          "route": "/:department/check-availability"
+        }
+      ]
+    },
+    {
+      "file": "routes/departments.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/hierarchy"
+        },
+        {
+          "method": "GET",
+          "route": "/search"
+        },
+        {
+          "method": "GET",
+          "route": "/export"
+        },
+        {
+          "method": "GET",
+          "route": "/summary"
+        },
+        {
+          "method": "PUT",
+          "route": "/bulk-update"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/assign-staff"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/metrics"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/audit-log"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/kpis"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/budget"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/staff"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/status"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/clone"
+        }
+      ]
+    },
+    {
+      "file": "routes/digitalKeys.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/shared"
+        },
+        {
+          "method": "POST",
+          "route": "/generate"
+        },
+        {
+          "method": "GET",
+          "route": "/admin"
+        },
+        {
+          "method": "GET",
+          "route": "/admin/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/:keyId"
+        },
+        {
+          "method": "POST",
+          "route": "/validate/:keyCode"
+        },
+        {
+          "method": "POST",
+          "route": "/:keyId/share"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:keyId/share/:userIdOrEmail"
+        },
+        {
+          "method": "GET",
+          "route": "/:keyId/logs"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:keyId"
+        },
+        {
+          "method": "GET",
+          "route": "/stats/overview"
+        },
+        {
+          "method": "GET",
+          "route": "/admin/activity-logs"
+        },
+        {
+          "method": "GET",
+          "route": "/admin/export"
+        }
+      ]
+    },
+    {
+      "file": "routes/discountPricing.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/overview"
+        },
+        {
+          "method": "POST",
+          "route": "/discounts/applicable"
+        },
+        {
+          "method": "POST",
+          "route": "/pricing/:id/calculate"
+        },
+        {
+          "method": "POST",
+          "route": "/market-segments/match"
+        },
+        {
+          "method": "GET",
+          "route": "/job-types/search"
+        },
+        {
+          "method": "PATCH",
+          "route": "/discounts/bulk-status"
+        },
+        {
+          "method": "PATCH",
+          "route": "/pricing/bulk-status"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/discounts"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/pricing"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/market-segments"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/job-types"
+        }
+      ]
+    },
+    {
+      "file": "routes/documentUpload.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/upload"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk-upload"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/download"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/verify"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/reject"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/staff/:staffId"
+        },
+        {
+          "method": "GET",
+          "route": "/guest/:guestId"
+        },
+        {
+          "method": "GET",
+          "route": "/pending-verifications"
+        },
+        {
+          "method": "GET",
+          "route": "/requirements/:userType"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/compliance"
+        }
+      ]
+    },
+    {
+      "file": "routes/emailCampaigns.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/scheduled"
+        },
+        {
+          "method": "POST",
+          "route": "/audience-count"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/send"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/duplicate"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/preview"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/track/open/:campaignId/:userId/:trackingId"
+        },
+        {
+          "method": "GET",
+          "route": "/track/click/:campaignId/:userId/:linkId"
+        },
+        {
+          "method": "GET",
+          "route": "/track/unsubscribe/:campaignId/:userId"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/analytics/detailed"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/bulk"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/analytics/realtime"
+        }
+      ]
+    },
+    {
+      "file": "routes/enhancedAnalytics.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/financial-trends"
+        },
+        {
+          "method": "GET",
+          "route": "/business-intelligence"
+        },
+        {
+          "method": "GET",
+          "route": "/demand-forecast"
+        },
+        {
+          "method": "GET",
+          "route": "/cost-anomaly-detection"
+        },
+        {
+          "method": "GET",
+          "route": "/vendor-performance"
+        },
+        {
+          "method": "GET",
+          "route": "/predictive-budget-planning"
+        },
+        {
+          "method": "GET",
+          "route": "/system-health"
+        },
+        {
+          "method": "POST",
+          "route": "/export"
+        }
+      ]
+    },
+    {
+      "file": "routes/enhancedBookings.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/cancel"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/history"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/sync"
+        },
+        {
+          "method": "GET",
+          "route": "/channels"
+        },
+        {
+          "method": "POST",
+          "route": "/channel-modification"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/adjust-price"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/adjustments/:adjustmentId/reverse"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/price-history"
+        }
+      ]
+    },
+    {
+      "file": "routes/externalBookings.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PUT",
+          "route": "/:bookingId"
+        },
+        {
+          "method": "POST",
+          "route": "/:bookingId/cancel"
+        },
+        {
+          "method": "GET",
+          "route": "/availability"
+        },
+        {
+          "method": "GET",
+          "route": "/health"
+        }
+      ]
+    },
+    {
+      "file": "routes/extraPersonPricing.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/rules"
+        },
+        {
+          "method": "POST",
+          "route": "/rules"
+        },
+        {
+          "method": "PUT",
+          "route": "/rules/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/calculate"
+        },
+        {
+          "method": "POST",
+          "route": "/preview"
+        },
+        {
+          "method": "GET",
+          "route": "/strategies"
+        }
+      ]
+    },
+    {
+      "file": "routes/featureFlags.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:flagName"
+        },
+        {
+          "method": "POST",
+          "route": "/:flagName"
+        }
+      ]
+    },
+    {
+      "file": "routes/financial.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/test-dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/chart-of-accounts/tree"
+        },
+        {
+          "method": "GET",
+          "route": "/chart-of-accounts/flattened"
+        },
+        {
+          "method": "POST",
+          "route": "/chart-of-accounts/bulk-import"
+        },
+        {
+          "method": "GET",
+          "route": "/chart-of-accounts/:id/activity"
+        },
+        {
+          "method": "GET",
+          "route": "/general-ledger"
+        },
+        {
+          "method": "GET",
+          "route": "/general-ledger/trial-balance"
+        },
+        {
+          "method": "GET",
+          "route": "/general-ledger/financial-statements"
+        },
+        {
+          "method": "GET",
+          "route": "/general-ledger/aging-report"
+        },
+        {
+          "method": "GET",
+          "route": "/general-ledger/export"
+        },
+        {
+          "method": "GET",
+          "route": "/general-ledger/account/:accountId"
+        },
+        {
+          "method": "GET",
+          "route": "/general-ledger/verify-balance"
+        },
+        {
+          "method": "GET",
+          "route": "/journal-entries/templates"
+        },
+        {
+          "method": "POST",
+          "route": "/journal-entries/bulk-create"
+        },
+        {
+          "method": "POST",
+          "route": "/journal-entries/:id/post"
+        },
+        {
+          "method": "POST",
+          "route": "/journal-entries/:id/reverse"
+        },
+        {
+          "method": "POST",
+          "route": "/journal-entries/:id/approve"
+        },
+        {
+          "method": "POST",
+          "route": "/journal-entries/:id/reject"
+        },
+        {
+          "method": "GET",
+          "route": "/bank-accounts/cash-position"
+        },
+        {
+          "method": "GET",
+          "route": "/bank-accounts/balances"
+        },
+        {
+          "method": "GET",
+          "route": "/bank-accounts/:id/transactions"
+        },
+        {
+          "method": "POST",
+          "route": "/bank-accounts/:id/transactions"
+        },
+        {
+          "method": "POST",
+          "route": "/bank-accounts/:id/reconcile"
+        },
+        {
+          "method": "POST",
+          "route": "/bank-accounts/:id/import-statement"
+        },
+        {
+          "method": "GET",
+          "route": "/budgets/summary"
+        },
+        {
+          "method": "GET",
+          "route": "/budgets/statistics"
+        },
+        {
+          "method": "GET",
+          "route": "/budgets/templates"
+        },
+        {
+          "method": "GET",
+          "route": "/budgets/vs-actual"
+        },
+        {
+          "method": "GET",
+          "route": "/budgets/forecast"
+        },
+        {
+          "method": "POST",
+          "route": "/budgets/:id/submit-review"
+        },
+        {
+          "method": "POST",
+          "route": "/budgets/:id/approve"
+        },
+        {
+          "method": "POST",
+          "route": "/budgets/:id/revise"
+        },
+        {
+          "method": "GET",
+          "route": "/payments/statistics"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/trial-balance"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/income-statement"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/balance-sheet"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/cash-flow"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/financial-ratios"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/comprehensive"
+        }
+      ]
+    },
+    {
+      "file": "routes/gdpr.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/consent"
+        },
+        {
+          "method": "PUT",
+          "route": "/consent/:consentId"
+        },
+        {
+          "method": "GET",
+          "route": "/consent/history"
+        },
+        {
+          "method": "POST",
+          "route": "/data/access"
+        },
+        {
+          "method": "POST",
+          "route": "/data/rectification"
+        },
+        {
+          "method": "POST",
+          "route": "/data/erasure"
+        },
+        {
+          "method": "POST",
+          "route": "/data/portability"
+        },
+        {
+          "method": "GET",
+          "route": "/processing/:dataCategory/:purpose"
+        },
+        {
+          "method": "GET",
+          "route": "/privacy-notice"
+        },
+        {
+          "method": "GET",
+          "route": "/processing-info"
+        },
+        {
+          "method": "GET",
+          "route": "/admin/retention-report"
+        },
+        {
+          "method": "GET",
+          "route": "/admin/compliance-report"
+        },
+        {
+          "method": "GET",
+          "route": "/admin/data-requests"
+        },
+        {
+          "method": "GET",
+          "route": "/admin/data-requests/:requestId"
+        },
+        {
+          "method": "POST",
+          "route": "/admin/data-requests/:requestId/process"
+        },
+        {
+          "method": "POST",
+          "route": "/admin/bulk-consent-status"
+        },
+        {
+          "method": "GET",
+          "route": "/public/privacy-policy"
+        },
+        {
+          "method": "GET",
+          "route": "/public/cookie-policy"
+        }
+      ]
+    },
+    {
+      "file": "routes/guestImport.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/upload"
+        },
+        {
+          "method": "POST",
+          "route": "/import"
+        },
+        {
+          "method": "POST",
+          "route": "/validate"
+        },
+        {
+          "method": "GET",
+          "route": "/template"
+        },
+        {
+          "method": "GET",
+          "route": "/template/download"
+        },
+        {
+          "method": "GET",
+          "route": "/statistics"
+        },
+        {
+          "method": "GET",
+          "route": "/formats"
+        }
+      ]
+    },
+    {
+      "file": "routes/guestLookup.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/room/:roomNumber"
+        },
+        {
+          "method": "GET",
+          "route": "/booking/:bookingId"
+        },
+        {
+          "method": "GET",
+          "route": "/search"
+        },
+        {
+          "method": "GET",
+          "route": "/:guestId/bookings"
+        },
+        {
+          "method": "GET",
+          "route": "/:guestId/billing-history"
+        }
+      ]
+    },
+    {
+      "file": "routes/guestManagement.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/overview"
+        },
+        {
+          "method": "POST",
+          "route": "/guest-types/:id/duplicate"
+        },
+        {
+          "method": "POST",
+          "route": "/validate"
+        },
+        {
+          "method": "PATCH",
+          "route": "/display-order"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/account-attributes"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/guest-types"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/identification-types"
+        }
+      ]
+    },
+    {
+      "file": "routes/guests.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/bookings"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        }
+      ]
+    },
+    {
+      "file": "routes/guestServices.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/available-staff"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/feedback"
+        }
+      ]
+    },
+    {
+      "file": "routes/health.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/live"
+        },
+        {
+          "method": "GET",
+          "route": "/ready"
+        },
+        {
+          "method": "GET",
+          "route": "/version"
+        },
+        {
+          "method": "GET",
+          "route": "/detailed"
+        },
+        {
+          "method": "GET",
+          "route": "/checks/:checkName"
+        },
+        {
+          "method": "GET",
+          "route": "/status"
+        },
+        {
+          "method": "GET",
+          "route": "/metrics"
+        },
+        {
+          "method": "GET",
+          "route": "/history"
+        },
+        {
+          "method": "GET",
+          "route": "/system"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "POST",
+          "route": "/checks/run"
+        },
+        {
+          "method": "GET",
+          "route": "/prometheus"
+        },
+        {
+          "method": "GET",
+          "route": "/external/:token"
+        },
+        {
+          "method": "POST",
+          "route": "/alerts/webhook"
+        }
+      ]
+    },
+    {
+      "file": "routes/hotelAreas.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/:hotelId/areas"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/areas/statistics"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/areas/type/:areaType"
+        },
+        {
+          "method": "GET",
+          "route": "/areas/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/areas/:id/tree"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/areas"
+        },
+        {
+          "method": "PUT",
+          "route": "/areas/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/areas/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:hotelId/areas/bulk-status"
+        },
+        {
+          "method": "PATCH",
+          "route": "/areas/:id/room-counts"
+        },
+        {
+          "method": "PATCH",
+          "route": "/areas/:id/statistics"
+        },
+        {
+          "method": "PATCH",
+          "route": "/areas/:id/assign-staff"
+        }
+      ]
+    },
+    {
+      "file": "routes/hotelServices.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/bookings"
+        },
+        {
+          "method": "GET",
+          "route": "/bookings/:bookingId"
+        },
+        {
+          "method": "GET",
+          "route": "/types"
+        },
+        {
+          "method": "GET",
+          "route": "/featured"
+        },
+        {
+          "method": "GET",
+          "route": "/:serviceId"
+        },
+        {
+          "method": "GET",
+          "route": "/:serviceId/availability"
+        },
+        {
+          "method": "POST",
+          "route": "/:serviceId/bookings"
+        },
+        {
+          "method": "POST",
+          "route": "/bookings/:bookingId/cancel"
+        }
+      ]
+    },
+    {
+      "file": "routes/hotelSettings.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/backup"
+        },
+        {
+          "method": "GET",
+          "route": "/:section"
+        },
+        {
+          "method": "PUT",
+          "route": "/basic-info"
+        },
+        {
+          "method": "PUT",
+          "route": "/operations"
+        },
+        {
+          "method": "PUT",
+          "route": "/policies"
+        },
+        {
+          "method": "PUT",
+          "route": "/taxes"
+        },
+        {
+          "method": "PUT",
+          "route": "/integrations"
+        },
+        {
+          "method": "PUT",
+          "route": "/security"
+        },
+        {
+          "method": "PUT",
+          "route": "/maintenance"
+        },
+        {
+          "method": "POST",
+          "route": "/integrations/test"
+        },
+        {
+          "method": "POST",
+          "route": "/amenities"
+        },
+        {
+          "method": "PUT",
+          "route": "/amenities/:amenityId"
+        },
+        {
+          "method": "DELETE",
+          "route": "/amenities/:amenityId"
+        },
+        {
+          "method": "POST",
+          "route": "/restore"
+        },
+        {
+          "method": "GET",
+          "route": "/booking-rules"
+        },
+        {
+          "method": "PUT",
+          "route": "/booking-rules"
+        }
+      ]
+    },
+    {
+      "file": "routes/housekeeping.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/inspect"
+        }
+      ]
+    },
+    {
+      "file": "routes/housekeepingAutomation.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/process-checkout"
+        },
+        {
+          "method": "GET",
+          "route": "/tasks"
+        },
+        {
+          "method": "GET",
+          "route": "/tasks/:taskId"
+        },
+        {
+          "method": "PUT",
+          "route": "/tasks/:taskId/assign"
+        },
+        {
+          "method": "PUT",
+          "route": "/tasks/:taskId/start"
+        },
+        {
+          "method": "PUT",
+          "route": "/tasks/:taskId/complete"
+        },
+        {
+          "method": "GET",
+          "route": "/available-staff"
+        },
+        {
+          "method": "GET",
+          "route": "/statistics"
+        },
+        {
+          "method": "POST",
+          "route": "/auto-assign"
+        }
+      ]
+    },
+    {
+      "file": "routes/incidents.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/assign"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/actions"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/critical"
+        },
+        {
+          "method": "GET",
+          "route": "/trends"
+        }
+      ]
+    },
+    {
+      "file": "routes/integrations.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/settings"
+        },
+        {
+          "method": "PUT",
+          "route": "/settings"
+        },
+        {
+          "method": "GET",
+          "route": "/health"
+        }
+      ]
+    },
+    {
+      "file": "routes/inventory.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/request"
+        },
+        {
+          "method": "PATCH",
+          "route": "/request/:itemId/:requestId"
+        }
+      ]
+    },
+    {
+      "file": "routes/inventoryAnalytics.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/historical-trends"
+        },
+        {
+          "method": "POST",
+          "route": "/create-snapshot"
+        },
+        {
+          "method": "GET",
+          "route": "/anomalies"
+        },
+        {
+          "method": "GET",
+          "route": "/seasonal-patterns"
+        },
+        {
+          "method": "GET",
+          "route": "/predictive-demand"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/cost-optimization"
+        },
+        {
+          "method": "POST",
+          "route": "/price-comparison"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk-optimization"
+        },
+        {
+          "method": "GET",
+          "route": "/supplier-performance"
+        },
+        {
+          "method": "POST",
+          "route": "/roi-calculation"
+        },
+        {
+          "method": "GET",
+          "route": "/contract-analysis"
+        },
+        {
+          "method": "GET",
+          "route": "/compliance"
+        },
+        {
+          "method": "POST",
+          "route": "/compliance/generate-report"
+        },
+        {
+          "method": "GET",
+          "route": "/compliance/monitor"
+        },
+        {
+          "method": "POST",
+          "route": "/compliance/audit"
+        },
+        {
+          "method": "GET",
+          "route": "/compliance/corrective-actions"
+        }
+      ]
+    },
+    {
+      "file": "routes/inventoryAutomation.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/process-checkout"
+        },
+        {
+          "method": "GET",
+          "route": "/assess-room/:roomId"
+        },
+        {
+          "method": "GET",
+          "route": "/statistics"
+        },
+        {
+          "method": "GET",
+          "route": "/rooms-needing-attention"
+        },
+        {
+          "method": "GET",
+          "route": "/replacement-items/:roomId"
+        },
+        {
+          "method": "PUT",
+          "route": "/update-room-status/:roomId"
+        }
+      ]
+    },
+    {
+      "file": "routes/inventoryConsumption.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/housekeeping/predict"
+        },
+        {
+          "method": "GET",
+          "route": "/housekeeping/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/housekeeping/trends"
+        },
+        {
+          "method": "GET",
+          "route": "/guest/recommendations"
+        },
+        {
+          "method": "GET",
+          "route": "/guest/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/auto/housekeeping"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/billing"
+        }
+      ]
+    },
+    {
+      "file": "routes/inventoryManagement.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/update"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk-update"
+        },
+        {
+          "method": "POST",
+          "route": "/stop-sell"
+        },
+        {
+          "method": "GET",
+          "route": "/calendar"
+        },
+        {
+          "method": "GET",
+          "route": "/summary"
+        },
+        {
+          "method": "POST",
+          "route": "/create-range"
+        }
+      ]
+    },
+    {
+      "file": "routes/inventoryMobile.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/quick-stock-check"
+        },
+        {
+          "method": "POST",
+          "route": "/stock-update"
+        },
+        {
+          "method": "GET",
+          "route": "/barcode-lookup/:barcode"
+        },
+        {
+          "method": "POST",
+          "route": "/photo-upload"
+        },
+        {
+          "method": "POST",
+          "route": "/offline-sync"
+        },
+        {
+          "method": "POST",
+          "route": "/push-notifications"
+        },
+        {
+          "method": "GET",
+          "route": "/categories"
+        }
+      ]
+    },
+    {
+      "file": "routes/inventoryNotifications.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "PATCH",
+          "route": "/mark-read"
+        },
+        {
+          "method": "GET",
+          "route": "/unread-count"
+        },
+        {
+          "method": "GET",
+          "route": "/summary"
+        }
+      ]
+    },
+    {
+      "file": "routes/inventoryVendorIntegration.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/auto-purchase-orders"
+        },
+        {
+          "method": "POST",
+          "route": "/vendor-recommendations"
+        },
+        {
+          "method": "GET",
+          "route": "/performance-analysis"
+        },
+        {
+          "method": "POST",
+          "route": "/set-preferred-vendors"
+        },
+        {
+          "method": "GET",
+          "route": "/restocking-report"
+        },
+        {
+          "method": "POST",
+          "route": "/update-inventory-from-po/:poId"
+        },
+        {
+          "method": "GET",
+          "route": "/preferred-vendor/:category"
+        }
+      ]
+    },
+    {
+      "file": "routes/invoices.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/payments"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/discounts"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/split-billing"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/splits/:splitIndex/pay"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/overdue"
+        },
+        {
+          "method": "POST",
+          "route": "/supplementary/extra-person-charges"
+        },
+        {
+          "method": "POST",
+          "route": "/supplementary/settlement"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/add-extra-charges"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/download"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/view"
+        }
+      ]
+    },
+    {
+      "file": "routes/language.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:code"
+        },
+        {
+          "method": "GET",
+          "route": "/translation/supported"
+        },
+        {
+          "method": "POST",
+          "route": "/detect"
+        },
+        {
+          "method": "POST",
+          "route": "/format"
+        },
+        {
+          "method": "GET",
+          "route": "/content/all"
+        },
+        {
+          "method": "GET",
+          "route": "/content/:key"
+        },
+        {
+          "method": "GET",
+          "route": "/content/stats/overview"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PUT",
+          "route": "/:code"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:code"
+        },
+        {
+          "method": "GET",
+          "route": "/translations/:resourceType/:resourceId"
+        },
+        {
+          "method": "POST",
+          "route": "/translations/:resourceType/:resourceId"
+        },
+        {
+          "method": "GET",
+          "route": "/translations/pending/review"
+        },
+        {
+          "method": "PATCH",
+          "route": "/translations/:translationId/approve"
+        },
+        {
+          "method": "PATCH",
+          "route": "/translations/:translationId/reject"
+        },
+        {
+          "method": "PATCH",
+          "route": "/translations/bulk"
+        },
+        {
+          "method": "GET",
+          "route": "/translations/stats/overview"
+        },
+        {
+          "method": "GET",
+          "route": "/translations/workflow/:resourceType/:resourceId/:targetLanguage"
+        },
+        {
+          "method": "POST",
+          "route": "/:code/channels"
+        },
+        {
+          "method": "POST",
+          "route": "/content"
+        },
+        {
+          "method": "PUT",
+          "route": "/content/:key"
+        },
+        {
+          "method": "DELETE",
+          "route": "/content/:key"
+        },
+        {
+          "method": "PATCH",
+          "route": "/content/:key/publish"
+        },
+        {
+          "method": "POST",
+          "route": "/content/:key/translate"
+        },
+        {
+          "method": "GET",
+          "route": "/content/:key/translations"
+        },
+        {
+          "method": "GET",
+          "route": "/content/translatable/list"
+        },
+        {
+          "method": "POST",
+          "route": "/content/batch/translate"
+        }
+      ]
+    },
+    {
+      "file": "routes/laundry.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/send-items"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/mark-in-laundry"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/mark-cleaning"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/mark-ready"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/return-items"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/mark-lost"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/mark-damaged"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/status"
+        },
+        {
+          "method": "GET",
+          "route": "/overdue"
+        },
+        {
+          "method": "GET",
+          "route": "/statistics"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        }
+      ]
+    },
+    {
+      "file": "routes/laundryTemplates.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/set-default"
+        },
+        {
+          "method": "GET",
+          "route": "/room-type/:roomType"
+        },
+        {
+          "method": "POST",
+          "route": "/create-defaults"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/test"
+        },
+        {
+          "method": "GET",
+          "route": "/statistics"
+        }
+      ]
+    },
+    {
+      "file": "routes/loginActivity.js",
+      "routes": []
+    },
+    {
+      "file": "routes/loyalty.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/offers"
+        },
+        {
+          "method": "GET",
+          "route": "/transactions"
+        },
+        {
+          "method": "POST",
+          "route": "/redeem"
+        },
+        {
+          "method": "GET",
+          "route": "/history"
+        },
+        {
+          "method": "GET",
+          "route": "/points"
+        },
+        {
+          "method": "GET",
+          "route": "/offers/:offerId"
+        }
+      ]
+    },
+    {
+      "file": "routes/maintenance.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/available-staff"
+        },
+        {
+          "method": "GET",
+          "route": "/available-rooms"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/assign"
+        },
+        {
+          "method": "GET",
+          "route": "/overdue"
+        },
+        {
+          "method": "GET",
+          "route": "/recurring/upcoming"
+        }
+      ]
+    },
+    {
+      "file": "routes/mapping.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/room-mappings"
+        },
+        {
+          "method": "GET",
+          "route": "/room-mappings/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/room-mappings"
+        },
+        {
+          "method": "PATCH",
+          "route": "/room-mappings/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/room-mappings/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/room-mappings/by-room-type/:roomTypeId"
+        },
+        {
+          "method": "GET",
+          "route": "/room-mappings/by-channel/:channel"
+        },
+        {
+          "method": "GET",
+          "route": "/rate-mappings"
+        },
+        {
+          "method": "GET",
+          "route": "/rate-mappings/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/rate-mappings"
+        },
+        {
+          "method": "PATCH",
+          "route": "/rate-mappings/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/rate-mappings/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/rate-mappings/by-room-mapping/:roomMappingId"
+        },
+        {
+          "method": "GET",
+          "route": "/rate-mappings/by-rate-plan/:pmsRatePlanId"
+        },
+        {
+          "method": "POST",
+          "route": "/rate-mappings/:id/test-calculation"
+        },
+        {
+          "method": "POST",
+          "route": "/room-mappings/bulk"
+        },
+        {
+          "method": "PATCH",
+          "route": "/sync-status/bulk"
+        },
+        {
+          "method": "GET",
+          "route": "/channels"
+        },
+        {
+          "method": "GET",
+          "route": "/statistics"
+        }
+      ]
+    },
+    {
+      "file": "routes/measurementUnits.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/convert"
+        },
+        {
+          "method": "POST",
+          "route": "/convert/batch"
+        },
+        {
+          "method": "GET",
+          "route": "/:unitId/conversions"
+        },
+        {
+          "method": "GET",
+          "route": "/types"
+        },
+        {
+          "method": "GET",
+          "route": "/systems"
+        },
+        {
+          "method": "GET",
+          "route": "/types/:unitType"
+        },
+        {
+          "method": "GET",
+          "route": "/base"
+        },
+        {
+          "method": "POST",
+          "route": "/:unitId/conversion-factors"
+        },
+        {
+          "method": "GET",
+          "route": "/report"
+        },
+        {
+          "method": "GET",
+          "route": "/validate"
+        },
+        {
+          "method": "POST",
+          "route": "/cache/clear"
+        },
+        {
+          "method": "GET",
+          "route": "/cache/stats"
+        },
+        {
+          "method": "POST",
+          "route": "/:unitId/format"
+        }
+      ]
+    },
+    {
+      "file": "routes/meetUpRequests.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/admin/all"
+        },
+        {
+          "method": "GET",
+          "route": "/admin/insights"
+        },
+        {
+          "method": "GET",
+          "route": "/admin/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/admin/:requestId/force-cancel"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/pending"
+        },
+        {
+          "method": "GET",
+          "route": "/upcoming"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:requestId"
+        },
+        {
+          "method": "POST",
+          "route": "/:requestId/accept"
+        },
+        {
+          "method": "POST",
+          "route": "/:requestId/decline"
+        },
+        {
+          "method": "POST",
+          "route": "/:requestId/cancel"
+        },
+        {
+          "method": "POST",
+          "route": "/:requestId/complete"
+        },
+        {
+          "method": "POST",
+          "route": "/:requestId/participants"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:requestId/participants/:userId"
+        },
+        {
+          "method": "POST",
+          "route": "/:requestId/suggest-alternative"
+        },
+        {
+          "method": "GET",
+          "route": "/search/partners"
+        },
+        {
+          "method": "GET",
+          "route": "/stats/overview"
+        }
+      ]
+    },
+    {
+      "file": "routes/meetUpResources.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/room-availability"
+        },
+        {
+          "method": "GET",
+          "route": "/rooms/:hotelId"
+        },
+        {
+          "method": "POST",
+          "route": "/book-room"
+        },
+        {
+          "method": "POST",
+          "route": "/booking-cost"
+        },
+        {
+          "method": "DELETE",
+          "route": "/cancel-booking/:meetUpId"
+        },
+        {
+          "method": "GET",
+          "route": "/booking-details/:meetUpId"
+        },
+        {
+          "method": "GET",
+          "route": "/equipment/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/services/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/room-schedule/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/admin/all-bookings"
+        },
+        {
+          "method": "GET",
+          "route": "/admin/booking-analytics"
+        }
+      ]
+    },
+    {
+      "file": "routes/messageTemplates.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/render"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/clone"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/ab-test"
+        },
+        {
+          "method": "GET",
+          "route": "/popular"
+        },
+        {
+          "method": "GET",
+          "route": "/by-trigger/:event"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        }
+      ]
+    },
+    {
+      "file": "routes/monitoring.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/metrics"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/slow-queries"
+        },
+        {
+          "method": "GET",
+          "route": "/top-slow"
+        },
+        {
+          "method": "GET",
+          "route": "/high-errors"
+        },
+        {
+          "method": "GET",
+          "route": "/report"
+        },
+        {
+          "method": "GET",
+          "route": "/cache-stats"
+        },
+        {
+          "method": "POST",
+          "route": "/metrics/reset"
+        },
+        {
+          "method": "POST",
+          "route": "/cache/flush"
+        },
+        {
+          "method": "POST",
+          "route": "/cache/invalidate-property/:propertyId"
+        },
+        {
+          "method": "POST",
+          "route": "/cache/invalidate-group/:groupId"
+        },
+        {
+          "method": "GET",
+          "route": "/health"
+        }
+      ]
+    },
+    {
+      "file": "routes/nightAudit.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/run"
+        },
+        {
+          "method": "GET",
+          "route": "/:date"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/lock"
+        }
+      ]
+    },
+    {
+      "file": "routes/noShow.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/:bookingId/no-show"
+        },
+        {
+          "method": "PUT",
+          "route": "/:bookingId/reverse-no-show"
+        },
+        {
+          "method": "GET",
+          "route": "/no-show/stats"
+        }
+      ]
+    },
+    {
+      "file": "routes/notifications.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/unread-count"
+        },
+        {
+          "method": "GET",
+          "route": "/summary"
+        },
+        {
+          "method": "GET",
+          "route": "/personal-overview"
+        },
+        {
+          "method": "GET",
+          "route": "/summary-legacy"
+        },
+        {
+          "method": "GET",
+          "route": "/preferences"
+        },
+        {
+          "method": "GET",
+          "route": "/types"
+        },
+        {
+          "method": "GET",
+          "route": "/channels"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/read"
+        },
+        {
+          "method": "POST",
+          "route": "/mark-read"
+        },
+        {
+          "method": "POST",
+          "route": "/mark-all-read"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/preferences"
+        },
+        {
+          "method": "PATCH",
+          "route": "/preferences/:channel/:type"
+        },
+        {
+          "method": "POST",
+          "route": "/test"
+        },
+        {
+          "method": "POST",
+          "route": "/subscribe"
+        },
+        {
+          "method": "GET",
+          "route": "/stream"
+        },
+        {
+          "method": "DELETE",
+          "route": "/bulk"
+        },
+        {
+          "method": "GET",
+          "route": "/templates"
+        },
+        {
+          "method": "GET",
+          "route": "/templates/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/templates"
+        },
+        {
+          "method": "PATCH",
+          "route": "/templates/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/templates/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/templates/:id/preview"
+        },
+        {
+          "method": "GET",
+          "route": "/templates/categories/:category"
+        },
+        {
+          "method": "GET",
+          "route": "/templates/types/:type"
+        },
+        {
+          "method": "GET",
+          "route": "/templates/analytics/performance"
+        },
+        {
+          "method": "POST",
+          "route": "/templates/initialize"
+        },
+        {
+          "method": "GET",
+          "route": "/monitoring/health"
+        },
+        {
+          "method": "GET",
+          "route": "/monitoring/performance"
+        },
+        {
+          "method": "GET",
+          "route": "/monitoring/rate-limits"
+        },
+        {
+          "method": "POST",
+          "route": "/monitoring/rate-limits/reset"
+        },
+        {
+          "method": "GET",
+          "route": "/monitoring/metrics"
+        },
+        {
+          "method": "POST",
+          "route": "/monitoring/cleanup"
+        },
+        {
+          "method": "POST",
+          "route": "/monitoring/flush-queue"
+        }
+      ]
+    },
+    {
+      "file": "routes/offerFavorites.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/:offerId"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:offerId"
+        }
+      ]
+    },
+    {
+      "file": "routes/operationalManagement.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/overview"
+        },
+        {
+          "method": "PATCH",
+          "route": "/counters/:id/status"
+        },
+        {
+          "method": "PATCH",
+          "route": "/lost-found/:id/claim"
+        },
+        {
+          "method": "PATCH",
+          "route": "/lost-found/:id/dispose"
+        },
+        {
+          "method": "PATCH",
+          "route": "/lost-found/:id/location"
+        },
+        {
+          "method": "PATCH",
+          "route": "/counters/bulk-status"
+        },
+        {
+          "method": "PATCH",
+          "route": "/lost-found/bulk-dispose-expired"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/counters"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/modes"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/lost-found"
+        },
+        {
+          "method": "GET",
+          "route": "/lost-found/expired"
+        },
+        {
+          "method": "GET",
+          "route": "/lost-found/valuable"
+        }
+      ]
+    },
+    {
+      "file": "routes/ota.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/setup/:hotelId"
+        },
+        {
+          "method": "POST",
+          "route": "/bookingcom/sync"
+        },
+        {
+          "method": "GET",
+          "route": "/bookingcom/status/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/sync-history"
+        },
+        {
+          "method": "GET",
+          "route": "/config/:hotelId"
+        },
+        {
+          "method": "PATCH",
+          "route": "/config/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/stats/:hotelId"
+        }
+      ]
+    },
+    {
+      "file": "routes/otaAmendments.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/webhook"
+        },
+        {
+          "method": "GET",
+          "route": "/pending"
+        },
+        {
+          "method": "GET",
+          "route": "/booking/:bookingId"
+        },
+        {
+          "method": "GET",
+          "route": "/booking/:bookingId/status-history"
+        },
+        {
+          "method": "POST",
+          "route": "/:bookingId/:amendmentId/approve"
+        },
+        {
+          "method": "POST",
+          "route": "/:bookingId/:amendmentId/reject"
+        },
+        {
+          "method": "POST",
+          "route": "/booking/:bookingId/change-status"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk"
+        },
+        {
+          "method": "GET",
+          "route": "/metrics"
+        }
+      ]
+    },
+    {
+      "file": "routes/otaWebhooks.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/ota"
+        },
+        {
+          "method": "GET",
+          "route": "/health"
+        }
+      ]
+    },
+    {
+      "file": "routes/paymentMethods.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/types"
+        },
+        {
+          "method": "GET",
+          "route": "/gateway-providers"
+        },
+        {
+          "method": "GET",
+          "route": "/available"
+        },
+        {
+          "method": "GET",
+          "route": "/search"
+        },
+        {
+          "method": "GET",
+          "route": "/export"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/type/:type"
+        },
+        {
+          "method": "PUT",
+          "route": "/bulk-update"
+        },
+        {
+          "method": "PUT",
+          "route": "/display-order"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/test-gateway"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/calculate-fees"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/validate"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/clone"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/status"
+        }
+      ]
+    },
+    {
+      "file": "routes/payments.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/intent"
+        },
+        {
+          "method": "POST",
+          "route": "/confirm"
+        },
+        {
+          "method": "POST",
+          "route": "/extra-person-charges/intent"
+        },
+        {
+          "method": "POST",
+          "route": "/settlement/intent"
+        },
+        {
+          "method": "POST",
+          "route": "/refund"
+        },
+        {
+          "method": "POST",
+          "route": "/room-charge"
+        },
+        {
+          "method": "POST",
+          "route": "/cash-on-delivery"
+        }
+      ]
+    },
+    {
+      "file": "routes/personalization.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/experience"
+        },
+        {
+          "method": "GET",
+          "route": "/content"
+        },
+        {
+          "method": "POST",
+          "route": "/pricing"
+        },
+        {
+          "method": "POST",
+          "route": "/recommendations"
+        },
+        {
+          "method": "POST",
+          "route": "/offers"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "POST",
+          "route": "/guests/:guestId/experience"
+        },
+        {
+          "method": "PUT",
+          "route": "/preferences"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/test/variant"
+        }
+      ]
+    },
+    {
+      "file": "routes/phoneExtensions.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/options"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/directory"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/usage-report"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/usage"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/maintenance"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/maintenance/clear"
+        },
+        {
+          "method": "PATCH",
+          "route": "/hotels/:hotelId/bulk-update"
+        },
+        {
+          "method": "PATCH",
+          "route": "/hotels/:hotelId/bulk-assign"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        }
+      ]
+    },
+    {
+      "file": "routes/photoUpload.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/upload"
+        },
+        {
+          "method": "POST",
+          "route": "/inventory"
+        },
+        {
+          "method": "GET",
+          "route": "/inventory/:filename"
+        },
+        {
+          "method": "DELETE",
+          "route": "/inventory/:filename"
+        },
+        {
+          "method": "PATCH",
+          "route": "/inventory/:filename"
+        },
+        {
+          "method": "POST",
+          "route": "/inventory/bulk"
+        }
+      ]
+    },
+    {
+      "file": "routes/portfolio.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/metrics"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/revenue"
+        },
+        {
+          "method": "GET",
+          "route": "/bookings"
+        },
+        {
+          "method": "GET",
+          "route": "/occupancy"
+        }
+      ]
+    },
+    {
+      "file": "routes/pos.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/outlets"
+        },
+        {
+          "method": "GET",
+          "route": "/outlets"
+        },
+        {
+          "method": "PUT",
+          "route": "/outlets/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/menus"
+        },
+        {
+          "method": "GET",
+          "route": "/menus/outlet/:outletId"
+        },
+        {
+          "method": "POST",
+          "route": "/menus/:menuId/items"
+        },
+        {
+          "method": "POST",
+          "route": "/orders"
+        },
+        {
+          "method": "GET",
+          "route": "/orders"
+        },
+        {
+          "method": "PUT",
+          "route": "/orders/:id/status"
+        },
+        {
+          "method": "PUT",
+          "route": "/orders/:id/payment"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard/stats"
+        },
+        {
+          "method": "POST",
+          "route": "/calculate/order-totals"
+        },
+        {
+          "method": "POST",
+          "route": "/calculate/billing-totals"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/sales"
+        }
+      ]
+    },
+    {
+      "file": "routes/posAttributes.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/types/:attributeType"
+        },
+        {
+          "method": "GET",
+          "route": "/groups/:attributeGroup"
+        },
+        {
+          "method": "GET",
+          "route": "/categories/:category"
+        },
+        {
+          "method": "POST",
+          "route": "/:attributeId/values"
+        },
+        {
+          "method": "PUT",
+          "route": "/:attributeId/values/:valueId"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:attributeId/values/:valueId"
+        },
+        {
+          "method": "POST",
+          "route": "/menu-items/:menuItemId/variants"
+        },
+        {
+          "method": "GET",
+          "route": "/menu-items/:menuItemId/variants"
+        },
+        {
+          "method": "POST",
+          "route": "/menu-items/:menuItemId/variants/find"
+        },
+        {
+          "method": "PUT",
+          "route": "/variants/:variantId/pricing"
+        },
+        {
+          "method": "PUT",
+          "route": "/variants/:variantId/availability"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/variants/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/cache/clear"
+        },
+        {
+          "method": "GET",
+          "route": "/cache/stats"
+        }
+      ]
+    },
+    {
+      "file": "routes/posReports.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/sales-summary"
+        },
+        {
+          "method": "GET",
+          "route": "/outlet-performance"
+        },
+        {
+          "method": "GET",
+          "route": "/transaction-history"
+        },
+        {
+          "method": "GET",
+          "route": "/payment-methods"
+        },
+        {
+          "method": "GET",
+          "route": "/top-items"
+        },
+        {
+          "method": "GET",
+          "route": "/staff-performance"
+        },
+        {
+          "method": "GET",
+          "route": "/guest-analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/peak-hours"
+        }
+      ]
+    },
+    {
+      "file": "routes/posSettlementIntegration.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/create-from-session"
+        },
+        {
+          "method": "POST",
+          "route": "/add-checkout-to-settlement"
+        },
+        {
+          "method": "POST",
+          "route": "/:settlementId/unified-payment"
+        },
+        {
+          "method": "GET",
+          "route": "/preview/:bookingId"
+        },
+        {
+          "method": "POST",
+          "route": "/sync-guest-data/:bookingId"
+        },
+        {
+          "method": "GET",
+          "route": "/ready-for-integration"
+        },
+        {
+          "method": "GET",
+          "route": "/integration-stats"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk-integrate"
+        }
+      ]
+    },
+    {
+      "file": "routes/posTax.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/calculate"
+        },
+        {
+          "method": "POST",
+          "route": "/calculate/order"
+        },
+        {
+          "method": "GET",
+          "route": "/groups"
+        },
+        {
+          "method": "GET",
+          "route": "/types"
+        },
+        {
+          "method": "GET",
+          "route": "/report"
+        },
+        {
+          "method": "GET",
+          "route": "/validate"
+        },
+        {
+          "method": "POST",
+          "route": "/cache/clear"
+        },
+        {
+          "method": "GET",
+          "route": "/:taxId/exemptions"
+        },
+        {
+          "method": "POST",
+          "route": "/:taxId/exemptions"
+        },
+        {
+          "method": "PUT",
+          "route": "/:taxId/exemptions/:exemptionId"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:taxId/exemptions/:exemptionId"
+        }
+      ]
+    },
+    {
+      "file": "routes/propertyGroups.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/properties"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id/properties"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/sync"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/audit-log"
+        }
+      ]
+    },
+    {
+      "file": "routes/propertyRooms.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/property-groups"
+        },
+        {
+          "method": "POST",
+          "route": "/create-with-rooms"
+        },
+        {
+          "method": "POST",
+          "route": "/:propertyId/rooms/bulk"
+        },
+        {
+          "method": "GET",
+          "route": "/:propertyId/rooms"
+        },
+        {
+          "method": "GET",
+          "route": "/:propertyId/rooms/stats"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:propertyId/rooms/bulk-update"
+        }
+      ]
+    },
+    {
+      "file": "routes/purchaseOrders.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/send"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/confirm"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/receive"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/cancel"
+        },
+        {
+          "method": "GET",
+          "route": "/pending"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/metrics"
+        }
+      ]
+    },
+    {
+      "file": "routes/rateManagement.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/best-rate"
+        },
+        {
+          "method": "GET",
+          "route": "/all-rates"
+        },
+        {
+          "method": "POST",
+          "route": "/plans"
+        },
+        {
+          "method": "GET",
+          "route": "/plans"
+        },
+        {
+          "method": "PUT",
+          "route": "/plans/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/plans/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/seasonal"
+        },
+        {
+          "method": "GET",
+          "route": "/seasonal"
+        },
+        {
+          "method": "PUT",
+          "route": "/seasonal/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/override"
+        },
+        {
+          "method": "GET",
+          "route": "/override"
+        },
+        {
+          "method": "DELETE",
+          "route": "/override/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/dynamic-pricing"
+        },
+        {
+          "method": "GET",
+          "route": "/dynamic-pricing"
+        },
+        {
+          "method": "POST",
+          "route": "/yield/update"
+        },
+        {
+          "method": "GET",
+          "route": "/yield"
+        },
+        {
+          "method": "GET",
+          "route": "/forecast"
+        },
+        {
+          "method": "POST",
+          "route": "/packages"
+        },
+        {
+          "method": "GET",
+          "route": "/packages"
+        },
+        {
+          "method": "PUT",
+          "route": "/packages/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/comparison"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk-update"
+        }
+      ]
+    },
+    {
+      "file": "routes/reasons.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/categories"
+        },
+        {
+          "method": "GET",
+          "route": "/roles"
+        },
+        {
+          "method": "GET",
+          "route": "/search"
+        },
+        {
+          "method": "GET",
+          "route": "/export"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/most-used"
+        },
+        {
+          "method": "GET",
+          "route": "/category/:category"
+        },
+        {
+          "method": "GET",
+          "route": "/role/:role"
+        },
+        {
+          "method": "PUT",
+          "route": "/bulk-update"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk-create"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/validate"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/log-usage"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/clone"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/status"
+        }
+      ]
+    },
+    {
+      "file": "routes/reorder.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/alerts"
+        },
+        {
+          "method": "POST",
+          "route": "/configure/:itemId"
+        },
+        {
+          "method": "POST",
+          "route": "/check"
+        },
+        {
+          "method": "POST",
+          "route": "/approve/:alertId"
+        },
+        {
+          "method": "POST",
+          "route": "/acknowledge/:alertId"
+        },
+        {
+          "method": "POST",
+          "route": "/dismiss/:alertId"
+        },
+        {
+          "method": "GET",
+          "route": "/history"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/items-needing-reorder"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk-configure"
+        }
+      ]
+    },
+    {
+      "file": "routes/reports.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/checkout-inventory"
+        },
+        {
+          "method": "GET",
+          "route": "/revenue"
+        },
+        {
+          "method": "GET",
+          "route": "/occupancy"
+        },
+        {
+          "method": "GET",
+          "route": "/bookings"
+        },
+        {
+          "method": "GET",
+          "route": "/bookings/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/revenue-breakdown"
+        },
+        {
+          "method": "GET",
+          "route": "/occupancy-breakdown"
+        },
+        {
+          "method": "GET",
+          "route": "/bookings-breakdown"
+        },
+        {
+          "method": "GET",
+          "route": "/satisfaction-breakdown"
+        },
+        {
+          "method": "POST",
+          "route": "/kpi/calculate"
+        },
+        {
+          "method": "GET",
+          "route": "/kpi"
+        },
+        {
+          "method": "GET",
+          "route": "/business-intelligence"
+        },
+        {
+          "method": "POST",
+          "route": "/kpi/batch-calculate"
+        },
+        {
+          "method": "GET",
+          "route": "/kpi/compare"
+        }
+      ]
+    },
+    {
+      "file": "routes/requestCategories.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/budget"
+        }
+      ]
+    },
+    {
+      "file": "routes/requestTemplates.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/use"
+        }
+      ]
+    },
+    {
+      "file": "routes/revenueAccounts.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/options"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/applicable"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId/calculate"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/summary"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/reports"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/budget-analysis"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/hotels/:hotelId/bulk-update"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        }
+      ]
+    },
+    {
+      "file": "routes/revenueManagement.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/pricing-rules"
+        },
+        {
+          "method": "GET",
+          "route": "/pricing-rules"
+        },
+        {
+          "method": "PUT",
+          "route": "/pricing-rules/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/pricing-rules/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/dynamic-rate"
+        },
+        {
+          "method": "POST",
+          "route": "/demand-forecast"
+        },
+        {
+          "method": "GET",
+          "route": "/demand-forecast"
+        },
+        {
+          "method": "POST",
+          "route": "/competitor-rates"
+        },
+        {
+          "method": "GET",
+          "route": "/competitor-rates"
+        },
+        {
+          "method": "PUT",
+          "route": "/competitor-rates"
+        },
+        {
+          "method": "POST",
+          "route": "/packages"
+        },
+        {
+          "method": "GET",
+          "route": "/packages"
+        },
+        {
+          "method": "PUT",
+          "route": "/packages/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/corporate-rates"
+        },
+        {
+          "method": "GET",
+          "route": "/corporate-rates"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/summary"
+        },
+        {
+          "method": "GET",
+          "route": "/optimization/recommendations"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard/metrics"
+        },
+        {
+          "method": "PUT",
+          "route": "/room-type-rates/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/room-type-rates/bulk-update"
+        },
+        {
+          "method": "GET",
+          "route": "/room-types"
+        }
+      ]
+    },
+    {
+      "file": "routes/revenueOptimization.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/kpis"
+        },
+        {
+          "method": "GET",
+          "route": "/yield-analysis"
+        },
+        {
+          "method": "POST",
+          "route": "/pricing/calculate"
+        },
+        {
+          "method": "POST",
+          "route": "/pricing/apply"
+        },
+        {
+          "method": "POST",
+          "route": "/pricing/automated"
+        },
+        {
+          "method": "GET",
+          "route": "/strategies"
+        },
+        {
+          "method": "POST",
+          "route": "/strategies"
+        },
+        {
+          "method": "PUT",
+          "route": "/strategies/:strategyId"
+        },
+        {
+          "method": "GET",
+          "route": "/forecasts"
+        },
+        {
+          "method": "POST",
+          "route": "/forecasts/generate"
+        },
+        {
+          "method": "GET",
+          "route": "/competitors"
+        },
+        {
+          "method": "POST",
+          "route": "/competitors"
+        },
+        {
+          "method": "GET",
+          "route": "/competitors/:competitorId/rates"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/optimization/strategy"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/optimization/pricing"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/analytics/regional"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/analytics/languages"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/reports"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/reports"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/reports/:reportId"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/optimization/kpis"
+        }
+      ]
+    },
+    {
+      "file": "routes/reviews.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/hotel/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/hotel/:hotelId/summary"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/response"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/helpful"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/report"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/moderate"
+        },
+        {
+          "method": "GET",
+          "route": "/pending"
+        },
+        {
+          "method": "GET",
+          "route": "/user/my-reviews"
+        }
+      ]
+    },
+    {
+      "file": "routes/rolePermissions.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:roleId"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PUT",
+          "route": "/:roleId"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:roleId"
+        },
+        {
+          "method": "GET",
+          "route": "/permissions/all"
+        },
+        {
+          "method": "POST",
+          "route": "/permissions/validate"
+        },
+        {
+          "method": "POST",
+          "route": "/users/:userId/assign"
+        },
+        {
+          "method": "DELETE",
+          "route": "/users/:userId/remove"
+        },
+        {
+          "method": "GET",
+          "route": "/users/:userId/role"
+        },
+        {
+          "method": "POST",
+          "route": "/users/:userId/check-permission"
+        },
+        {
+          "method": "POST",
+          "route": "/users/:userId/check-permissions"
+        },
+        {
+          "method": "GET",
+          "route": "/hierarchy"
+        },
+        {
+          "method": "GET",
+          "route": "/:roleId/users"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "GET",
+          "route": "/me/role"
+        },
+        {
+          "method": "GET",
+          "route": "/me/permissions"
+        },
+        {
+          "method": "POST",
+          "route": "/users/bulk-assign"
+        }
+      ]
+    },
+    {
+      "file": "routes/roomBlocks.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/rooms/:roomId/release"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/rooms/:roomId/book"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/notes"
+        }
+      ]
+    },
+    {
+      "file": "routes/roomCharges.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/options"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/applicable"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId/calculate"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId/calculate-comprehensive"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/summary"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/audit"
+        },
+        {
+          "method": "PATCH",
+          "route": "/hotels/:hotelId/bulk-update"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        }
+      ]
+    },
+    {
+      "file": "routes/roomInventory.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/items"
+        },
+        {
+          "method": "POST",
+          "route": "/items"
+        },
+        {
+          "method": "PUT",
+          "route": "/items/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/templates"
+        },
+        {
+          "method": "POST",
+          "route": "/templates"
+        },
+        {
+          "method": "GET",
+          "route": "/rooms/:roomId"
+        },
+        {
+          "method": "POST",
+          "route": "/rooms/:roomId/inspect"
+        },
+        {
+          "method": "POST",
+          "route": "/rooms/:roomId/replace"
+        },
+        {
+          "method": "GET",
+          "route": "/transactions"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/checkout-inspection"
+        },
+        {
+          "method": "GET",
+          "route": "/checkout-inspection/:bookingId"
+        },
+        {
+          "method": "PUT",
+          "route": "/checkout-inspection/:bookingId"
+        }
+      ]
+    },
+    {
+      "file": "routes/rooms.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/debug"
+        },
+        {
+          "method": "GET",
+          "route": "/metrics"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/pricing"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/price-history"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk-price-update"
+        }
+      ]
+    },
+    {
+      "file": "routes/roomTax.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/options"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/applicable"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId/calculate"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/hotels/:hotelId/summary"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/hotels/:hotelId"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/hotels/:hotelId/bulk-update"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        }
+      ]
+    },
+    {
+      "file": "routes/roomTypes.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/hotel/:hotelId"
+        },
+        {
+          "method": "GET",
+          "route": "/hotel/:hotelId/options"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/channel-mapping"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id/channel-mapping/:channelId"
+        },
+        {
+          "method": "GET",
+          "route": "/legacy/:hotelId/:legacyType"
+        },
+        {
+          "method": "POST",
+          "route": "/migrate/hotel/:hotelId/rooms"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/inventory"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/localized"
+        }
+      ]
+    },
+    {
+      "file": "routes/salutations.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/public"
+        },
+        {
+          "method": "GET",
+          "route": "/public/category/:category"
+        },
+        {
+          "method": "GET",
+          "route": "/public/gender/:gender"
+        }
+      ]
+    },
+    {
+      "file": "routes/scheduledUpdates.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id/reschedule"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/execute"
+        },
+        {
+          "method": "GET",
+          "route": "/upcoming/:hours?"
+        },
+        {
+          "method": "GET",
+          "route": "/property/:propertyId"
+        },
+        {
+          "method": "GET",
+          "route": "/stats/summary"
+        }
+      ]
+    },
+    {
+      "file": "routes/search.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/global"
+        },
+        {
+          "method": "GET",
+          "route": "/suggestions"
+        }
+      ]
+    },
+    {
+      "file": "routes/seasonalPricing.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/adjustment"
+        },
+        {
+          "method": "GET",
+          "route": "/availability"
+        },
+        {
+          "method": "GET",
+          "route": "/calendar"
+        },
+        {
+          "method": "GET",
+          "route": "/seasons/date-range"
+        },
+        {
+          "method": "GET",
+          "route": "/special-periods/date-range"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/seasons"
+        },
+        {
+          "method": "GET",
+          "route": "/seasons"
+        },
+        {
+          "method": "GET",
+          "route": "/seasons/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/seasons/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/seasons/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/special-periods"
+        },
+        {
+          "method": "GET",
+          "route": "/special-periods"
+        },
+        {
+          "method": "GET",
+          "route": "/special-periods/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/special-periods/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/special-periods/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/special-periods/bulk"
+        },
+        {
+          "method": "GET",
+          "route": "/alerts/upcoming"
+        }
+      ]
+    },
+    {
+      "file": "routes/securityMonitoring.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/events"
+        },
+        {
+          "method": "GET",
+          "route": "/events"
+        },
+        {
+          "method": "GET",
+          "route": "/events/:eventId"
+        },
+        {
+          "method": "GET",
+          "route": "/alerts"
+        },
+        {
+          "method": "PUT",
+          "route": "/alerts/:alertId"
+        },
+        {
+          "method": "GET",
+          "route": "/suspicious-activities"
+        },
+        {
+          "method": "PUT",
+          "route": "/suspicious-activities/:activityId/review"
+        },
+        {
+          "method": "POST",
+          "route": "/audit"
+        },
+        {
+          "method": "GET",
+          "route": "/audit"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/threat-intelligence"
+        },
+        {
+          "method": "GET",
+          "route": "/metrics"
+        },
+        {
+          "method": "GET",
+          "route": "/export"
+        },
+        {
+          "method": "GET",
+          "route": "/health"
+        }
+      ]
+    },
+    {
+      "file": "routes/segmentation.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/analyze"
+        },
+        {
+          "method": "GET",
+          "route": "/summary"
+        },
+        {
+          "method": "GET",
+          "route": "/rules"
+        },
+        {
+          "method": "GET",
+          "route": "/segments/:segmentId/insights"
+        },
+        {
+          "method": "GET",
+          "route": "/segments/:segmentId/members"
+        },
+        {
+          "method": "GET",
+          "route": "/journey/:userId"
+        }
+      ]
+    },
+    {
+      "file": "routes/serviceTypes.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/variations"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/templates"
+        },
+        {
+          "method": "POST",
+          "route": "/:type/calculate-price"
+        }
+      ]
+    },
+    {
+      "file": "routes/settings.js",
+      "routes": [
+        {
+          "method": "PUT",
+          "route": "/check-in-out"
+        },
+        {
+          "method": "PUT",
+          "route": "/currency"
+        },
+        {
+          "method": "PUT",
+          "route": "/timezone"
+        },
+        {
+          "method": "PUT",
+          "route": "/cancellation-policy"
+        },
+        {
+          "method": "PUT",
+          "route": "/general"
+        },
+        {
+          "method": "GET",
+          "route": "/inheritance-status/:propertyId"
+        },
+        {
+          "method": "POST",
+          "route": "/apply-group-settings"
+        },
+        {
+          "method": "PUT",
+          "route": "/toggle-inheritance/:propertyId"
+        },
+        {
+          "method": "GET",
+          "route": "/group/:groupId"
+        },
+        {
+          "method": "POST",
+          "route": "/apply"
+        },
+        {
+          "method": "POST",
+          "route": "/affected-count"
+        },
+        {
+          "method": "PUT",
+          "route": "/toggle-inheritance"
+        },
+        {
+          "method": "PUT",
+          "route": "/override"
+        },
+        {
+          "method": "DELETE",
+          "route": "/override"
+        },
+        {
+          "method": "GET",
+          "route": "/group-summary/:groupId"
+        },
+        {
+          "method": "POST",
+          "route": "/preview-changes"
+        },
+        {
+          "method": "GET",
+          "route": "/change-history/:propertyId/:settingType"
+        },
+        {
+          "method": "POST",
+          "route": "/rollback"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk-rollback"
+        }
+      ]
+    },
+    {
+      "file": "routes/settlementNotifications.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/send-reminder"
+        },
+        {
+          "method": "POST",
+          "route": "/process-overdue"
+        },
+        {
+          "method": "POST",
+          "route": "/process-due-today"
+        },
+        {
+          "method": "POST",
+          "route": "/process-escalations"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk-remind"
+        },
+        {
+          "method": "GET",
+          "route": "/schedule-status"
+        }
+      ]
+    },
+    {
+      "file": "routes/settlements.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/overdue"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/payment"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/escalate"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/communication"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/dispute"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/dispute/:disputeId/resolve"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/validate"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/adjustment"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/late-fee"
+        },
+        {
+          "method": "GET",
+          "route": "/validation-statistics"
+        }
+      ]
+    },
+    {
+      "file": "routes/staffAlerts.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/summary"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/acknowledge"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        }
+      ]
+    },
+    {
+      "file": "routes/staffDashboard.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/health"
+        },
+        {
+          "method": "GET",
+          "route": "/today"
+        },
+        {
+          "method": "GET",
+          "route": "/rooms/status"
+        },
+        {
+          "method": "GET",
+          "route": "/activity"
+        },
+        {
+          "method": "GET",
+          "route": "/inventory/summary"
+        },
+        {
+          "method": "POST",
+          "route": "/inventory/:itemId/order"
+        },
+        {
+          "method": "PATCH",
+          "route": "/rooms/:roomId/inspect"
+        }
+      ]
+    },
+    {
+      "file": "routes/staffMeetUp.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/supervision"
+        },
+        {
+          "method": "POST",
+          "route": "/:meetUpId/assign"
+        },
+        {
+          "method": "GET",
+          "route": "/my-assignments"
+        },
+        {
+          "method": "PUT",
+          "route": "/:meetUpId/supervision-status"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/urgent"
+        },
+        {
+          "method": "POST",
+          "route": "/process-alerts"
+        },
+        {
+          "method": "GET",
+          "route": "/alert-stats"
+        }
+      ]
+    },
+    {
+      "file": "routes/staffServices.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/my-services"
+        },
+        {
+          "method": "GET",
+          "route": "/my-requests"
+        },
+        {
+          "method": "PATCH",
+          "route": "/requests/:id/update-status"
+        },
+        {
+          "method": "PATCH",
+          "route": "/requests/:id/add-notes"
+        }
+      ]
+    },
+    {
+      "file": "routes/staffTasks.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/my-tasks"
+        },
+        {
+          "method": "GET",
+          "route": "/today"
+        },
+        {
+          "method": "GET",
+          "route": "/:taskId"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:taskId/status"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:taskId/progress"
+        },
+        {
+          "method": "POST",
+          "route": "/:taskId/photos"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/overdue"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:taskId"
+        },
+        {
+          "method": "POST",
+          "route": "/create-daily-inventory-checks"
+        }
+      ]
+    },
+    {
+      "file": "routes/stockMovements.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/item/:itemId"
+        },
+        {
+          "method": "POST",
+          "route": "/adjustment"
+        },
+        {
+          "method": "POST",
+          "route": "/transfer"
+        },
+        {
+          "method": "POST",
+          "route": "/consumption"
+        },
+        {
+          "method": "GET",
+          "route": "/summary"
+        },
+        {
+          "method": "POST",
+          "route": "/reconcile"
+        },
+        {
+          "method": "GET",
+          "route": "/export"
+        },
+        {
+          "method": "GET",
+          "route": "/reorder-suggestions"
+        },
+        {
+          "method": "GET",
+          "route": "/low-stock-alerts"
+        },
+        {
+          "method": "GET",
+          "route": "/item-statistics/:itemId"
+        }
+      ]
+    },
+    {
+      "file": "routes/supplyRequests.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/approve"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/reject"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/order"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/items/:itemIndex/receive"
+        },
+        {
+          "method": "GET",
+          "route": "/pending-approvals"
+        },
+        {
+          "method": "GET",
+          "route": "/overdue"
+        }
+      ]
+    },
+    {
+      "file": "routes/systemIntegration.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/health"
+        },
+        {
+          "method": "POST",
+          "route": "/inventory/reconciliation"
+        },
+        {
+          "method": "POST",
+          "route": "/inventory/test"
+        },
+        {
+          "method": "GET",
+          "route": "/automation/rules"
+        },
+        {
+          "method": "PUT",
+          "route": "/automation/rules/:ruleType/:ruleName"
+        },
+        {
+          "method": "POST",
+          "route": "/automation/test"
+        },
+        {
+          "method": "POST",
+          "route": "/notifications/test"
+        },
+        {
+          "method": "GET",
+          "route": "/metrics"
+        },
+        {
+          "method": "POST",
+          "route": "/sync"
+        },
+        {
+          "method": "GET",
+          "route": "/logs"
+        },
+        {
+          "method": "PUT",
+          "route": "/settings"
+        },
+        {
+          "method": "GET",
+          "route": "/settings"
+        }
+      ]
+    },
+    {
+      "file": "routes/tapeChart.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/room-config"
+        },
+        {
+          "method": "GET",
+          "route": "/room-config"
+        },
+        {
+          "method": "PUT",
+          "route": "/room-config/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/room-config/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/rooms/:roomId/status"
+        },
+        {
+          "method": "GET",
+          "route": "/rooms/:roomId/status-history"
+        },
+        {
+          "method": "GET",
+          "route": "/rooms/available"
+        },
+        {
+          "method": "POST",
+          "route": "/room-blocks"
+        },
+        {
+          "method": "GET",
+          "route": "/room-blocks"
+        },
+        {
+          "method": "GET",
+          "route": "/room-blocks/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/room-blocks/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/room-blocks/:id/release"
+        },
+        {
+          "method": "POST",
+          "route": "/reservations"
+        },
+        {
+          "method": "GET",
+          "route": "/reservations"
+        },
+        {
+          "method": "GET",
+          "route": "/reservations/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/reservations/:reservationId/assign-room"
+        },
+        {
+          "method": "POST",
+          "route": "/reservations/:reservationId/auto-assign"
+        },
+        {
+          "method": "POST",
+          "route": "/reservations/:reservationId/upgrade"
+        },
+        {
+          "method": "POST",
+          "route": "/views"
+        },
+        {
+          "method": "GET",
+          "route": "/views"
+        },
+        {
+          "method": "PUT",
+          "route": "/views/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/views/:id"
+        },
+        {
+          "method": "GET",
+          "route": "/chart-data"
+        },
+        {
+          "method": "POST",
+          "route": "/assignment-rules"
+        },
+        {
+          "method": "GET",
+          "route": "/assignment-rules"
+        },
+        {
+          "method": "PUT",
+          "route": "/assignment-rules/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/assignment-rules/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/reservations/:reservationId/waitlist"
+        },
+        {
+          "method": "POST",
+          "route": "/waitlist/process"
+        },
+        {
+          "method": "GET",
+          "route": "/waitlist"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/occupancy"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/room-utilization"
+        },
+        {
+          "method": "GET",
+          "route": "/reports/revenue-by-room-type"
+        },
+        {
+          "method": "GET",
+          "route": "/dashboard"
+        },
+        {
+          "method": "GET",
+          "route": "/room-status-updates"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk/room-status"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk/room-assignment"
+        },
+        {
+          "method": "POST",
+          "route": "/rooms/:roomId/lock"
+        },
+        {
+          "method": "DELETE",
+          "route": "/rooms/:roomId/unlock"
+        },
+        {
+          "method": "GET",
+          "route": "/rooms/:roomId/lock-status"
+        },
+        {
+          "method": "PUT",
+          "route": "/rooms/:roomId/lock/extend"
+        },
+        {
+          "method": "GET",
+          "route": "/rooms/locks"
+        },
+        {
+          "method": "DELETE",
+          "route": "/rooms/locks/cleanup"
+        },
+        {
+          "method": "POST",
+          "route": "/rooms/locks/bulk-unlock"
+        },
+        {
+          "method": "POST",
+          "route": "/search"
+        },
+        {
+          "method": "POST",
+          "route": "/filter"
+        },
+        {
+          "method": "GET",
+          "route": "/search/suggestions"
+        },
+        {
+          "method": "GET",
+          "route": "/search/filters"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk/room-status"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk/room-assignment"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk/room-block"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk/room-release"
+        },
+        {
+          "method": "GET",
+          "route": "/bulk/progress/:batchId"
+        },
+        {
+          "method": "GET",
+          "route": "/bulk/active"
+        }
+      ]
+    },
+    {
+      "file": "routes/testCheckouts.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/compare-checkouts"
+        },
+        {
+          "method": "GET",
+          "route": "/staff-today-debug"
+        },
+        {
+          "method": "GET",
+          "route": "/debug-user-checkouts"
+        },
+        {
+          "method": "GET",
+          "route": "/available-checkouts"
+        },
+        {
+          "method": "POST",
+          "route": "/create-test-checkout"
+        },
+        {
+          "method": "GET",
+          "route": "/booking-statuses"
+        },
+        {
+          "method": "POST",
+          "route": "/create-checked-in-booking"
+        },
+        {
+          "method": "GET",
+          "route": "/debug-checkins"
+        }
+      ]
+    },
+    {
+      "file": "routes/translations.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/namespaces"
+        },
+        {
+          "method": "GET",
+          "route": "/:namespace/:language"
+        },
+        {
+          "method": "POST",
+          "route": "/batch"
+        },
+        {
+          "method": "POST",
+          "route": "/translate"
+        },
+        {
+          "method": "POST",
+          "route": "/batch-translate"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:namespace/:key"
+        },
+        {
+          "method": "PUT",
+          "route": "/:namespace/:key/approve"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        }
+      ]
+    },
+    {
+      "file": "routes/travelAgents.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/validate-code/:code"
+        },
+        {
+          "method": "GET",
+          "route": "/me"
+        },
+        {
+          "method": "GET",
+          "route": "/me/bookings"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/status"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/performance"
+        },
+        {
+          "method": "POST",
+          "route": "/multi-booking"
+        },
+        {
+          "method": "GET",
+          "route": "/multi-booking"
+        },
+        {
+          "method": "GET",
+          "route": "/multi-booking/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/multi-booking/calculate-pricing"
+        },
+        {
+          "method": "GET",
+          "route": "/multi-booking/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/multi-booking/:id/status"
+        },
+        {
+          "method": "POST",
+          "route": "/multi-booking/:id/rollback"
+        },
+        {
+          "method": "POST",
+          "route": "/export/bookings"
+        },
+        {
+          "method": "POST",
+          "route": "/export/commission-report"
+        },
+        {
+          "method": "POST",
+          "route": "/export/batch"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/trends"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/forecast"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/performance"
+        },
+        {
+          "method": "GET",
+          "route": "/download/:filename"
+        }
+      ]
+    },
+    {
+      "file": "routes/upload.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/avatar"
+        },
+        {
+          "method": "DELETE",
+          "route": "/avatar"
+        }
+      ]
+    },
+    {
+      "file": "routes/userAnalytics.js",
+      "routes": []
+    },
+    {
+      "file": "routes/userManagement.js",
+      "routes": []
+    },
+    {
+      "file": "routes/userPreferences.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/:section"
+        },
+        {
+          "method": "PUT",
+          "route": "/profile"
+        },
+        {
+          "method": "PUT",
+          "route": "/notifications"
+        },
+        {
+          "method": "PUT",
+          "route": "/display"
+        },
+        {
+          "method": "PUT",
+          "route": "/staff"
+        },
+        {
+          "method": "PUT",
+          "route": "/guest"
+        },
+        {
+          "method": "PUT",
+          "route": "/system"
+        },
+        {
+          "method": "PATCH",
+          "route": "/availability"
+        },
+        {
+          "method": "DELETE",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/export"
+        },
+        {
+          "method": "POST",
+          "route": "/import"
+        }
+      ]
+    },
+    {
+      "file": "routes/users.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/generate-password"
+        },
+        {
+          "method": "POST",
+          "route": "/create"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/validate-gst"
+        }
+      ]
+    },
+    {
+      "file": "routes/vendorComparison.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk-suggestions"
+        },
+        {
+          "method": "POST",
+          "route": "/cost-optimization"
+        }
+      ]
+    },
+    {
+      "file": "routes/vendors.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/statistics"
+        },
+        {
+          "method": "GET",
+          "route": "/performance"
+        },
+        {
+          "method": "GET",
+          "route": "/top-performers"
+        },
+        {
+          "method": "GET",
+          "route": "/contracts/expiring"
+        },
+        {
+          "method": "GET",
+          "route": "/search"
+        },
+        {
+          "method": "GET",
+          "route": "/by-category/:category"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "POST",
+          "route": "/legacy"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/performance"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/payment"
+        },
+        {
+          "method": "GET",
+          "route": "/enhanced/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/enhanced/comparison"
+        },
+        {
+          "method": "GET",
+          "route": "/enhanced/preferred"
+        },
+        {
+          "method": "GET",
+          "route": "/:id/enhanced/details"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/enhanced/performance-update"
+        }
+      ]
+    },
+    {
+      "file": "routes/vip.js",
+      "routes": []
+    },
+    {
+      "file": "routes/waitingList.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/room-availability"
+        },
+        {
+          "method": "GET",
+          "route": "/stats"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "PUT",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/status"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id/priority"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/notes"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/contact"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/notify"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:id"
+        }
+      ]
+    },
+    {
+      "file": "routes/waitlist.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/process-matches"
+        },
+        {
+          "method": "POST",
+          "route": "/find-candidates"
+        },
+        {
+          "method": "POST",
+          "route": "/process-expired"
+        },
+        {
+          "method": "GET",
+          "route": "/:id"
+        },
+        {
+          "method": "PATCH",
+          "route": "/:id"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/match/:matchId/action"
+        },
+        {
+          "method": "POST",
+          "route": "/:id/contact"
+        }
+      ]
+    },
+    {
+      "file": "routes/webhooks.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/stripe"
+        }
+      ]
+    },
+    {
+      "file": "routes/webOptimization.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/:hotelId/ab-tests"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/ab-tests"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/ab-tests/:testId"
+        },
+        {
+          "method": "PUT",
+          "route": "/:hotelId/ab-tests/:testId"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:hotelId/ab-tests/:testId"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/ab-tests/:testId/start"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/ab-tests/:testId/stop"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/ab-tests/:testId/record-conversion"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/ab-tests/:testId/results"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/performance/record"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/performance/report"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/performance/vitals"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/behavior/record"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/behavior/heatmap"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/behavior/analytics"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/conversion/funnel"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/conversion/funnels"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/conversion/funnel/:funnelId/report"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/personalization/rules"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/personalization/rules"
+        },
+        {
+          "method": "PUT",
+          "route": "/:hotelId/personalization/rules/:ruleId"
+        },
+        {
+          "method": "DELETE",
+          "route": "/:hotelId/personalization/rules/:ruleId"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/personalization/execute"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/optimization/report"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/optimization/recommendations"
+        }
+      ]
+    },
+    {
+      "file": "routes/webSettings.js",
+      "routes": [
+        {
+          "method": "GET",
+          "route": "/:hotelId"
+        },
+        {
+          "method": "PUT",
+          "route": "/:hotelId"
+        },
+        {
+          "method": "PUT",
+          "route": "/:hotelId/section/:section"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/test"
+        },
+        {
+          "method": "GET",
+          "route": "/:hotelId/export"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/import"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/preview"
+        },
+        {
+          "method": "POST",
+          "route": "/:hotelId/reset"
+        }
+      ]
+    },
+    {
+      "file": "routes/workflow.js",
+      "routes": [
+        {
+          "method": "POST",
+          "route": "/bulk-checkin"
+        },
+        {
+          "method": "POST",
+          "route": "/bulk-checkout"
+        },
+        {
+          "method": "POST",
+          "route": "/housekeeping"
+        },
+        {
+          "method": "POST",
+          "route": "/maintenance"
+        },
+        {
+          "method": "POST",
+          "route": "/room-status"
+        },
+        {
+          "method": "GET",
+          "route": "/actions"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/floor/:floorId"
+        },
+        {
+          "method": "GET",
+          "route": "/analytics/predictive"
+        },
+        {
+          "method": "GET",
+          "route": "/upgrades/suggestions"
+        },
+        {
+          "method": "POST",
+          "route": "/upgrades/process"
+        },
+        {
+          "method": "GET",
+          "route": "/upgrades/analytics"
+        }
+      ]
+    }
+  ]
+}

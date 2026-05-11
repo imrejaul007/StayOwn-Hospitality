@@ -1,0 +1,669 @@
+{
+  "version": 1,
+  "updatedAt": 1775607007546,
+  "nodeCount": 53,
+  "nodes": {
+    "mem-MEMORY-memory-index": {
+      "id": "mem-MEMORY-memory-index",
+      "category": "core",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007488
+    },
+    "mem-project_overview----": {
+      "id": "mem-project_overview----",
+      "category": "project_overview",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007437
+    },
+    "mem-project_overview-tech-stack": {
+      "id": "mem-project_overview-tech-stack",
+      "category": "project_overview",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007437
+    },
+    "mem-project_overview-current-state--phase-1-built-": {
+      "id": "mem-project_overview-current-state--phase-1-built-",
+      "category": "project_overview",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007437
+    },
+    "mem-feedback_autonomy----": {
+      "id": "mem-feedback_autonomy----",
+      "category": "feedback_autonomy",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007456
+    },
+    "mem-feedback_git_email----": {
+      "id": "mem-feedback_git_email----",
+      "category": "feedback_git_email",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007466
+    },
+    "mem-project_adbazaar----": {
+      "id": "mem-project_adbazaar----",
+      "category": "project_adbazaar",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007468
+    },
+    "mem-project_adbazaar_go_live----": {
+      "id": "mem-project_adbazaar_go_live----",
+      "category": "project_adbazaar_go_live",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007471
+    },
+    "mem-project_adbazaar_go_live-status": {
+      "id": "mem-project_adbazaar_go_live-status",
+      "category": "project_adbazaar_go_live",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007471
+    },
+    "mem-project_adbazaar_go_live-step-1---supabase-project": {
+      "id": "mem-project_adbazaar_go_live-step-1---supabase-project",
+      "category": "project_adbazaar_go_live",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007471
+    },
+    "mem-project_adbazaar_go_live-step-2---vercel-env-vars": {
+      "id": "mem-project_adbazaar_go_live-step-2---vercel-env-vars",
+      "category": "project_adbazaar_go_live",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007471
+    },
+    "mem-project_adbazaar_go_live-step-3---rez-backend-on-render": {
+      "id": "mem-project_adbazaar_go_live-step-3---rez-backend-on-render",
+      "category": "project_adbazaar_go_live",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007471
+    },
+    "mem-project_adbazaar_go_live-step-4---rez-merchant-connecti": {
+      "id": "mem-project_adbazaar_go_live-step-4---rez-merchant-connecti",
+      "category": "project_adbazaar_go_live",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007472
+    },
+    "mem-project_adbazaar_go_live-key-architecture-decisions": {
+      "id": "mem-project_adbazaar_go_live-key-architecture-decisions",
+      "category": "project_adbazaar_go_live",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007472
+    },
+    "mem-project_adbazaar_go_live-build-fix-history--for-context": {
+      "id": "mem-project_adbazaar_go_live-build-fix-history--for-context",
+      "category": "project_adbazaar_go_live",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007472
+    },
+    "mem-project_ads_architecture----": {
+      "id": "mem-project_ads_architecture----",
+      "category": "project_ads_architecture",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007475
+    },
+    "mem-project_api_gateway----": {
+      "id": "mem-project_api_gateway----",
+      "category": "project_api_gateway",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007479
+    },
+    "mem-project_hotel_integration----": {
+      "id": "mem-project_hotel_integration----",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-live-deploy-urls--as-of-2026-0": {
+      "id": "mem-project_hotel_integration-live-deploy-urls--as-of-2026-0",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-repo": {
+      "id": "mem-project_hotel_integration-repo",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-infrastructure": {
+      "id": "mem-project_hotel_integration-infrastructure",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-system-map": {
+      "id": "mem-project_hotel_integration-system-map",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-three-level-coin-system": {
+      "id": "mem-project_hotel_integration-three-level-coin-system",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-shared-secrets--must-match-on-": {
+      "id": "mem-project_hotel_integration-shared-secrets--must-match-on-",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-hotel-ota-api-render-environme": {
+      "id": "mem-project_hotel_integration-hotel-ota-api-render-environme",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-vercel-environment-variables--": {
+      "id": "mem-project_hotel_integration-vercel-environment-variables--",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-key-source-files": {
+      "id": "mem-project_hotel_integration-key-source-files",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-db-changes--postgresql-": {
+      "id": "mem-project_hotel_integration-db-changes--postgresql-",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-db-changes--mongodb---pms-": {
+      "id": "mem-project_hotel_integration-db-changes--mongodb---pms-",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-post-deploy-checklist": {
+      "id": "mem-project_hotel_integration-post-deploy-checklist",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-branding": {
+      "id": "mem-project_hotel_integration-branding",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_integration-runbook": {
+      "id": "mem-project_hotel_integration-runbook",
+      "category": "project_hotel_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007480
+    },
+    "mem-project_hotel_ota_rez_integration----": {
+      "id": "mem-project_hotel_ota_rez_integration----",
+      "category": "project_hotel_ota_rez_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007481
+    },
+    "mem-project_hotel_ota_rez_integration-integration-status----implemen": {
+      "id": "mem-project_hotel_ota_rez_integration-integration-status----implemen",
+      "category": "project_hotel_ota_rez_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007481
+    },
+    "mem-project_hotel_ota_rez_integration-what-was-built": {
+      "id": "mem-project_hotel_ota_rez_integration-what-was-built",
+      "category": "project_hotel_ota_rez_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007481
+    },
+    "mem-project_hotel_ota_rez_integration-files-modified-created": {
+      "id": "mem-project_hotel_ota_rez_integration-files-modified-created",
+      "category": "project_hotel_ota_rez_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007481
+    },
+    "mem-project_hotel_ota_rez_integration-env-variables--required-for-pr": {
+      "id": "mem-project_hotel_ota_rez_integration-env-variables--required-for-pr",
+      "category": "project_hotel_ota_rez_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007481
+    },
+    "mem-project_hotel_ota_rez_integration-key-design-decisions": {
+      "id": "mem-project_hotel_ota_rez_integration-key-design-decisions",
+      "category": "project_hotel_ota_rez_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007481
+    },
+    "mem-project_hotel_ota_rez_integration-test-plan": {
+      "id": "mem-project_hotel_ota_rez_integration-test-plan",
+      "category": "project_hotel_ota_rez_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007481
+    },
+    "mem-project_hotel_ota_rez_integration-next-steps": {
+      "id": "mem-project_hotel_ota_rez_integration-next-steps",
+      "category": "project_hotel_ota_rez_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007481
+    },
+    "mem-project_hotel_ota_rez_integration-why----design": {
+      "id": "mem-project_hotel_ota_rez_integration-why----design",
+      "category": "project_hotel_ota_rez_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007481
+    },
+    "mem-project_hotel_ota_rez_integration-how-to-apply": {
+      "id": "mem-project_hotel_ota_rez_integration-how-to-apply",
+      "category": "project_hotel_ota_rez_integration",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007481
+    },
+    "mem-project_pending_migrations----": {
+      "id": "mem-project_pending_migrations----",
+      "category": "project_pending_migrations",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007483
+    },
+    "mem-project_rez_strategy----": {
+      "id": "mem-project_rez_strategy----",
+      "category": "project_rez_strategy",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007484
+    },
+    "mem-reference_services_urls----": {
+      "id": "mem-reference_services_urls----",
+      "category": "reference_services_urls",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007485
+    },
+    "mem-reference_services_urls-all-rez-repos--18-total-": {
+      "id": "mem-reference_services_urls-all-rez-repos--18-total-",
+      "category": "reference_services_urls",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007485
+    },
+    "mem-reference_services_urls-monolith---microservice-mappin": {
+      "id": "mem-reference_services_urls-monolith---microservice-mappin",
+      "category": "reference_services_urls",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007485
+    },
+    "mem-reference_services_urls-key-backend-endpoints": {
+      "id": "mem-reference_services_urls-key-backend-endpoints",
+      "category": "reference_services_urls",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007485
+    },
+    "mem-reference_services_urls-infrastructure": {
+      "id": "mem-reference_services_urls-infrastructure",
+      "category": "reference_services_urls",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007485
+    },
+    "mem-reference_services_urls-environment-variables--critica": {
+      "id": "mem-reference_services_urls-environment-variables--critica",
+      "category": "reference_services_urls",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007485
+    },
+    "mem-user_founder----": {
+      "id": "mem-user_founder----",
+      "category": "user_founder",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007486
+    },
+    "mem-project_rezapp----": {
+      "id": "mem-project_rezapp----",
+      "category": "project_rezapp",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007489
+    },
+    "mem-project_rezapp-rez-consumer-app--nuqta-master": {
+      "id": "mem-project_rezapp-rez-consumer-app--nuqta-master",
+      "category": "project_rezapp",
+      "confidence": 0.5,
+      "accessCount": 0,
+      "createdAt": 1775607007489
+    }
+  },
+  "edges": [
+    {
+      "sourceId": "mem-project_overview----",
+      "targetId": "mem-project_overview-tech-stack",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_overview-tech-stack",
+      "targetId": "mem-project_overview-current-state--phase-1-built-",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_adbazaar_go_live----",
+      "targetId": "mem-project_adbazaar_go_live-status",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_adbazaar_go_live-status",
+      "targetId": "mem-project_adbazaar_go_live-step-1---supabase-project",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_adbazaar_go_live-step-1---supabase-project",
+      "targetId": "mem-project_adbazaar_go_live-step-2---vercel-env-vars",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_adbazaar_go_live-step-2---vercel-env-vars",
+      "targetId": "mem-project_adbazaar_go_live-step-3---rez-backend-on-render",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_adbazaar_go_live-step-3---rez-backend-on-render",
+      "targetId": "mem-project_adbazaar_go_live-step-4---rez-merchant-connecti",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_adbazaar_go_live-step-4---rez-merchant-connecti",
+      "targetId": "mem-project_adbazaar_go_live-key-architecture-decisions",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_adbazaar_go_live-key-architecture-decisions",
+      "targetId": "mem-project_adbazaar_go_live-build-fix-history--for-context",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration----",
+      "targetId": "mem-project_hotel_integration-live-deploy-urls--as-of-2026-0",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration-live-deploy-urls--as-of-2026-0",
+      "targetId": "mem-project_hotel_integration-repo",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration-repo",
+      "targetId": "mem-project_hotel_integration-infrastructure",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration-infrastructure",
+      "targetId": "mem-project_hotel_integration-system-map",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration-system-map",
+      "targetId": "mem-project_hotel_integration-three-level-coin-system",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration-three-level-coin-system",
+      "targetId": "mem-project_hotel_integration-shared-secrets--must-match-on-",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration-shared-secrets--must-match-on-",
+      "targetId": "mem-project_hotel_integration-hotel-ota-api-render-environme",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration-hotel-ota-api-render-environme",
+      "targetId": "mem-project_hotel_integration-vercel-environment-variables--",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration-vercel-environment-variables--",
+      "targetId": "mem-project_hotel_integration-key-source-files",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration-key-source-files",
+      "targetId": "mem-project_hotel_integration-db-changes--postgresql-",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration-db-changes--postgresql-",
+      "targetId": "mem-project_hotel_integration-db-changes--mongodb---pms-",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration-db-changes--mongodb---pms-",
+      "targetId": "mem-project_hotel_integration-post-deploy-checklist",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration-post-deploy-checklist",
+      "targetId": "mem-project_hotel_integration-branding",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_integration-branding",
+      "targetId": "mem-project_hotel_integration-runbook",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_ota_rez_integration----",
+      "targetId": "mem-project_hotel_ota_rez_integration-integration-status----implemen",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_ota_rez_integration-integration-status----implemen",
+      "targetId": "mem-project_hotel_ota_rez_integration-what-was-built",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_ota_rez_integration-what-was-built",
+      "targetId": "mem-project_hotel_ota_rez_integration-files-modified-created",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_ota_rez_integration-files-modified-created",
+      "targetId": "mem-project_hotel_ota_rez_integration-env-variables--required-for-pr",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_ota_rez_integration-env-variables--required-for-pr",
+      "targetId": "mem-project_hotel_ota_rez_integration-key-design-decisions",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_ota_rez_integration-key-design-decisions",
+      "targetId": "mem-project_hotel_ota_rez_integration-test-plan",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_ota_rez_integration-test-plan",
+      "targetId": "mem-project_hotel_ota_rez_integration-next-steps",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_ota_rez_integration-next-steps",
+      "targetId": "mem-project_hotel_ota_rez_integration-why----design",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_ota_rez_integration-why----design",
+      "targetId": "mem-project_hotel_ota_rez_integration-how-to-apply",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-reference_services_urls----",
+      "targetId": "mem-reference_services_urls-all-rez-repos--18-total-",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-reference_services_urls-all-rez-repos--18-total-",
+      "targetId": "mem-reference_services_urls-monolith---microservice-mappin",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-reference_services_urls-monolith---microservice-mappin",
+      "targetId": "mem-reference_services_urls-key-backend-endpoints",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-reference_services_urls-key-backend-endpoints",
+      "targetId": "mem-reference_services_urls-infrastructure",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-reference_services_urls-infrastructure",
+      "targetId": "mem-reference_services_urls-environment-variables--critica",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_rezapp----",
+      "targetId": "mem-project_rezapp-rez-consumer-app--nuqta-master",
+      "type": "temporal",
+      "weight": 0.5
+    },
+    {
+      "sourceId": "mem-project_hotel_ota_rez_integration-what-was-built",
+      "targetId": "mem-project_hotel_ota_rez_integration-key-design-decisions",
+      "type": "similar",
+      "weight": 0.4008810572687225
+    }
+  ],
+  "pageRanks": {
+    "mem-MEMORY-memory-index": 0.0062288755394879465,
+    "mem-project_overview----": 0.0062288755394879465,
+    "mem-project_overview-tech-stack": 0.011523428505775968,
+    "mem-project_overview-current-state--phase-1-built-": 0.016023785995779055,
+    "mem-feedback_autonomy----": 0.0062288755394879465,
+    "mem-feedback_git_email----": 0.0062288755394879465,
+    "mem-project_adbazaar----": 0.0062288755394879465,
+    "mem-project_adbazaar_go_live----": 0.0062288755394879465,
+    "mem-project_adbazaar_go_live-status": 0.011523428505775968,
+    "mem-project_adbazaar_go_live-step-1---supabase-project": 0.016023785995779055,
+    "mem-project_adbazaar_go_live-step-2---vercel-env-vars": 0.019849061498298844,
+    "mem-project_adbazaar_go_live-step-3---rez-backend-on-render": 0.023100516314192215,
+    "mem-project_adbazaar_go_live-step-4---rez-merchant-connecti": 0.02586424678720868,
+    "mem-project_adbazaar_go_live-key-architecture-decisions": 0.028213422304844107,
+    "mem-project_adbazaar_go_live-build-fix-history--for-context": 0.030210282206828785,
+    "mem-project_ads_architecture----": 0.0062288755394879465,
+    "mem-project_api_gateway----": 0.0062288755394879465,
+    "mem-project_hotel_integration----": 0.0062288755394879465,
+    "mem-project_hotel_integration-live-deploy-urls--as-of-2026-0": 0.011523428505775968,
+    "mem-project_hotel_integration-repo": 0.016023785995779055,
+    "mem-project_hotel_integration-infrastructure": 0.019849061498298844,
+    "mem-project_hotel_integration-system-map": 0.023100516314192215,
+    "mem-project_hotel_integration-three-level-coin-system": 0.02586424678720868,
+    "mem-project_hotel_integration-shared-secrets--must-match-on-": 0.028213422304844107,
+    "mem-project_hotel_integration-hotel-ota-api-render-environme": 0.030210282206828785,
+    "mem-project_hotel_integration-vercel-environment-variables--": 0.03190763789575884,
+    "mem-project_hotel_integration-key-source-files": 0.03335037327291447,
+    "mem-project_hotel_integration-db-changes--postgresql-": 0.03457658042229306,
+    "mem-project_hotel_integration-db-changes--mongodb---pms-": 0.03561872426984437,
+    "mem-project_hotel_integration-post-deploy-checklist": 0.03650449838113665,
+    "mem-project_hotel_integration-branding": 0.03725744617886301,
+    "mem-project_hotel_integration-runbook": 0.03789785340913843,
+    "mem-project_hotel_ota_rez_integration----": 0.0062288755394879465,
+    "mem-project_hotel_ota_rez_integration-integration-status----implemen": 0.011523428505775968,
+    "mem-project_hotel_ota_rez_integration-what-was-built": 0.016023785995779055,
+    "mem-project_hotel_ota_rez_integration-files-modified-created": 0.013038968518893395,
+    "mem-project_hotel_ota_rez_integration-env-variables--required-for-pr": 0.01731197240998409,
+    "mem-project_hotel_ota_rez_integration-key-design-decisions": 0.027754109370899317,
+    "mem-project_hotel_ota_rez_integration-test-plan": 0.029819785805779597,
+    "mem-project_hotel_ota_rez_integration-next-steps": 0.03157562965622531,
+    "mem-project_hotel_ota_rez_integration-why----design": 0.033068122744756394,
+    "mem-project_hotel_ota_rez_integration-how-to-apply": 0.034336780735197574,
+    "mem-project_pending_migrations----": 0.0062288755394879465,
+    "mem-project_rez_strategy----": 0.0062288755394879465,
+    "mem-reference_services_urls----": 0.0062288755394879465,
+    "mem-reference_services_urls-all-rez-repos--18-total-": 0.011523428505775968,
+    "mem-reference_services_urls-monolith---microservice-mappin": 0.016023785995779055,
+    "mem-reference_services_urls-key-backend-endpoints": 0.019849061498298844,
+    "mem-reference_services_urls-infrastructure": 0.023100516314192215,
+    "mem-reference_services_urls-environment-variables--critica": 0.02586424678720868,
+    "mem-user_founder----": 0.0062288755394879465,
+    "mem-project_rezapp----": 0.0062288755394879465,
+    "mem-project_rezapp-rez-consumer-app--nuqta-master": 0.011523428505775968
+  }
+}

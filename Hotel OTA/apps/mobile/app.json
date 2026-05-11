@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "Hotel OTA",
+    "slug": "hotel-ota",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "hotelota",
+    "platforms": ["ios", "android"],
+    "ios": { "bundleIdentifier": "com.hotelota.app" },
+    "android": { "package": "com.hotelota.app" }
+  }
+}

@@ -1,0 +1,178 @@
+{
+  "title": "Book Your Stay",
+  "subtitle": "Experience luxury and comfort with our enhanced booking system",
+  
+  "search": {
+    "title": "Search Available Rooms",
+    "checkIn": "Check-in Date",
+    "checkOut": "Check-out Date",
+    "adults": "Adults",
+    "children": "Children",
+    "rooms": "Rooms",
+    "searchButton": "Search Available Rooms",
+    "searching": "Searching Available Rooms...",
+    "modifySearch": "Modify Search",
+    "summary": "{{nights}} night|{{nights}} nights • {{guests}} guest|{{guests}} guests • {{rooms}} room|{{rooms}} rooms"
+  },
+  
+  "rooms": {
+    "title": "Choose Your Room",
+    "available": "{{count}} rooms available",
+    "unavailable": "Unavailable",
+    "insufficient": "Insufficient rooms available for selected dates",
+    "specifications": {
+      "maxOccupancy": "Up to {{count}} guests",
+      "roomSize": "{{size}} sqm",
+      "bedType": "{{type}} bed",
+      "view": "{{view}} view"
+    },
+    "amenities": {
+      "more": "+{{count}} more"
+    },
+    "pricing": {
+      "perNight": "per night",
+      "total": "Total: {{amount}}",
+      "ratePlansAvailable": "{{count}} rate plans available"
+    },
+    "selectRoom": "Select Room",
+    "noRooms": "No rooms available",
+    "noRoomsDescription": "Please try different dates or contact us directly."
+  },
+  
+  "ratePlans": {
+    "title": "Choose Rate Plan",
+    "subtitle": "Select the best rate for your stay",
+    "cancellation": {
+      "flexible": "flexible cancellation",
+      "moderate": "moderate cancellation", 
+      "strict": "strict cancellation",
+      "non_refundable": "non-refundable"
+    },
+    "restrictions": {
+      "minNights": "Min {{count}} nights"
+    },
+    "mealPlans": {
+      "RO": "Room Only",
+      "BB": "Bed & Breakfast",
+      "HB": "Half Board",
+      "FB": "Full Board", 
+      "AI": "All Inclusive"
+    }
+  },
+  
+  "guest": {
+    "title": "Guest Information",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "specialRequests": "Special Requests (Optional)",
+    "specialRequestsPlaceholder": "Any special requests or preferences...",
+    "required": "required",
+    "validation": {
+      "firstName": "Please enter your first name",
+      "lastName": "Please enter your last name",
+      "email": "Please enter a valid email address",
+      "phone": "Please enter your phone number"
+    }
+  },
+  
+  "promo": {
+    "title": "Promo Code (Optional)",
+    "placeholder": "Enter promo code",
+    "apply": "Apply",
+    "hint": "Try: WELCOME10 or SAVE500",
+    "applied": "Promo code {{code}} applied successfully!",
+    "invalid": "Invalid or expired promo code"
+  },
+  
+  "summary": {
+    "title": "Booking Summary",
+    "room": "Room: {{name}} × {{count}}",
+    "ratePlan": "Rate Plan: {{name}}",
+    "extraAdults": "Extra Adult Charges",
+    "extraChildren": "Extra Child Charges", 
+    "discount": "Discount ({{code}})",
+    "taxes": "Taxes & Fees",
+    "total": "Total Amount",
+    "backToRooms": "Back to Rooms",
+    "reviewConfirm": "Review & Confirm"
+  },
+  
+  "confirmation": {
+    "title": "Confirm Your Booking",
+    "details": {
+      "title": "Booking Details",
+      "checkIn": "Check-in:",
+      "checkOut": "Check-out:",
+      "guests": "Guests:",
+      "room": "Room:"
+    },
+    "guest": {
+      "title": "Guest Information",
+      "name": "Name:",
+      "email": "Email:",
+      "phone": "Phone:",
+      "specialRequests": "Special Requests:"
+    },
+    "payment": {
+      "title": "Payment Summary",
+      "for": "For {{nights}} nights • {{rooms}} room|{{rooms}} rooms",
+      "ratePlan": "Using {{name}} rate plan"
+    },
+    "terms": "By clicking \"Confirm Booking\", you agree to our terms and conditions.",
+    "cancellation": "Free cancellation until 24 hours before check-in.",
+    "backToEdit": "Back to Edit",
+    "confirmBooking": "Confirm Booking",
+    "confirming": "Confirming Booking..."
+  },
+  
+  "success": {
+    "title": "Booking Confirmed!",
+    "thankYou": "Thank you for your reservation. You'll receive a confirmation email shortly at {{email}}",
+    "reference": "Booking Reference:",
+    "instructions": {
+      "checkIn": "Check-in: {{date}} after 3:00 PM",
+      "checkOut": "Check-out: {{date}} before 12:00 PM",
+      "cancellation": "Free cancellation until 24 hours before check-in"
+    },
+    "bookAnother": "Book Another Stay"
+  },
+  
+  "errors": {
+    "loadingRooms": "Failed to load available rooms",
+    "searchAvailability": "Failed to search availability",
+    "selectDates": "Please select check-in and check-out dates",
+    "minimumStay": "Stay must be at least 1 night",
+    "pricingCalculation": "Failed to calculate pricing",
+    "bookingConfirmation": "Failed to confirm booking. Please try again.",
+    "guestInfoRequired": "Please fill in all required guest information",
+    "validEmail": "Please enter a valid email address"
+  },
+  
+  "loading": {
+    "bookingEngine": "Loading booking engine...",
+    "searching": "Searching...",
+    "confirming": "Confirming...",
+    "processing": "Processing..."
+  },
+  
+  "currency": {
+    "select": "Select Currency",
+    "switch": "Switch Currency"
+  },
+  
+  "language": {
+    "select": "Select Language",
+    "switch": "Switch Language",
+    "current": "Current Language"
+  },
+  
+  "steps": {
+    "search": "Search",
+    "select": "Select Room",
+    "details": "Guest Details",
+    "confirm": "Confirm",
+    "complete": "Complete"
+  }
+}

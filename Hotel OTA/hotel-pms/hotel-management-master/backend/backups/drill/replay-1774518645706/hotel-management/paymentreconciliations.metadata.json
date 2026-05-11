@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"hotelId":{"$numberInt":"1"},"reconciliationDate":{"$numberInt":"-1"}},"name":"hotelId_1_reconciliationDate_-1","background":true}],"uuid":"a97cad387a024c9bbf384b90dfda7c35","collectionName":"paymentreconciliations","type":"collection"}

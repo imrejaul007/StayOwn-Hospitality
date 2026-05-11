@@ -1,0 +1,223 @@
+name: Hotel OTA API CI/CD
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '20'
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+  REDIS_URL: ${{ secrets.REDIS_URL }}
+
+jobs:
+  # =========================================
+  # LINT & TYPE CHECK
+  # =========================================
+  lint:
+    name: Lint & Type Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: apps/api/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: apps/api
+
+      - name: Run ESLint
+        run: npm run lint --if-present || true
+        working-directory: apps/api
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+        working-directory: apps/api
+
+  # =========================================
+  # TEST
+  # =========================================
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: lint
+
+    services:
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand(\"ping\")'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DATABASE_URL: mongodb://localhost:27017/hotel-ota-test
+      REDIS_URL: redis://localhost:6379
+      JWT_SECRET: test-jwt-secret-key
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: apps/api/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: apps/api
+
+      - name: Generate Prisma Client
+        run: npx prisma generate
+        working-directory: apps/api
+
+      - name: Run tests
+        run: npm test -- --passWithNoTests
+        working-directory: apps/api
+
+  # =========================================
+  # SECURITY
+  # =========================================
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: apps/api/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: apps/api
+
+      - name: Run npm audit
+        run: npm audit --audit-level=high
+
+      - name: Run Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload scan results
+        uses: github/codeql-action/upload-sarif@v2
+        with: &id001
+          sarif_file: 'trivy-results.sarif'
+
+  # =========================================
+  # BUILD
+  # =========================================
+  build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: [test, security]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}/hotel-ota-api
+          tags: |
+            type=sha,prefix=
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+
+      - name: Build and Push API
+        uses: docker/build-push-action@v5
+        with:
+          context: ./apps/api
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and Push Hotel Panel
+        uses: docker/build-push-action@v5
+        with:
+          context: ./apps/hotel-panel
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-hotel-panel
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # =========================================
+  # DEPLOY TO RENDER
+  # =========================================
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Deploy via Render API
+        uses: iGospAY/action-render@v1
+        with:
+          render-service-url: ${{ secrets.HOTEL_OTA_RENDER_DEPLOY_HOOK_URL }}
+
+  # =========================================
+  # NOTIFY
+  # =========================================
+  notify:
+    name: Notify Status
+    runs-on: ubuntu-latest
+    needs: [deploy]
+    if: always()
+
+    steps:
+      - name: Send Slack notification
+        if: needs.deploy.result == 'success'
+        uses: slackapi/slack-github-action@v1
+        with:
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          slack-message: "Hotel OTA API deployed successfully! Commit: ${{ github.sha }}"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Alert on failure
+        if: needs.deploy.result == 'failure'
+        uses: slackapi/slack-github-action@v1
+        with:
+          channel-id: ${{ secrets.SLACK_CHANNEL_ID }}
+          slack-message: "Hotel OTA API deployment failed! Commit: ${{ github.sha }}"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

@@ -1,0 +1,13 @@
+node_modules/**
+dist/**
+build/**
+.next/**
+coverage/**
+*.min.js
+*.map
+uploads/**
+agents/reports/**
+e2e-tests/**
+backend/src/migrations/**
+frontend/public/**
+.code-review-graph/**

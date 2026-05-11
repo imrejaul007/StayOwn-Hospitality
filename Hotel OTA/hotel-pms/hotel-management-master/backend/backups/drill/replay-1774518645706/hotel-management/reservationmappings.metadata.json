@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"mappingId":{"$numberInt":"1"}},"name":"mappingId_1","background":true,"unique":true}],"uuid":"ecb6a7f106eb4066bd74d21011e9e317","collectionName":"reservationmappings","type":"collection"}

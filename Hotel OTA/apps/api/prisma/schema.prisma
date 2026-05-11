@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Hotel {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  address     String
+  phone       String?
+  images      String[]
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  rooms      Room[]
+  requests   ServiceRequest[]
+  bundles    RoomBundle[]
+  @@map("hotels")
+}
+
+model Room {
+  id        String @id @default(uuid())
+  hotelId  String
+  number    String
+  type      String  // standard, deluxe, suite
+  floor     Int
+  status    String  @default("available")
+
+  hotel    Hotel @relation(fields: [hotelId], references: [id])
+  requests ServiceRequest[]
+  bookings Booking[]
+  @@map("rooms")
+}
+
+model ServiceRequest {
+  id          String   @id @default(uuid())
+  hotelId    String
+  roomId     String
+  type        String   // housekeeping, room_service, spa, laundry
+  priority    String   @default("medium")
+  status      String   @default("pending")
+  assignedTo  String?
+  notes       String?
+  createdAt   DateTime @default(now())
+  completedAt DateTime?
+
+  hotel      Hotel @relation(fields: [hotelId], references: [id])
+  room       Room @relation(fields: [roomId], references: [id])
+  @@map("service_requests")
+}
+
+model RoomBundle {
+  id        String @id @default(uuid())
+  hotelId  String
+  name      String
+  type      String  // romantic_dinner, spa_combo, late_checkout
+  price     Decimal
+  description String?
+  isActive   Boolean @default(true)
+
+  hotel    Hotel @relation(fields: [hotelId], references: [id])
+  @@map("room_bundles")
+}
+
+model Booking {
+  id        String   @id @default(uuid())
+  roomId   String
+  guestId  String
+  checkIn  DateTime
+  checkOut DateTime
+  status    String   @default("upcoming")
+  total    Decimal
+  createdAt DateTime @default(now())
+
+  room     Room @relation(fields: [roomId], references: [id])
+  @@map("bookings")
+}
+
+model GuestPreference {
+  id        String @id @default(uuid())
+  bookingId String @unique
+  temperature Int    @default(24)
+  lighting   String @default("medium")
+  pillow    String @default("medium")
+  dietary   Json?  // []
+  allergies Json?  // []
+  occasion  String?
+  preferences Json? // {}
+
+  @@map("guest_preferences")
+}

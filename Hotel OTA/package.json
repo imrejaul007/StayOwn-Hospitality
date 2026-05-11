@@ -1,0 +1,22 @@
+{
+  "name": "hotel-ota",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=apps/api",
+    "dev:api": "npm run dev --workspace=apps/api",
+    "dev:hotel": "npm run dev --workspace=apps/hotel-panel",
+    "dev:admin": "npm run dev --workspace=apps/admin",
+    "dev:ota": "npm run dev --workspace=apps/ota-web",
+    "dev:corporate": "npm run dev --workspace=apps/corporate-panel",
+    "build": "npm run build --workspace=apps/api",
+    "db:generate": "npx prisma generate --schema=packages/database/prisma/schema.prisma",
+    "db:migrate": "npx prisma migrate dev --schema=packages/database/prisma/schema.prisma",
+    "db:seed": "npx ts-node packages/database/src/seed.ts",
+    "db:studio": "npx prisma studio --schema=packages/database/prisma/schema.prisma"
+  }
+}

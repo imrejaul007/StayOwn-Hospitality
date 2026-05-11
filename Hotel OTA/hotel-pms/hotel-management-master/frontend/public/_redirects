@@ -1,0 +1,5 @@
+# Netlify redirects for SPA routing and API proxy
+/*    /index.html   200
+
+# API proxy - redirect all /api/* requests to backend
+/api/*  https://your-backend-url.com/api/:splat  200

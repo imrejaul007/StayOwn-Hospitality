@@ -1,0 +1,222 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [main, master, develop]
+  pull_request:
+    branches: [main, master]
+  schedule:
+    # Run tests daily at 2 AM UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm ci
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Setup MongoDB
+        uses: supercharge/mongodb-github-action@v1
+        with:
+          mongodb-version: '6.0'
+          mongodb-replica-set: rs0
+
+      - name: Create backend .env file
+        run: |
+          cd backend
+          cat > .env << EOF
+          NODE_ENV=test
+          PORT=4000
+          MONGO_URI=mongodb://localhost:27017/hotel-test
+          JWT_SECRET=test-jwt-secret-key-for-e2e-testing
+          JWT_PRIVATE_KEY=test-private-key
+          JWT_PUBLIC_KEY=test-public-key
+          STRIPE_SECRET_KEY=${{ secrets.STRIPE_TEST_SECRET_KEY || 'sk_test_placeholder' }}
+          REDIS_URL=redis://localhost:6379
+          FRONTEND_URL=http://localhost:3000
+          EOF
+
+      - name: Create frontend .env file
+        run: |
+          cd frontend
+          cat > .env << EOF
+          VITE_API_URL=http://localhost:4000/api/v1
+          VITE_STRIPE_PUBLISHABLE_KEY=${{ secrets.STRIPE_TEST_PUBLISHABLE_KEY || 'pk_test_placeholder' }}
+          EOF
+
+      - name: Setup Redis
+        uses: shogo82148/actions-setup-redis@v1
+        with:
+          redis-version: '7'
+
+      - name: Start backend server
+        run: |
+          cd backend
+          npm run start &
+          npx wait-on http://localhost:4000/health --timeout 60000
+
+      - name: Seed test database
+        run: |
+          cd backend
+          npm run seed
+
+      - name: Build and start frontend
+        run: |
+          cd frontend
+          npm run build
+          npm run preview &
+          npx wait-on http://localhost:3000 --timeout 60000
+
+      - name: Run Playwright tests
+        run: |
+          npx playwright test --project=${{ matrix.browser }}
+        env:
+          CI: true
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-${{ matrix.browser }}
+          path: e2e-tests/reports/
+          retention-days: 30
+
+      - name: Upload screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots-${{ matrix.browser }}
+          path: screenshots/
+          retention-days: 7
+
+      - name: Upload videos
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: videos-${{ matrix.browser }}
+          path: test-results/
+          retention-days: 7
+
+  report:
+    needs: test
+    runs-on: ubuntu-latest
+    if: always()
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download all test reports
+        uses: actions/download-artifact@v4
+        with:
+          pattern: playwright-report-*
+          path: all-reports/
+
+      - name: Merge test reports
+        run: |
+          npx playwright merge-reports --reporter html all-reports
+
+      - name: Upload merged report
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report-merged
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Comment PR with test results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            let comment = '## E2E Test Results\n\n';
+
+            // Read test results if available
+            const resultsPath = 'e2e-tests/reports/results.json';
+            if (fs.existsSync(resultsPath)) {
+              const results = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
+              const passed = results.tests.filter(t => t.status === 'passed').length;
+              const failed = results.tests.filter(t => t.status === 'failed').length;
+              const skipped = results.tests.filter(t => t.status === 'skipped').length;
+
+              comment += `✅ Passed: ${passed}\n`;
+              comment += `❌ Failed: ${failed}\n`;
+              comment += `⏭️ Skipped: ${skipped}\n\n`;
+
+              if (failed > 0) {
+                comment += '### Failed Tests:\n';
+                results.tests.filter(t => t.status === 'failed').forEach(test => {
+                  comment += `- ${test.name}\n`;
+                });
+              }
+            } else {
+              comment += 'Test results not available. Check the artifacts for details.';
+            }
+
+            // Post comment
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  performance:
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run performance tests
+        run: |
+          npx playwright test --config=playwright.performance.config.ts
+
+      - name: Store performance results
+        uses: actions/upload-artifact@v4
+        with:
+          name: performance-results
+          path: performance-results/
+          retention-days: 90
+
+      - name: Update performance dashboard
+        if: success()
+        run: |
+          echo "Performance metrics would be sent to monitoring dashboard here"

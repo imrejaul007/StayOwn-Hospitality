@@ -1,0 +1,104 @@
+{
+  "startedAt": "2026-03-26T22:27:14.723Z",
+  "completedAt": "2026-03-26T22:27:15.520Z",
+  "baseUrl": "http://localhost:4000",
+  "hasPilotToken": false,
+  "status": "passed",
+  "checks": [
+    {
+      "url": "http://localhost:4000/health",
+      "status": 200,
+      "ok": true,
+      "requiresAuth": false,
+      "body": {
+        "status": "warning",
+        "message": "Server status: warning",
+        "timestamp": "2026-03-26T22:27:15.118Z",
+        "health": {
+          "overall": "warning",
+          "alerts": {
+            "total": 1,
+            "critical": 0,
+            "warning": 1
+          },
+          "uptime": 543.1786271
+        },
+        "websocket": {
+          "initialized": true,
+          "totalConnections": 0,
+          "hotelConnections": {}
+        }
+      }
+    },
+    {
+      "url": "http://localhost:4000/api/versions",
+      "status": 200,
+      "ok": true,
+      "requiresAuth": false,
+      "body": {
+        "status": "success",
+        "data": {
+          "supportedVersions": [
+            "v1",
+            "v2"
+          ],
+          "compatibilityRouteTarget": "v1"
+        }
+      }
+    },
+    {
+      "url": "http://localhost:4000/health/detailed",
+      "status": 401,
+      "ok": true,
+      "requiresAuth": true,
+      "body": {
+        "success": false,
+        "error": {
+          "id": "9bc7abe7-f148-404d-9055-67a2a74423a4",
+          "code": "INTERNAL_ERROR",
+          "message": "You are not logged in! Please log in to get access.",
+          "statusCode": 401,
+          "timestamp": "2026-03-26T22:27:15.451Z",
+          "stack": "ApplicationError: You are not logged in! Please log in to get access.\n    at file:///C:/Users/user/Downloads/hotel-management-master/hotel-management-master/backend/src/middleware/auth.js:17:17\n    at file:///C:/Users/user/Downloads/hotel-management-master/hotel-management-master/backend/src/utils/catchAsync.js:3:5\n    at Layer.handle [as handle_request] (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at router.process_params (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at maintenanceMode (file:///C:/Users/user/Downloads/hotel-management-master/hotel-management-master/backend/src/middleware/maintenanceMode.js:11:12)"
+        }
+      },
+      "note": "Auth endpoint returned 401 as expected without PILOT_TOKEN"
+    },
+    {
+      "url": "http://localhost:4000/health/metrics",
+      "status": 401,
+      "ok": true,
+      "requiresAuth": true,
+      "body": {
+        "success": false,
+        "error": {
+          "id": "cf916552-ce15-4dfd-a449-7427ff555199",
+          "code": "INTERNAL_ERROR",
+          "message": "You are not logged in! Please log in to get access.",
+          "statusCode": 401,
+          "timestamp": "2026-03-26T22:27:15.489Z",
+          "stack": "ApplicationError: You are not logged in! Please log in to get access.\n    at file:///C:/Users/user/Downloads/hotel-management-master/hotel-management-master/backend/src/middleware/auth.js:17:17\n    at file:///C:/Users/user/Downloads/hotel-management-master/hotel-management-master/backend/src/utils/catchAsync.js:3:5\n    at Layer.handle [as handle_request] (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at router.process_params (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at maintenanceMode (file:///C:/Users/user/Downloads/hotel-management-master/hotel-management-master/backend/src/middleware/maintenanceMode.js:11:12)"
+        }
+      },
+      "note": "Auth endpoint returned 401 as expected without PILOT_TOKEN"
+    },
+    {
+      "url": "http://localhost:4000/health/queue",
+      "status": 401,
+      "ok": true,
+      "requiresAuth": true,
+      "body": {
+        "success": false,
+        "error": {
+          "id": "a18df5f7-d599-46d8-90e6-905a11b0374b",
+          "code": "INTERNAL_ERROR",
+          "message": "You are not logged in! Please log in to get access.",
+          "statusCode": 401,
+          "timestamp": "2026-03-26T22:27:15.505Z",
+          "stack": "ApplicationError: You are not logged in! Please log in to get access.\n    at file:///C:/Users/user/Downloads/hotel-management-master/hotel-management-master/backend/src/middleware/auth.js:17:17\n    at file:///C:/Users/user/Downloads/hotel-management-master/hotel-management-master/backend/src/utils/catchAsync.js:3:5\n    at Layer.handle [as handle_request] (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\index.js:284:15\n    at router.process_params (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (C:\\Users\\user\\Downloads\\hotel-management-master\\hotel-management-master\\backend\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at maintenanceMode (file:///C:/Users/user/Downloads/hotel-management-master/hotel-management-master/backend/src/middleware/maintenanceMode.js:11:12)"
+        }
+      },
+      "note": "Auth endpoint returned 401 as expected without PILOT_TOKEN"
+    }
+  ]
+}
