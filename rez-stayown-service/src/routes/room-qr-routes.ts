@@ -27,6 +27,7 @@ import {
   ServiceCharge
 } from '../room-qr';
 import { rateLimiters } from '../middleware/rateLimiter';
+import { authenticateToken, authenticateService } from '../middleware/auth';
 
 const router = Router();
 
@@ -64,8 +65,9 @@ interface ChargeRequest {
 /**
  * Generate QR for a booking
  * POST /api/room-qr/generate
+ * Requires authentication + rate limiting
  */
-router.post('/generate', async (req: Request, res: Response) => {
+router.post('/generate', authenticateToken, rateLimiters.qrGenerate, async (req: Request, res: Response) => {
   try {
     const {
       hotelId,
@@ -138,8 +140,9 @@ router.post('/generate', async (req: Request, res: Response) => {
 /**
  * Get QR details for a booking
  * GET /api/room-qr/:bookingId
+ * Requires authentication
  */
-router.get('/:bookingId', async (req: Request, res: Response) => {
+router.get('/:bookingId', authenticateToken, async (req: Request, res: Response) => {
   try {
     const { bookingId } = req.params;
 
@@ -189,8 +192,9 @@ router.get('/:bookingId', async (req: Request, res: Response) => {
 /**
  * Resend QR notification
  * POST /api/room-qr/:bookingId/send
+ * Requires authentication
  */
-router.post('/:bookingId/send', async (req: Request, res: Response) => {
+router.post('/:bookingId/send', authenticateToken, async (req: Request, res: Response) => {
   try {
     const { bookingId } = req.params;
     const { channel } = req.body; // 'email', 'whatsapp', 'sms', or 'all'
@@ -271,8 +275,9 @@ router.post('/validate', rateLimiters.qrValidateHigh, async (req: Request, res: 
 /**
  * Add charge to folio
  * POST /api/room-qr/charge
+ * Requires authentication + rate limiting
  */
-router.post('/charge', async (req: Request, res: Response) => {
+router.post('/charge', authenticateToken, rateLimiters.charge, async (req: Request, res: Response) => {
   try {
     const {
       bookingId,
@@ -338,8 +343,9 @@ router.post('/charge', async (req: Request, res: Response) => {
 /**
  * Get charges for a booking
  * GET /api/room-qr/:bookingId/charges
+ * Requires authentication
  */
-router.get('/:bookingId/charges', async (req: Request, res: Response) => {
+router.get('/:bookingId/charges', authenticateToken, async (req: Request, res: Response) => {
   try {
     const { bookingId } = req.params;
 
@@ -379,8 +385,9 @@ router.get('/:bookingId/charges', async (req: Request, res: Response) => {
 /**
  * Get checkout bill
  * GET /api/room-qr/:bookingId/bill
+ * Requires authentication
  */
-router.get('/:bookingId/bill', async (req: Request, res: Response) => {
+router.get('/:bookingId/bill', authenticateToken, async (req: Request, res: Response) => {
   try {
     const { bookingId } = req.params;
 
@@ -424,8 +431,9 @@ router.get('/:bookingId/bill', async (req: Request, res: Response) => {
 /**
  * Process checkout
  * POST /api/room-qr/:bookingId/checkout
+ * Requires authentication + rate limiting
  */
-router.post('/:bookingId/checkout', async (req: Request, res: Response) => {
+router.post('/:bookingId/checkout', authenticateToken, rateLimiters.checkout, async (req: Request, res: Response) => {
   try {
     const { bookingId } = req.params;
 
@@ -466,8 +474,9 @@ router.post('/:bookingId/checkout', async (req: Request, res: Response) => {
 /**
  * Deactivate QR code
  * POST /api/room-qr/:bookingId/deactivate
+ * Requires authentication
  */
-router.post('/:bookingId/deactivate', async (req: Request, res: Response) => {
+router.post('/:bookingId/deactivate', authenticateToken, async (req: Request, res: Response) => {
   try {
     const { bookingId } = req.params;
 
@@ -502,8 +511,9 @@ router.post('/:bookingId/deactivate', async (req: Request, res: Response) => {
 /**
  * Get QR statistics for a hotel
  * GET /api/room-qr/hotel/:hotelId/stats
+ * Requires authentication
  */
-router.get('/hotel/:hotelId/stats', async (req: Request, res: Response) => {
+router.get('/hotel/:hotelId/stats', authenticateToken, async (req: Request, res: Response) => {
   try {
     const { hotelId } = req.params;
 
@@ -531,12 +541,13 @@ router.get('/hotel/:hotelId/stats', async (req: Request, res: Response) => {
 /**
  * Handle room service webhook events
  * POST /api/room-qr/webhook
+ * Requires service authentication via authenticateService middleware
  */
-router.post('/webhook', async (req: Request, res: Response) => {
+router.post('/webhook', authenticateService, async (req: Request, res: Response) => {
   try {
     const { event, bookingId, hotelId, roomId, data } = req.body;
 
-    // Verify webhook secret (in production)
+    // Additional webhook secret verification for extra security
     const webhookSecret = req.headers['x-webhook-secret'] as string;
     const expectedSecret = process.env.ROOM_QR_WEBHOOK_SECRET;
 

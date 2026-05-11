@@ -1,5 +1,4 @@
-import { Router, Request, Response } from 'express';
-import { z } from 'zod';
+import { Router, Response } from 'express';
 import { Channel, Inventory, ChannelBooking } from '../models/ChannelManager';
 import { authenticateToken, requireRole, AuthenticatedRequest } from '../middleware/auth';
 
@@ -53,7 +52,15 @@ router.post('/connect', requireRole('hotel_admin', 'super_admin'), async (req: A
 // Sync inventory
 router.post('/sync/:channelId', async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const channel = await Channel.findById(req.params.channelId);
+    const mongoose = require('mongoose');
+    const { channelId } = req.params;
+
+    // Validate ObjectId format to prevent information leakage
+    if (!mongoose.Types.ObjectId.isValid(channelId)) {
+      return res.status(400).json({ error: 'Invalid channel ID format' });
+    }
+
+    const channel = await Channel.findById(channelId);
 
     if (!channel) {
       return res.status(404).json({ error: 'Channel not found' });

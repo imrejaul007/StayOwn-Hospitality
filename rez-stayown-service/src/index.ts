@@ -15,6 +15,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
 import morgan from 'morgan';
+import crypto from 'crypto';
 
 // Sentry initialization
 import * as Sentry from '@sentry/node';
@@ -26,6 +27,7 @@ Sentry.init({
 
 // MongoDB connection
 import { connectMongoDB, disconnectMongoDB } from './config/mongodb-auth';
+import { closeRedisClient } from './middleware/rateLimiter';
 
 // Routes
 import stayownRoutes from './routes/stayownRoutes';
@@ -48,8 +50,56 @@ import { handleRoomServiceWebhook } from './room-qr';
 // Language Detection Middleware
 import { languageDetector, switchLanguage, getLanguageSettings } from './middleware/languageDetector';
 
+// ─── Environment Validation ───────────────────────────────────────────────────
+
+interface EnvValidationResult {
+  valid: boolean;
+  errors: string[];
+}
+
+function validateEnvironment(): EnvValidationResult {
+  const errors: string[] = [];
+
+  // Required in production
+  if (process.env.NODE_ENV === 'production') {
+    const requiredProduction = [
+      { key: 'JWT_SECRET', name: 'JWT Secret' },
+      { key: 'MONGODB_URI', name: 'MongoDB URI' },
+    ];
+
+    for (const { key, name } of requiredProduction) {
+      if (!process.env[key]) {
+        errors.push(`${name} (${key}) is required in production`);
+      }
+    }
+  }
+
+  return { valid: errors.length === 0, errors };
+}
+
+// Validate at startup
+const envValidation = validateEnvironment();
+if (!envValidation.valid) {
+  console.error('[Startup] CRITICAL: Environment validation failed:');
+  envValidation.errors.forEach(e => console.error('  -', e));
+  if (process.env.NODE_ENV === 'production') {
+    process.exit(1);
+  }
+}
+
 const app = express();
 const PORT = parseInt(process.env.PORT || '4016', 10);
+
+// ─── Correlation ID Middleware ────────────────────────────────────────────────
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  const correlationId = (req.headers['x-correlation-id'] as string) ||
+                        crypto.randomUUID();
+  req.headers['x-correlation-id'] = correlationId;
+  res.setHeader('X-Correlation-ID', correlationId);
+  (req as any).correlationId = correlationId;
+  next();
+});
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 
@@ -62,25 +112,51 @@ app.use(helmet({
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'"],
       imgSrc: ["'self'", 'data:', 'https:'],
+      connectSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      objectSrc: ["'none'"],
+      frameAncestors: ["'none'"],
     },
   },
+  crossOriginEmbedderPolicy: false,
 }));
 
-// CORS
-const allowedOrigins = (process.env.CORS_ORIGIN || 'https://admin.rez.money,https://rez.money,https://rez-app.vercel.app')
-  .split(',')
-  .map(s => s.trim());
+// CORS - strict configuration
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(',').map(s => s.trim())
+  : [];
 
 app.use(cors({
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error(`CORS: origin ${origin} not allowed`));
+    // Allow requests with no origin (mobile apps, curl, Postman)
+    if (!origin) {
+      return callback(null, true);
     }
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    // Log suspicious CORS attempts
+    console.warn(`[CORS] Blocked origin: ${origin}`);
+    callback(new Error(`CORS: origin ${origin} not allowed`));
   },
   credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Service-Key', 'X-Correlation-ID', 'X-Requested-With'],
+  exposedHeaders: ['X-RateLimit-Limit', 'X-RateLimit-Remaining', 'X-RateLimit-Reset', 'X-Correlation-ID'],
+  maxAge: 86400, // 24 hours
 }));
+
+// HTTPS enforcement in production
+if (process.env.NODE_ENV === 'production') {
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    if (req.headers['x-forwarded-proto'] !== 'https') {
+      return res.redirect(301, `https://${req.hostname}${req.url}`);
+    }
+    next();
+  });
+}
 
 // Body parsing
 app.use(express.json({ limit: '1mb' }));
@@ -233,15 +309,24 @@ app.post('/api/webhooks/room-service', async (req: Request, res: Response) => {
 
 // ─── Error Handler ───────────────────────────────────────────────────────────
 
+// CORS error handler
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
+  if (err.message.includes('CORS')) {
+    res.status(403).json({
+      success: false,
+      error: 'Not allowed by CORS policy'
+    });
+    return;
+  }
+
   console.error('[Error]', err.message);
 
   Sentry.captureException(err);
 
+  // Never expose internal error details in production
   res.status(500).json({
     success: false,
-    error: 'Internal server error',
-    message: process.env.NODE_ENV === 'development' ? err.message : undefined,
+    error: 'Internal server error'
   });
 });
 
@@ -274,6 +359,14 @@ async function startServer(): Promise<void> {
       server.close(async () => {
         console.log('[Shutdown] HTTP server closed');
 
+        // Close Redis connection
+        try {
+          await closeRedisClient();
+        } catch (err) {
+          console.error('[Shutdown] Redis disconnect error:', err);
+        }
+
+        // Disconnect MongoDB
         try {
           await disconnectMongoDB();
           console.log('[Shutdown] MongoDB disconnected');
@@ -284,11 +377,11 @@ async function startServer(): Promise<void> {
         process.exit(0);
       });
 
-      // Force exit after 30 seconds
+      // Force exit after 15 seconds (reduced from 30)
       setTimeout(() => {
         console.error('[Shutdown] Forcing exit after timeout');
         process.exit(1);
-      }, 30000);
+      }, 15000);
     };
 
     process.on('SIGTERM', () => shutdown('SIGTERM'));

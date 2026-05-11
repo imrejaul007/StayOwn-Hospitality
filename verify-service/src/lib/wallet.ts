@@ -110,7 +110,17 @@ export async function getBalance(userId: string): Promise<WalletBalance | null> 
       return null
     }
 
-    return response.json()
+    const text = await response.text()
+    if (!text) {
+      return null
+    }
+
+    try {
+      return JSON.parse(text) as WalletBalance
+    } catch {
+      console.error('Wallet balance: Invalid JSON response')
+      return null
+    }
   } catch (error) {
     console.error('Wallet balance error:', error)
     return null

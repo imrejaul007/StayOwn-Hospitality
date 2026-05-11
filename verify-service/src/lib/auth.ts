@@ -3,8 +3,50 @@ import bcrypt from 'bcryptjs'
 import { NextRequest } from 'next/server'
 import prisma from './db'
 
-// JWT secret - should be set in production
-const JWT_SECRET = process.env.JWT_SECRET || 'dev-secret-change-in-production'
+// JWT secret - FAIL CLOSED in production
+function getJwtSecret(): string {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('CRITICAL: JWT_SECRET must be configured in production');
+    }
+    console.warn('[Security] WARNING: Using development JWT secret - DO NOT use in production');
+    return 'dev-only-secret-do-not-use-in-production';
+  }
+  return secret;
+}
+
+const JWT_SECRET = getJwtSecret();
+
+// ─── Audit Logging ─────────────────────────────────────────────────────────────
+
+interface AuditLogEntry {
+  timestamp: Date
+  event: string
+  userId?: string
+  brandId?: string
+  serialId?: string
+  ip?: string
+  userAgent?: string
+  success: boolean
+  error?: string
+  metadata?: Record<string, unknown>
+}
+
+export function logAuditEvent(entry: AuditLogEntry): void {
+  // In production, this should be sent to a proper logging service
+  const logEntry = {
+    service: 'verify-service',
+    ...entry,
+    timestamp: entry.timestamp.toISOString(),
+  };
+
+  if (entry.success) {
+    console.log('[Audit]', JSON.stringify(logEntry));
+  } else {
+    console.warn('[Audit]', JSON.stringify(logEntry));
+  }
+}
 
 export interface JWTPayload {
   userId: string

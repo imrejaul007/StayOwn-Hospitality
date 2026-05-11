@@ -119,7 +119,7 @@ async function fetchFromPMS(endpoint: string): Promise<any | null> {
     });
     return response.data;
   } catch (error) {
-    log.warn( PMS fetch failed for ${endpoint}`);
+    log.warn(`PMS fetch failed for ${endpoint}`);
     return null;
   }
 }
@@ -135,7 +135,7 @@ async function postToPMS(endpoint: string, data: any): Promise<any | null> {
     });
     return response.data;
   } catch (error) {
-    log.error( PMS post failed for ${endpoint}:`, error);
+    log.error(`PMS post failed for ${endpoint}:`, error);
     return null;
   }
 }
@@ -220,13 +220,13 @@ async function getBooking(bookingId: string): Promise<BookingRecord | null> {
 }
 
 async function processRefund(bookingId: string, amountPaise: number): Promise<void> {
-  log.info(StayOwn] Processing refund for booking ${bookingId}: ${amountPaise} paise`);
+  log.info(`[StayOwn] Processing refund for booking ${bookingId}: ${amountPaise} paise`);
   // In production: integrate with payment gateway (Razorpay, Stripe, etc.)
   // POST /v1/payments/refund
 }
 
 async function updateBookingStatus(bookingId: string, status: string): Promise<void> {
-  log.info(StayOwn] Updating booking ${bookingId} status to ${status}`);
+  log.info(`[StayOwn] Updating booking ${bookingId} status to ${status}`);
   // Update in MongoDB
   await Booking.findOneAndUpdate({ bookingId }, { status });
   // Also update in PMS if available

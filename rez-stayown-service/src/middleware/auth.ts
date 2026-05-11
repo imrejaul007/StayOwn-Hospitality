@@ -263,23 +263,42 @@ export function validateApiKey(req: Request, res: Response, next: NextFunction):
 
 /**
  * Verify WhatsApp webhook signature (Meta)
+ * CRITICAL: Implements HMAC-SHA256 signature verification
  */
 export function verifyWebhookSignature(req: Request, res: Response, next: NextFunction): void {
   const signature = req.headers['x-hub-signature-256'] as string;
 
   if (!signature) {
+    console.warn('[Webhook] Missing webhook signature from', req.ip);
     res.status(401).json({ error: 'Missing webhook signature' });
     return;
   }
 
-  // In production, verify the signature using the app secret
-  // const appSecret = process.env.FACEBOOK_APP_SECRET;
-  // const expectedSignature = 'sha256=' + crypto
-  //   .createHmac('sha256', appSecret)
-  //   .update(JSON.stringify(req.body))
-  //   .digest('hex');
+  const appSecret = process.env.FACEBOOK_APP_SECRET;
 
-  // For now, log and continue (implement signature verification in production)
-  console.log('[Webhook] Signature check:', signature.substring(0, 20) + '...');
+  if (!appSecret) {
+    console.error('[Webhook] CRITICAL: FACEBOOK_APP_SECRET not configured - rejecting webhook');
+    res.status(500).json({ error: 'Webhook verification not configured' });
+    return;
+  }
+
+  // Verify HMAC-SHA256 signature
+  const crypto = require('crypto');
+  const expectedSignature = 'sha256=' + crypto
+    .createHmac('sha256', appSecret)
+    .update(JSON.stringify(req.body))
+    .digest('hex');
+
+  // Use timing-safe comparison to prevent timing attacks
+  const sigBuffer = Buffer.from(signature);
+  const expectedBuffer = Buffer.from(expectedSignature);
+
+  if (sigBuffer.length !== expectedBuffer.length ||
+      !crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
+    console.warn('[Webhook] Invalid webhook signature from', req.ip);
+    res.status(401).json({ error: 'Invalid webhook signature' });
+    return;
+  }
+
   next();
 }

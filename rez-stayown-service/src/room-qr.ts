@@ -14,8 +14,20 @@ import axios from 'axios';
 import mongoose from 'mongoose';
 import { rezMindClient } from './services/rez-mind-client';
 
-// Configuration
-const JWT_SECRET = process.env.ROOM_QR_JWT_SECRET || process.env.JWT_SECRET || 'room-qr-secret-key-change-in-production';
+// Configuration - FAIL CLOSED if secrets not configured in production
+function getJwtSecret(): string {
+  const secret = process.env.ROOM_QR_JWT_SECRET || process.env.JWT_SECRET;
+  if (!secret) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('CRITICAL: ROOM_QR_JWT_SECRET or JWT_SECRET must be configured in production');
+    }
+    console.warn('[Security] WARNING: Using fallback JWT secret - DO NOT use in production');
+    return 'dev-only-fallback-secret-do-not-use-in-production';
+  }
+  return secret;
+}
+
+const JWT_SECRET = getJwtSecret();
 const QR_BASE_URL = process.env.ROOM_QR_BASE_URL || 'https://rez.money/room';
 const HOTEL_OTA_API = process.env.HOTEL_OTA_API_URL || 'http://localhost:3008';
 

@@ -13,6 +13,7 @@ import Redis from 'ioredis';
 
 // Redis client for rate limiting
 let redis: Redis | null = null;
+let isRedisConnected = false;
 
 try {
   const redisUrl = process.env.REDIS_URL;
@@ -21,6 +22,20 @@ try {
       lazyConnect: true,
       maxRetriesPerRequest: 3,
     });
+
+    redis.on('connect', () => {
+      isRedisConnected = true;
+      console.log('[RateLimiter] Redis connected');
+    });
+
+    redis.on('error', (err) => {
+      isRedisConnected = false;
+      console.error('[RateLimiter] Redis error:', err.message);
+    });
+
+    redis.on('close', () => {
+      isRedisConnected = false;
+    });
   }
 } catch {
   console.warn('[RateLimiter] Redis not available, using in-memory fallback');
@@ -28,6 +43,38 @@ try {
 
 // In-memory fallback for when Redis is not available
 const inMemoryStore: Map<string, { count: number; resetAt: number }> = new Map();
+
+// Periodic cleanup of in-memory store to prevent memory leaks
+const MEMORY_CLEANUP_INTERVAL = 60 * 1000; // 1 minute
+setInterval(() => {
+  const now = Date.now();
+  let cleaned = 0;
+  for (const [key, value] of inMemoryStore.entries()) {
+    if (value.resetAt < now) {
+      inMemoryStore.delete(key);
+      cleaned++;
+    }
+  }
+  if (cleaned > 0) {
+    console.log(`[RateLimiter] Cleaned ${cleaned} expired entries from in-memory store`);
+  }
+}, MEMORY_CLEANUP_INTERVAL);
+
+/**
+ * Close Redis connection for graceful shutdown
+ */
+export async function closeRedisClient(): Promise<void> {
+  if (redis) {
+    try {
+      await redis.quit();
+      console.log('[RateLimiter] Redis connection closed');
+    } catch (err) {
+      console.error('[RateLimiter] Error closing Redis:', err);
+    }
+    redis = null;
+    isRedisConnected = false;
+  }
+}
 
 interface RateLimitConfig {
   windowMs: number;      // Time window in milliseconds
