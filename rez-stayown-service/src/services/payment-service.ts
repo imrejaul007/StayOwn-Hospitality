@@ -1,19 +1,15 @@
 /**
- * Payment Service Integration
+ * Payment Service Integration - RABTUL Integration
  *
- * Handles:
- * - Razorpay payment initialization
+ * Delegates all payment operations to the RABTUL Payment Service:
+ * - Payment initialization
  * - Payment verification
  * - Refund processing
  * - Payment status tracking
  */
 
-import axios from 'axios';
-import crypto from 'crypto';
-
-const PAYMENT_SERVICE_URL = process.env.REZ_PAYMENT_SERVICE_URL || 'http://localhost:4001';
-const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || '';
-const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
+const PAYMENT_SERVICE_URL = process.env.PAYMENT_SERVICE_URL || 'https://rez-payment-service.onrender.com';
+const INTERNAL_SERVICE_TOKEN = process.env.INTERNAL_SERVICE_TOKEN || '';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
 
@@ -64,84 +60,89 @@ export interface RefundResponse {
   error?: string;
 }
 
-// ─── Razorpay Helpers ─────────────────────────────────────────────────────────
+// ─── RABTUL Payment Service Client ──────────────────────────────────────────────
 
-function generateOrderId(): string {
-  return `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+interface RABTULPaymentResponse {
+  success: boolean;
+  paymentId?: string;
+  orderId?: string;
+  amount?: number;
+  currency?: string;
+  status?: string;
+  refundId?: string;
+  error?: string;
+  data?: any;
 }
 
-function verifySignature(
-  orderId: string,
-  paymentId: string,
-  signature: string
-): boolean {
-  const payload = `${orderId}|${paymentId}`;
-  const expectedSignature = crypto
-    .createHmac('sha256', RAZORPAY_KEY_SECRET)
-    .update(payload)
-    .digest('hex');
+async function callRABTULPayment(endpoint: string, body?: any): Promise<RABTULPaymentResponse> {
+  if (!PAYMENT_SERVICE_URL) {
+    return { success: false, error: 'Payment service URL not configured' };
+  }
 
-  return signature === expectedSignature;
+  try {
+    const res = await fetch(`${PAYMENT_SERVICE_URL}/api/payments/${endpoint}`, {
+      method: body ? 'POST' : 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Internal-Token': INTERNAL_SERVICE_TOKEN,
+      },
+      body: body ? JSON.stringify(body) : undefined,
+      signal: AbortSignal.timeout(15000),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.error(`[RABTUL Payment] ${endpoint} failed:`, data.error || res.statusText);
+      return { success: false, error: data.error || 'Payment service unavailable' };
+    }
+
+    return data;
+  } catch (error: any) {
+    console.error(`[RABTUL Payment] ${endpoint} error:`, error.message);
+    return { success: false, error: error.message || 'Payment service unavailable' };
+  }
 }
 
 // ─── Payment Service ────────────────────────────────────────────────────────────
 
 export const paymentService = {
   /**
-   * Initialize a payment for checkout
+   * Initialize a payment for checkout via RABTUL Payment Service
    */
   async initializePayment(
     request: PaymentInitRequest
   ): Promise<PaymentInitResponse> {
     try {
-      const orderId = generateOrderId();
-
-      // If we have a real payment service, call it
-      if (PAYMENT_SERVICE_URL) {
-        try {
-          const response = await axios.post(
-            `${PAYMENT_SERVICE_URL}/api/payments/initialize`,
-            {
-              bookingId: request.bookingId,
-              hotelId: request.hotelId,
-              amount: request.amountPaise,
-              currency: request.currency || 'INR',
-              customerName: request.customerName,
-              customerEmail: request.customerEmail,
-              customerPhone: request.customerPhone,
-              description: request.description || `Hotel checkout - ${request.bookingId}`,
-            },
-            {
-              timeout: 10000,
-              headers: {
-                'Content-Type': 'application/json',
-                'x-service-key': process.env.INTERNAL_SERVICE_TOKEN || '',
-              },
-            }
-          );
-
-          return {
-            success: true,
-            paymentId: response.data.paymentId || orderId,
-            orderId: response.data.orderId || orderId,
-            amount: request.amountPaise,
-            currency: request.currency || 'INR',
-            status: 'created',
-          };
-        } catch (error) {
-          console.error('[Payment] Service call failed:', error);
-        }
-      }
-
-      // Fallback: Return mock payment info for testing
-      return {
-        success: true,
-        paymentId: `pay_${Date.now()}`,
-        orderId,
+      const response = await callRABTULPayment('initiate', {
+        bookingId: request.bookingId,
+        hotelId: request.hotelId,
         amount: request.amountPaise,
         currency: request.currency || 'INR',
-        status: 'pending',
-        checkoutUrl: `https://api.razorpay.com/v1/checkout/post?order_id=${orderId}`,
+        customerName: request.customerName,
+        customerEmail: request.customerEmail,
+        customerPhone: request.customerPhone,
+        description: request.description || `Hotel checkout - ${request.bookingId}`,
+      });
+
+      if (!response.success) {
+        return {
+          success: false,
+          amount: request.amountPaise,
+          currency: request.currency || 'INR',
+          status: 'failed',
+          error: response.error || 'Payment initialization failed',
+        };
+      }
+
+      return {
+        success: true,
+        paymentId: response.paymentId,
+        orderId: response.orderId,
+        amount: response.amount || request.amountPaise,
+        currency: response.currency || request.currency || 'INR',
+        status: 'created',
+        checkoutUrl: response.data?.checkoutUrl,
       };
     } catch (error: any) {
       console.error('[Payment] Initialize failed:', error);
@@ -156,41 +157,22 @@ export const paymentService = {
   },
 
   /**
-   * Verify a payment signature
+   * Verify a payment signature via RABTUL Payment Service
    */
   async verifyPayment(request: PaymentVerifyRequest): Promise<PaymentVerifyResponse> {
     try {
-      const isValid = verifySignature(
-        request.orderId,
-        request.paymentId,
-        request.signature
-      );
+      const response = await callRABTULPayment('verify', {
+        paymentId: request.paymentId,
+        orderId: request.orderId,
+        signature: request.signature,
+      });
 
-      if (!isValid) {
+      if (!response.success) {
         return {
           success: false,
           status: 'invalid',
-          error: 'Invalid payment signature',
+          error: response.error || 'Invalid payment signature',
         };
-      }
-
-      // Notify payment service of verification
-      if (PAYMENT_SERVICE_URL) {
-        try {
-          await axios.post(
-            `${PAYMENT_SERVICE_URL}/api/payments/verify`,
-            request,
-            {
-              timeout: 5000,
-              headers: {
-                'Content-Type': 'application/json',
-                'x-service-key': process.env.INTERNAL_SERVICE_TOKEN || '',
-              },
-            }
-          );
-        } catch {
-          // Continue even if notification fails
-        }
       }
 
       return {
@@ -208,7 +190,7 @@ export const paymentService = {
   },
 
   /**
-   * Get payment status
+   * Get payment status via RABTUL Payment Service
    */
   async getPaymentStatus(paymentId: string): Promise<{
     success: boolean;
@@ -216,27 +198,19 @@ export const paymentService = {
     error?: string;
   }> {
     try {
-      if (PAYMENT_SERVICE_URL) {
-        const response = await axios.get(
-          `${PAYMENT_SERVICE_URL}/api/payments/${paymentId}/status`,
-          {
-            timeout: 5000,
-            headers: {
-              'x-service-key': process.env.INTERNAL_SERVICE_TOKEN || '',
-            },
-          }
-        );
+      const response = await callRABTULPayment(`status/${paymentId}`);
 
+      if (!response.success) {
         return {
-          success: true,
-          status: response.data.status,
+          success: false,
+          status: 'failed',
+          error: response.error,
         };
       }
 
-      // Mock response
       return {
         success: true,
-        status: 'pending',
+        status: (response.status as any) || 'pending',
       };
     } catch (error: any) {
       console.error('[Payment] Status check failed:', error);
@@ -249,39 +223,28 @@ export const paymentService = {
   },
 
   /**
-   * Process refund
+   * Process refund via RABTUL Payment Service
    */
   async processRefund(request: RefundRequest): Promise<RefundResponse> {
     try {
-      if (PAYMENT_SERVICE_URL) {
-        const response = await axios.post(
-          `${PAYMENT_SERVICE_URL}/api/payments/refund`,
-          {
-            paymentId: request.paymentId,
-            amount: request.amountPaise,
-            reason: request.reason,
-          },
-          {
-            timeout: 15000,
-            headers: {
-              'Content-Type': 'application/json',
-              'x-service-key': process.env.INTERNAL_SERVICE_TOKEN || '',
-            },
-          }
-        );
+      const response = await callRABTULPayment('refund', {
+        paymentId: request.paymentId,
+        amount: request.amountPaise,
+        reason: request.reason,
+      });
 
+      if (!response.success) {
         return {
-          success: true,
-          refundId: response.data.refundId,
-          status: 'processed',
+          success: false,
+          status: 'failed',
+          error: response.error || 'Refund processing failed',
         };
       }
 
-      // Mock response
       return {
         success: true,
-        refundId: `ref_${Date.now()}`,
-        status: 'pending',
+        refundId: response.refundId,
+        status: 'processed',
       };
     } catch (error: any) {
       console.error('[Payment] Refund failed:', error);
@@ -294,7 +257,7 @@ export const paymentService = {
   },
 
   /**
-   * Create UPI payment request
+   * Create UPI payment request via RABTUL Payment Service
    */
   async createUPIRequest(
     bookingId: string,
@@ -307,16 +270,31 @@ export const paymentService = {
     error?: string;
   }> {
     try {
-      const upiId = process.env.HOTEL_UPI_ID || 'hotel@razorpay';
-      const amount = (amountPaise / 100).toFixed(2);
-      const transactionNote = `Hotel Checkout - ${bookingId}`;
+      const response = await callRABTULPayment('create-upi', {
+        bookingId,
+        amount: amountPaise,
+        customerPhone,
+      });
 
-      const upiLink = `upi://pay?pa=${upiId}&pn=Hotel&am=${amount}&cu=INR&tn=${encodeURIComponent(transactionNote)}`;
+      if (!response.success) {
+        // Fallback to local UPI link generation if service unavailable
+        const upiId = process.env.HOTEL_UPI_ID || 'hotel@razorpay';
+        const amount = (amountPaise / 100).toFixed(2);
+        const transactionNote = `Hotel Checkout - ${bookingId}`;
+
+        const upiLink = `upi://pay?pa=${upiId}&pn=Hotel&am=${amount}&cu=INR&tn=${encodeURIComponent(transactionNote)}`;
+
+        return {
+          success: true,
+          upiLink,
+          qrCode: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiLink)}`,
+        };
+      }
 
       return {
         success: true,
-        upiLink,
-        qrCode: `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiLink)}`,
+        upiLink: response.data?.upiLink,
+        qrCode: response.data?.qrCode,
       };
     } catch (error: any) {
       console.error('[Payment] UPI request failed:', error);

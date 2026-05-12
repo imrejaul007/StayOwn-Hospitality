@@ -5,14 +5,14 @@
  * - Check-in is approaching (24 hours before)
  * - QR code is about to expire (4 hours before)
  * - QR code has expired
+ *
+ * Uses RABTUL Notification Service for all notifications
  */
 
 import { RoomQR } from '../room-qr';
-import axios from 'axios';
 
-const EMAIL_SERVICE_URL = process.env.EMAIL_SERVICE_URL || 'http://localhost:4003';
-const WHATSAPP_SERVICE_URL = process.env.WHATSAPP_SERVICE_URL || 'http://localhost:4004';
-const SMS_SERVICE_URL = process.env.SMS_SERVICE_URL || 'http://localhost:4005';
+// RABTUL Notification Service URL
+const NOTIFICATION_SERVICE_URL = process.env.NOTIFICATION_SERVICE_URL || 'https://rez-notifications-service.onrender.com';
 
 interface QRExpirationStatus {
   bookingId: string;
@@ -33,6 +33,40 @@ export interface NotificationResult {
   whatsapp: boolean;
   sms: boolean;
   error?: string;
+}
+
+/**
+ * Send notification via RABTUL Notification Service
+ */
+async function sendViaRABTUL(recipient: string, channel: 'EMAIL' | 'WHATSAPP' | 'SMS', template: string, data: any): Promise<boolean> {
+  const internalToken = process.env.INTERNAL_SERVICE_TOKEN || '';
+
+  try {
+    const response = await fetch(`${NOTIFICATION_SERVICE_URL}/api/v1/notifications/send`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Internal-Token': internalToken,
+      },
+      body: JSON.stringify({
+        userId: recipient,
+        channel,
+        template,
+        data,
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`[ExpirationNotifier] RABTUL API error: ${response.status} - ${errorText}`);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error(`[ExpirationNotifier] Failed to send via RABTUL:`, error);
+    return false;
+  }
 }
 
 /**
@@ -141,47 +175,32 @@ export async function sendExpirationNotification(
       return result;
   }
 
-  // Send email
+  // Send email via RABTUL
   if (qr.guestEmail) {
-    try {
-      await axios.post(`${EMAIL_SERVICE_URL}/api/send`, {
-        to: qr.guestEmail,
-        subject,
-        message,
-        type: 'expiration_reminder',
-      });
-      result.email = true;
-    } catch (error) {
-      console.error(`[ExpirationNotifier] Email failed for ${qr.bookingId}`);
-    }
+    const emailSent = await sendViaRABTUL(qr.guestEmail, 'EMAIL', 'expiration_reminder', {
+      to: qr.guestEmail,
+      subject,
+      message,
+    });
+    result.email = emailSent;
   }
 
-  // Send WhatsApp
+  // Send WhatsApp via RABTUL
   if (qr.guestPhone) {
-    try {
-      await axios.post(`${WHATSAPP_SERVICE_URL}/api/send`, {
-        to: qr.guestPhone,
-        message,
-        type: 'text',
-      });
-      result.whatsapp = true;
-    } catch (error) {
-      console.error(`[ExpirationNotifier] WhatsApp failed for ${qr.bookingId}`);
-    }
+    const whatsappSent = await sendViaRABTUL(qr.guestPhone, 'WHATSAPP', 'expiration_reminder', {
+      to: qr.guestPhone,
+      message,
+    });
+    result.whatsapp = whatsappSent;
   }
 
-  // Send SMS
+  // Send SMS via RABTUL
   if (qr.guestPhone) {
-    try {
-      await axios.post(`${SMS_SERVICE_URL}/api/send`, {
-        to: qr.guestPhone,
-        message: message.substring(0, 160), // SMS limit
-        type: 'text',
-      });
-      result.sms = true;
-    } catch (error) {
-      console.error(`[ExpirationNotifier] SMS failed for ${qr.bookingId}`);
-    }
+    const smsSent = await sendViaRABTUL(qr.guestPhone, 'SMS', 'expiration_reminder', {
+      to: qr.guestPhone,
+      message: message.substring(0, 160), // SMS limit
+    });
+    result.sms = smsSent;
   }
 
   return result;
@@ -210,33 +229,23 @@ export async function sendCheckinReminder(bookingId: string): Promise<boolean> {
 
   const sent: boolean[] = [];
 
-  // Email
+  // Email via RABTUL
   if (qr.guestEmail) {
-    try {
-      await axios.post(`${EMAIL_SERVICE_URL}/api/send`, {
-        to: qr.guestEmail,
-        subject: `Check-in Reminder - ${qr.hotelId}`,
-        message,
-        type: 'checkin_reminder',
-      });
-      sent.push(true);
-    } catch {
-      sent.push(false);
-    }
+    const emailSent = await sendViaRABTUL(qr.guestEmail, 'EMAIL', 'checkin_reminder', {
+      to: qr.guestEmail,
+      subject: `Check-in Reminder - ${qr.hotelId}`,
+      message,
+    });
+    sent.push(emailSent);
   }
 
-  // WhatsApp
+  // WhatsApp via RABTUL
   if (qr.guestPhone) {
-    try {
-      await axios.post(`${WHATSAPP_SERVICE_URL}/api/send`, {
-        to: qr.guestPhone,
-        message,
-        type: 'text',
-      });
-      sent.push(true);
-    } catch {
-      sent.push(false);
-    }
+    const whatsappSent = await sendViaRABTUL(qr.guestPhone, 'WHATSAPP', 'checkin_reminder', {
+      to: qr.guestPhone,
+      message,
+    });
+    sent.push(whatsappSent);
   }
 
   return sent.some((s) => s);

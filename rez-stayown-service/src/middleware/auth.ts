@@ -1,17 +1,15 @@
 /**
- * Authentication Middleware for StayOwn Service
+ * Authentication Middleware for StayOwn Service - RABTUL Integration
  *
- * Handles:
+ * Delegates all authentication to the RABTUL Auth Service:
  * - JWT token validation
  * - Service-to-service authentication
  * - Role-based access control
  */
 
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
 
-// Environment-based secrets (in production, use secure secret management)
-const JWT_SECRET = process.env.JWT_SECRET || process.env.REZ_STAYOWN_JWT_SECRET || '';
+const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || 'https://rez-auth-service.onrender.com';
 const INTERNAL_SERVICE_TOKEN = process.env.INTERNAL_SERVICE_TOKEN || '';
 
 // Token payload type
@@ -36,7 +34,42 @@ declare global {
 }
 
 /**
- * Validate JWT token from Authorization header
+ * Verify token with RABTUL Auth Service
+ */
+async function verifyTokenWithRABTUL(token: string): Promise<JWTPayload | null> {
+  try {
+    const res = await fetch(`${AUTH_SERVICE_URL}/api/auth/verify`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'X-Internal-Token': INTERNAL_SERVICE_TOKEN,
+      },
+    });
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const data = await res.json();
+    if (data.success && data.user) {
+      return {
+        sub: data.user.id,
+        phone: data.user.phone,
+        role: data.user.role || 'user',
+        hotelId: data.user.hotelId,
+        email: data.user.email,
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error('[Auth] RABTUL verify failed:', error);
+    return null;
+  }
+}
+
+/**
+ * Validate JWT token from Authorization header via RABTUL Auth Service
  */
 export function authenticateToken(req: Request, res: Response, next: NextFunction): void {
   const authHeader = req.headers.authorization;
@@ -47,27 +80,30 @@ export function authenticateToken(req: Request, res: Response, next: NextFunctio
     return;
   }
 
-  // CRITICAL: Fail closed if JWT_SECRET not configured
-  if (!JWT_SECRET) {
-    console.error('[Auth] CRITICAL: JWT_SECRET not configured - rejecting all requests');
+  // CRITICAL: Fail closed if AUTH_SERVICE_URL not configured
+  if (!AUTH_SERVICE_URL) {
+    console.error('[Auth] CRITICAL: AUTH_SERVICE_URL not configured - rejecting all requests');
     res.status(500).json({ success: false, message: 'Server configuration error' });
     return;
   }
 
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err) {
-      console.error('[Auth] Token verification failed:', err.message);
+  verifyTokenWithRABTUL(token).then((user) => {
+    if (!user) {
+      console.error('[Auth] Token verification failed');
       res.status(401).json({ success: false, message: 'Invalid or expired token' });
       return;
     }
 
-    req.user = decoded as JWTPayload;
+    req.user = user;
     next();
+  }).catch((error) => {
+    console.error('[Auth] Token verification error:', error);
+    res.status(401).json({ success: false, message: 'Invalid or expired token' });
   });
 }
 
 /**
- * Verify internal service token for service-to-service communication
+ * Verify internal service token for service-to-service communication via RABTUL
  */
 export function authenticateService(req: Request, res: Response, next: NextFunction): void {
   const serviceKey = req.headers['x-service-key'] as string;
@@ -80,32 +116,22 @@ export function authenticateService(req: Request, res: Response, next: NextFunct
     return;
   }
 
-  // Check Bearer token for service role
+  // Check Bearer token for service role via RABTUL
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.split(' ')[1];
 
-    if (!JWT_SECRET) {
-      try {
-        const decoded = jwt.decode(token) as JWTPayload;
-        if (decoded && decoded.role === 'service') {
-          req.user = decoded;
-          req.serviceAuth = true;
-          next();
-          return;
-        }
-      } catch {
-        // Fall through to error
+    verifyTokenWithRABTUL(token).then((user) => {
+      if (user && user.role === 'service') {
+        req.user = user;
+        req.serviceAuth = true;
+        next();
+      } else {
+        res.status(401).json({ success: false, message: 'Service authentication required' });
       }
-    } else {
-      jwt.verify(token, JWT_SECRET, (err, decoded) => {
-        if (!err && (decoded as JWTPayload).role === 'service') {
-          req.user = decoded as JWTPayload;
-          req.serviceAuth = true;
-          next();
-          return;
-        }
-      });
-    }
+    }).catch(() => {
+      res.status(401).json({ success: false, message: 'Service authentication required' });
+    });
+    return;
   }
 
   res.status(401).json({ success: false, message: 'Service authentication required' });
@@ -169,35 +195,12 @@ export function optionalAuth(req: Request, _res: Response, next: NextFunction): 
     return;
   }
 
-  if (!JWT_SECRET) {
-    try {
-      const decoded = jwt.decode(token) as JWTPayload;
-      req.user = decoded || undefined;
-    } catch {
-      // Ignore decode errors
-    }
+  verifyTokenWithRABTUL(token).then((user) => {
+    req.user = user || undefined;
     next();
-    return;
-  }
-
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (!err) {
-      req.user = decoded as JWTPayload;
-    }
+  }).catch(() => {
+    next();
   });
-
-  next();
-}
-
-/**
- * Generate a service token for internal use
- */
-export function generateServiceToken(payload: Omit<JWTPayload, 'iat' | 'exp'>): string {
-  if (!JWT_SECRET) {
-    throw new Error('JWT_SECRET not configured');
-  }
-
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '24h' });
 }
 
 /**
@@ -226,32 +229,30 @@ export function validateApiKey(req: Request, res: Response, next: NextFunction):
     return;
   }
 
-  // Check Bearer token with service role
+  // Check Bearer token with service role via RABTUL
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.split(' ')[1];
 
-    if (!JWT_SECRET) {
-      try {
-        const decoded = jwt.decode(token) as JWTPayload;
-        if (decoded && (decoded.role === 'service' || decoded.role === 'admin')) {
-          req.user = decoded;
-          req.serviceAuth = true;
-          next();
-          return;
-        }
-      } catch {
-        // Fall through to error
+    verifyTokenWithRABTUL(token).then((user) => {
+      if (user && (user.role === 'service' || user.role === 'admin')) {
+        req.user = user;
+        req.serviceAuth = true;
+        next();
+      } else {
+        res.status(401).json({
+          success: false,
+          error: 'API key or authentication required',
+          hint: 'Provide x-api-key, x-service-key, or Bearer token'
+        });
       }
-    } else {
-      jwt.verify(token, JWT_SECRET, (err, decoded) => {
-        if (!err && ((decoded as JWTPayload).role === 'service' || (decoded as JWTPayload).role === 'admin')) {
-          req.user = decoded as JWTPayload;
-          req.serviceAuth = true;
-          next();
-          return;
-        }
+    }).catch(() => {
+      res.status(401).json({
+        success: false,
+        error: 'API key or authentication required',
+        hint: 'Provide x-api-key, x-service-key, or Bearer token'
       });
-    }
+    });
+    return;
   }
 
   res.status(401).json({

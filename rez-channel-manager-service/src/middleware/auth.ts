@@ -1,12 +1,12 @@
 /**
- * Authentication middleware for Channel Manager Service
- * Validates internal service tokens and hotel manager tokens
+ * Authentication middleware for Channel Manager Service - RABTUL Integration
+ * Validates tokens via the RABTUL Auth Service
  */
 
 import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || process.env.INTERNAL_JWT_SECRET;
+const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || 'https://rez-auth-service.onrender.com';
+const INTERNAL_SERVICE_TOKEN = process.env.INTERNAL_SERVICE_TOKEN || '';
 
 export interface AuthenticatedRequest extends Request {
   user?: {
@@ -15,6 +15,40 @@ export interface AuthenticatedRequest extends Request {
     role?: string;
     type: 'service' | 'user';
   };
+}
+
+/**
+ * Verify token with RABTUL Auth Service
+ */
+async function verifyTokenWithRABTUL(token: string): Promise<any | null> {
+  try {
+    const res = await fetch(`${AUTH_SERVICE_URL}/api/auth/verify`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'X-Internal-Token': INTERNAL_SERVICE_TOKEN,
+      },
+    });
+
+    if (!res.ok) {
+      return null;
+    }
+
+    const data = await res.json();
+    if (data.success && data.user) {
+      return {
+        id: data.user.id,
+        hotelId: data.user.hotelId,
+        role: data.user.role || 'user',
+        type: 'user',
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error('[Auth] RABTUL verify failed:', error);
+    return null;
+  }
 }
 
 export function authenticateToken(
@@ -27,14 +61,14 @@ export function authenticateToken(
 
   // Check for internal service token first
   if (serviceToken) {
-    const expectedToken = process.env.INTERNAL_SERVICE_TOKEN;
+    const expectedToken = INTERNAL_SERVICE_TOKEN;
     if (expectedToken && serviceToken === expectedToken) {
       req.user = { id: 'internal-service', type: 'service' };
       return next();
     }
   }
 
-  // Check for JWT token
+  // Check for JWT token via RABTUL Auth Service
   if (authHeader) {
     const token = authHeader.split(' ')[1];
 
@@ -43,25 +77,23 @@ export function authenticateToken(
       return;
     }
 
-    if (!JWT_SECRET) {
-      // Fail closed if no JWT secret configured
+    if (!AUTH_SERVICE_URL) {
+      // Fail closed if no auth service configured
       res.status(500).json({ error: 'Server misconfiguration' });
       return;
     }
 
-    try {
-      const decoded = jwt.verify(token, JWT_SECRET) as any;
-      req.user = {
-        id: decoded.sub || decoded.userId,
-        hotelId: decoded.hotelId,
-        role: decoded.role,
-        type: 'user',
-      };
-      return next();
-    } catch (error) {
+    verifyTokenWithRABTUL(token).then((user) => {
+      if (user) {
+        req.user = user;
+        return next();
+      } else {
+        res.status(401).json({ error: 'Invalid or expired token' });
+      }
+    }).catch(() => {
       res.status(401).json({ error: 'Invalid or expired token' });
-      return;
-    }
+    });
+    return;
   }
 
   res.status(401).json({ error: 'Authentication required' });

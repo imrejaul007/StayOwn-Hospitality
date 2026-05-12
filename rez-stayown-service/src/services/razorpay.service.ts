@@ -1,15 +1,46 @@
 /**
- * Razorpay Payment Service
- * Handles payment processing for StayOwn bookings
+ * Razorpay Payment Service - RABTUL Integration
+ *
+ * Delegates payment operations to the RABTUL Payment Service:
+ * - Order creation
+ * - Payment capture
+ * - Refunds
+ * - Payment verification
  */
 
-import axios from 'axios';
-import crypto from 'crypto';
+const PAYMENT_SERVICE_URL = process.env.PAYMENT_SERVICE_URL || 'https://rez-payment-service.onrender.com';
+const INTERNAL_SERVICE_TOKEN = process.env.INTERNAL_SERVICE_TOKEN || '';
 
-const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID;
-const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET;
-const RAZORPAY_WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET;
-const RAZORPAY_API_URL = 'https://api.razorpay.com/v1';
+interface RABTULPaymentResponse {
+  success: boolean;
+  paymentId?: string;
+  orderId?: string;
+  amount?: number;
+  currency?: string;
+  status?: string;
+  error?: string;
+  data?: any;
+}
+
+async function callRABTULPayment(endpoint: string, body?: any): Promise<RABTULPaymentResponse> {
+  const res = await fetch(`${PAYMENT_SERVICE_URL}/api/payments/${endpoint}`, {
+    method: body ? 'POST' : 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Internal-Token': INTERNAL_SERVICE_TOKEN,
+    },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    console.error(`[RABTUL Payment] ${endpoint} failed:`, data.error || res.statusText);
+    return { success: false, error: data.error || 'Payment service unavailable' };
+  }
+
+  return data;
+}
 
 interface RazorpayOrder {
   id: string;
@@ -37,146 +68,107 @@ interface PaymentVerification {
 }
 
 /**
- * Create a Razorpay order for booking
+ * Create a Razorpay order for booking via RABTUL Payment Service
  */
 export async function createRazorpayOrder(params: CreateOrderParams): Promise<RazorpayOrder> {
-  if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) {
-    throw new Error('Razorpay credentials not configured');
+  if (!PAYMENT_SERVICE_URL) {
+    throw new Error('Payment service URL not configured');
   }
 
   const { amountPaise, bookingId, customerEmail, customerPhone, notes } = params;
 
-  const auth = Buffer.from(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`).toString('base64');
+  const response = await callRABTULPayment('initiate', {
+    amount: amountPaise,
+    bookingId,
+    customerEmail,
+    customerPhone,
+    notes,
+    currency: 'INR',
+  });
 
-  try {
-    const response = await axios.post<RazorpayOrder>(
-      `${RAZORPAY_API_URL}/orders`,
-      {
-        amount: amountPaise,
-        currency: 'INR',
-        receipt: `booking_${bookingId}`,
-        notes: {
-          bookingId,
-          ...notes,
-        },
-        ...(customerEmail && { email: customerEmail }),
-        ...(customerPhone && { contact: customerPhone }),
-      },
-      {
-        headers: {
-          'Authorization': `Basic ${auth}`,
-          'Content-Type': 'application/json',
-        },
-        timeout: 10000,
-      }
-    );
-
-    return response.data;
-  } catch (error: any) {
-    console.error('[Razorpay] Failed to create order:', error.response?.data || error.message);
-    throw new Error(`Failed to create payment order: ${error.response?.data?.error?.description || error.message}`);
+  if (!response.success) {
+    throw new Error(`Failed to create payment order: ${response.error}`);
   }
+
+  return {
+    id: response.orderId || `order_${Date.now()}`,
+    entity: 'order',
+    amount: amountPaise,
+    amount_paid: 0,
+    amount_due: amountPaise,
+    currency: 'INR',
+    status: 'created',
+    created_at: Math.floor(Date.now() / 1000),
+  };
 }
 
 /**
- * Verify payment signature from Razorpay webhook
+ * Verify payment signature from Razorpay webhook via RABTUL Payment Service
  */
-export function verifyPaymentSignature(params: PaymentVerification): boolean {
-  if (!RAZORPAY_WEBHOOK_SECRET) {
-    console.error('[Razorpay] Webhook secret not configured');
+export async function verifyPaymentSignature(params: PaymentVerification): Promise<boolean> {
+  if (!PAYMENT_SERVICE_URL) {
+    console.error('[Razorpay] Payment service URL not configured');
     return false;
   }
 
-  const { razorpayOrderId, razorpayPaymentId, razorpaySignature } = params;
+  const response = await callRABTULPayment('verify-signature', {
+    orderId: params.razorpayOrderId,
+    paymentId: params.razorpayPaymentId,
+    signature: params.razorpaySignature,
+  });
 
-  const payload = `${razorpayOrderId}|${razorpayPaymentId}`;
-  const expectedSignature = crypto
-    .createHmac('sha256', RAZORPAY_WEBHOOK_SECRET)
-    .update(payload)
-    .digest('hex');
-
-  return expectedSignature === razorpaySignature;
+  return response.success;
 }
 
 /**
- * Capture a payment
+ * Capture a payment via RABTUL Payment Service
  */
 export async function capturePayment(paymentId: string, amountPaise: number): Promise<void> {
-  if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) {
-    throw new Error('Razorpay credentials not configured');
+  if (!PAYMENT_SERVICE_URL) {
+    throw new Error('Payment service URL not configured');
   }
 
-  const auth = Buffer.from(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`).toString('base64');
+  const response = await callRABTULPayment('capture', {
+    paymentId,
+    amount: amountPaise,
+  });
 
-  try {
-    await axios.post(
-      `${RAZORPAY_API_URL}/payments/${paymentId}/capture`,
-      { amount: amountPaise },
-      {
-        headers: {
-          'Authorization': `Basic ${auth}`,
-          'Content-Type': 'application/json',
-        },
-        timeout: 10000,
-      }
-    );
-  } catch (error: any) {
-    console.error('[Razorpay] Failed to capture payment:', error.response?.data || error.message);
-    throw new Error(`Failed to capture payment: ${error.response?.data?.error?.description || error.message}`);
+  if (!response.success) {
+    throw new Error(`Failed to capture payment: ${response.error}`);
   }
 }
 
 /**
- * Refund a payment
+ * Refund a payment via RABTUL Payment Service
  */
 export async function refundPayment(paymentId: string, amountPaise?: number): Promise<void> {
-  if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) {
-    throw new Error('Razorpay credentials not configured');
+  if (!PAYMENT_SERVICE_URL) {
+    throw new Error('Payment service URL not configured');
   }
 
-  const auth = Buffer.from(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`).toString('base64');
+  const response = await callRABTULPayment('refund', {
+    paymentId,
+    amount: amountPaise,
+  });
 
-  try {
-    await axios.post(
-      `${RAZORPAY_API_URL}/payments/${paymentId}/refund`,
-      amountPaise ? { amount: amountPaise } : {},
-      {
-        headers: {
-          'Authorization': `Basic ${auth}`,
-          'Content-Type': 'application/json',
-        },
-        timeout: 10000,
-      }
-    );
-  } catch (error: any) {
-    console.error('[Razorpay] Failed to refund:', error.response?.data || error.message);
-    throw new Error(`Failed to process refund: ${error.response?.data?.error?.description || error.message}`);
+  if (!response.success) {
+    throw new Error(`Failed to process refund: ${response.error}`);
   }
 }
 
 /**
- * Get payment details
+ * Get payment details via RABTUL Payment Service
  */
 export async function getPayment(paymentId: string): Promise<any> {
-  if (!RAZORPAY_KEY_ID || !RAZORPAY_KEY_SECRET) {
-    throw new Error('Razorpay credentials not configured');
+  if (!PAYMENT_SERVICE_URL) {
+    throw new Error('Payment service URL not configured');
   }
 
-  const auth = Buffer.from(`${RAZORPAY_KEY_ID}:${RAZORPAY_KEY_SECRET}`).toString('base64');
+  const response = await callRABTULPayment(`status/${paymentId}`);
 
-  try {
-    const response = await axios.get(
-      `${RAZORPAY_API_URL}/payments/${paymentId}`,
-      {
-        headers: {
-          'Authorization': `Basic ${auth}`,
-        },
-        timeout: 10000,
-      }
-    );
-    return response.data;
-  } catch (error: any) {
-    console.error('[Razorpay] Failed to get payment:', error.response?.data || error.message);
-    throw new Error(`Failed to get payment: ${error.response?.data?.error?.description || error.message}`);
+  if (!response.success) {
+    throw new Error(`Failed to get payment: ${response.error}`);
   }
+
+  return response.data;
 }

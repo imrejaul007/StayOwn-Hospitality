@@ -1,7 +1,7 @@
 /**
  * Email Service for StayOwn Hotel Bookings
  *
- * Handles sending transactional and marketing emails via configured provider
+ * Handles sending transactional and marketing emails via RABTUL Notification Service
  */
 
 import {
@@ -14,6 +14,9 @@ import {
   ReviewRequestData,
   SpecialOfferData
 } from '../templates/email-templates';
+
+// RABTUL Notification Service URL
+const NOTIFICATION_SERVICE_URL = process.env.NOTIFICATION_SERVICE_URL || 'https://rez-notifications-service.onrender.com';
 
 export interface EmailResult {
   success: boolean;
@@ -45,6 +48,43 @@ class EmailService {
   }
 
   /**
+   * Send email via RABTUL Notification Service
+   */
+  private async sendViaRABTUL(email: {
+    to: string;
+    subject: string;
+    html: string;
+  }): Promise<string> {
+    const internalToken = process.env.INTERNAL_SERVICE_TOKEN || '';
+
+    const response = await fetch(`${NOTIFICATION_SERVICE_URL}/api/v1/notifications/send`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Internal-Token': internalToken,
+      },
+      body: JSON.stringify({
+        userId: email.to,
+        channel: 'EMAIL',
+        template: 'custom',
+        data: {
+          to: email.to,
+          subject: email.subject,
+          html: email.html,
+        },
+      }),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`RABTUL Notification Service error: ${response.status} - ${errorText}`);
+    }
+
+    const result = await response.json();
+    return result.messageId || `rabtul-${Date.now()}`;
+  }
+
+  /**
    * Send booking confirmation email
    */
   async sendBookingConfirmation(data: BookingConfirmationData): Promise<EmailResult> {
@@ -59,10 +99,8 @@ class EmailService {
         return { success: true, messageId: `mock-${Date.now()}` };
       }
 
-      const messageId = await this.sendEmail({
+      const messageId = await this.sendViaRABTUL({
         to: email.to,
-        from: `${this.config.fromName} <${this.config.fromEmail}>`,
-        replyTo: this.config.replyTo,
         subject: email.subject,
         html: email.html,
       });
@@ -90,10 +128,8 @@ class EmailService {
         return { success: true, messageId: `mock-${Date.now()}` };
       }
 
-      const messageId = await this.sendEmail({
+      const messageId = await this.sendViaRABTUL({
         to: email.to,
-        from: `${this.config.fromName} <${this.config.fromEmail}>`,
-        replyTo: this.config.replyTo,
         subject: email.subject,
         html: email.html,
       });
@@ -121,10 +157,8 @@ class EmailService {
         return { success: true, messageId: `mock-${Date.now()}` };
       }
 
-      const messageId = await this.sendEmail({
+      const messageId = await this.sendViaRABTUL({
         to: email.to,
-        from: `${this.config.fromName} <${this.config.fromEmail}>`,
-        replyTo: this.config.replyTo,
         subject: email.subject,
         html: email.html,
       });
@@ -152,10 +186,8 @@ class EmailService {
         return { success: true, messageId: `mock-${Date.now()}` };
       }
 
-      const messageId = await this.sendEmail({
+      const messageId = await this.sendViaRABTUL({
         to: email.to,
-        from: `${this.config.fromName} <${this.config.fromEmail}>`,
-        replyTo: this.config.replyTo,
         subject: email.subject,
         html: email.html,
       });
@@ -189,10 +221,8 @@ class EmailService {
           results.push({ success: true, messageId: `mock-${Date.now()}` });
           totalSent++;
         } else {
-          const messageId = await this.sendEmail({
+          const messageId = await this.sendViaRABTUL({
             to: email.to,
-            from: `${this.config.fromName} <${this.config.fromEmail}>`,
-            replyTo: this.config.replyTo,
             subject: email.subject,
             html: email.html,
           });
@@ -210,7 +240,7 @@ class EmailService {
   }
 
   /**
-   * Core email sending function - routes to appropriate provider
+   * Core email sending function - routes to RABTUL Notification Service
    */
   private async sendEmail(email: {
     to: string;
@@ -219,118 +249,12 @@ class EmailService {
     subject: string;
     html: string;
   }): Promise<string> {
-    switch (this.config.provider) {
-      case 'sendgrid':
-        return this.sendViaSendGrid(email);
-      case 'ses':
-        return this.sendViaSES(email);
-      case 'smtp':
-        return this.sendViaSMTP(email);
-      default:
-        throw new Error(`Unknown email provider: ${this.config.provider}`);
-    }
-  }
-
-  /**
-   * Send via SendGrid
-   */
-  private async sendViaSendGrid(email: {
-    to: string;
-    from: string;
-    replyTo?: string;
-    subject: string;
-    html: string;
-  }): Promise<string> {
-    if (!this.config.apiKey) {
-      throw new Error('SendGrid API key not configured');
-    }
-
-    const response = await fetch('https://api.sendgrid.com/v3/mail/send', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${this.config.apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        personalizations: [{ to: [{ email: email.to }] }],
-        from: { email: email.from },
-        reply_to: email.replyTo ? { email: email.replyTo } : undefined,
-        subject: email.subject,
-        content: [{ type: 'text/html', value: email.html }],
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`SendGrid error: ${response.status} - ${errorText}`);
-    }
-
-    const messageId = response.headers.get('X-Message-Id') || `sg-${Date.now()}`;
-    return messageId;
-  }
-
-  /**
-   * Send via AWS SES
-   */
-  private async sendViaSES(email: {
-    to: string;
-    from: string;
-    replyTo?: string;
-    subject: string;
-    html: string;
-  }): Promise<string> {
-    if (!this.config.apiKey) {
-      throw new Error('AWS credentials not configured for SES');
-    }
-
-    // AWS SES requires AWS SDK - simplified implementation
-    // In production, use @aws-sdk/client-ses
-    const response = await fetch(`${process.env.AWS_SES_ENDPOINT || 'https://email.us-east-1.amazonaws.com'}/v1/email/outbound`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Api-Key': this.config.apiKey,
-      },
-      body: JSON.stringify({
-        Source: email.from,
-        Destination: { ToAddresses: [email.to] },
-        Message: {
-          Subject: { Data: email.subject, Charset: 'UTF-8' },
-          Body: { Html: { Data: email.html, Charset: 'UTF-8' } },
-        },
-        ReplyToAddresses: email.replyTo ? [email.replyTo] : [],
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`SES error: ${response.status} - ${errorText}`);
-    }
-
-    return `ses-${Date.now()}`;
-  }
-
-  /**
-   * Send via SMTP
-   */
-  private async sendViaSMTP(email: {
-    to: string;
-    from: string;
-    subject: string;
-    html: string;
-  }): Promise<string> {
-    // In production, use nodemailer
-    // For now, log the email details
-    console.log('[EmailService] SMTP send:', {
+    // Route all emails through RABTUL Notification Service
+    return this.sendViaRABTUL({
       to: email.to,
-      from: email.from,
       subject: email.subject,
+      html: email.html,
     });
-
-    // Simulate async send
-    await new Promise(resolve => setTimeout(resolve, 100));
-
-    return `smtp-${Date.now()}`;
   }
 
   /**
