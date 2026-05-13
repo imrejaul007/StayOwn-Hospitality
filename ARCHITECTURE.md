@@ -2,7 +2,7 @@
 
 ## Source of Truth - Technical Architecture
 
-**Version:** 1.0.0 | **Last Updated:** 2026-05-12
+**Version:** 1.1.0 | **Last Updated:** 2026-05-13
 
 ---
 
@@ -13,7 +13,7 @@
 | Service | Purpose | QR Type | Database |
 |---------|---------|---------|---------|
 | **verify-service** | Product authenticity | Product Serial QR | PostgreSQL |
-| **Room QR (StayOwn)** | Hotel room access | Room Access QR | MongoDB |
+| **Room QR (Hotel-OTA)** | Hotel room access | Room Access QR | PostgreSQL |
 
 **verify-service** = Anti-counterfeit, product loyalty  
 - Serial validation (HMAC)
@@ -21,10 +21,22 @@
 - Brand rewards (coins)
 - Karma points
 
-**Room QR** = Hotel guest operations  
+**Room QR (Hotel-OTA)** = Hotel guest operations  
 - Room access control
 - Service ordering
 - Checkout billing
+- Connected to CoPilot AI
+
+### Hotel-OTA Components
+
+| App | Purpose | Tech |
+|-----|---------|------|
+| **Hotel-OTA/apps/api** | Backend API (33 routes) | Node.js, Express, PostgreSQL |
+| **Hotel-OTA/apps/hotel-panel** | Hotel admin dashboard | React |
+| **Hotel-OTA/apps/ota-web** | Consumer hotel search | React |
+| **Hotel-OTA/apps/admin** | Super admin panel | React |
+| **Hotel-OTA/apps/mobile** | Guest mobile app | React Native |
+| **Hotel-OTA/apps/corporate-panel** | Corporate bookings | React |
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐

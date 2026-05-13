@@ -29,10 +29,21 @@
 | Service | Purpose | QR Type | Example |
 |---------|---------|---------|---------|
 | **verify-service** | Product authenticity | Product Serial QR | Scan shoe QR → Verify real/nice |
-| **Room QR (StayOwn)** | Hotel room access | Room Access QR | Hotel check-in QR code |
+| **Room QR (Hotel-OTA)** | Hotel room access | Room Access QR | Hotel check-in QR code |
 
 **verify-service** = Anti-counterfeit, product loyalty, brand engagement  
 **Room QR** = Hotel guest check-in, room service, checkout
+
+### Hotel-OTA Components
+
+| App | Purpose | Tech |
+|-----|---------|------|
+| **api** | Backend API (33 routes) | Node.js, Express, PostgreSQL |
+| **hotel-panel** | Hotel admin dashboard | React |
+| **ota-web** | Consumer hotel search | React |
+| **admin** | Super admin panel | React |
+| **corporate-panel** | Corporate bookings | React |
+| **mobile** | Guest mobile app | React Native |
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
@@ -131,6 +142,31 @@
 | **Trust** | Multi-component trust scores |
 | **Reviews** | Submit, host responses |
 | **Payments** | Transactions, payouts |
+
+### 5. Hotel-OTA API
+
+**Port:** 3000 | **Stack:** Node.js, Express, PostgreSQL
+
+| Category | Features |
+|----------|----------|
+| **Booking** | Create, cancel, modify reservations |
+| **Room Management** | Availability, pricing, bundles |
+| **Room Service** | Order food, amenities |
+| **Room QR** | Digital keys, check-in, checkout |
+| **AI Chat** | CoPilot integration, support chatbot |
+| **Chat** | Hotel chat, room chat, unified messaging |
+| **Payments** | Razorpay integration, coin payments |
+| **Mining** | REZ coin mining system |
+| **Admin** | Hotel management, partner management |
+
+**Key Routes (33 total):**
+- `auth.routes.ts` - Authentication, OAuth
+- `booking.routes.ts` - Booking management
+- `room-qr.routes.ts` - Room QR codes
+- `chatAi.routes.ts` - AI Chat (CoPilot)
+- `room-service.routes.ts` - Room service orders
+- `unified-chat.routes.ts` - Unified messaging
+- `mining.routes.ts` - Coin mining
 
 ---
 
