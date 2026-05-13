@@ -8,6 +8,24 @@
 
 ## System Overview
 
+### ⚠️ IMPORTANT: Two Different "Verify" Systems
+
+| Service | Purpose | QR Type | Database |
+|---------|---------|---------|---------|
+| **verify-service** | Product authenticity | Product Serial QR | PostgreSQL |
+| **Room QR (StayOwn)** | Hotel room access | Room Access QR | MongoDB |
+
+**verify-service** = Anti-counterfeit, product loyalty  
+- Serial validation (HMAC)
+- Fraud detection
+- Brand rewards (coins)
+- Karma points
+
+**Room QR** = Hotel guest operations  
+- Room access control
+- Service ordering
+- Checkout billing
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────┐
 │                              ReZ Ecosystem                                      │

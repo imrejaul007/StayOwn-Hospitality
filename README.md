@@ -24,6 +24,16 @@
 
 ## Platform Overview
 
+### ⚠️ IMPORTANT: Two Different "Verify" Systems
+
+| Service | Purpose | QR Type | Example |
+|---------|---------|---------|---------|
+| **verify-service** | Product authenticity | Product Serial QR | Scan shoe QR → Verify real/nice |
+| **Room QR (StayOwn)** | Hotel room access | Room Access QR | Hotel check-in QR code |
+
+**verify-service** = Anti-counterfeit, product loyalty, brand engagement  
+**Room QR** = Hotel guest check-in, room service, checkout
+
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │                        ReZ Ecosystem                                      │
