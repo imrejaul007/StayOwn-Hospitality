@@ -1,5 +1,29 @@
 # Hotel Management System (PMS) — CLAUDE.md
 
+---
+
+## Service Discovery
+
+This service is registered in REZ-Master/services.json.
+
+To discover related services:
+```bash
+# From REZ-Master directory
+node rez-cli find <service-name>  # Find specific service
+node rez-cli list --category <category>  # List by category
+node rez-cli stats  # Platform statistics
+```
+
+Quick search:
+- `node rez-cli list --search payment` - Find payment services
+- `node rez-cli list --search auth` - Find auth services
+- `node rez-cli list --search kds` - Find KDS services
+- `node rez-cli list --search ai` - Find AI services
+
+---
+
+
+
 ## Project Overview
 Enterprise-grade hotel management system. Node.js/Express backend, React/TypeScript frontend, MongoDB, Redis, Stripe payments, Socket.io real-time.
 
