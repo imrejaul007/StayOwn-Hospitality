@@ -2,8 +2,8 @@
 
 **GitHub:** https://github.com/imrejaul007/StayOwn-Hospitality
 **Local:** StayOwn-Hospitality/
-**Last Updated:** May 14, 2026
-**Version:** 1.0.0
+**Last Updated:** May 15, 2026
+**Version:** 2.0.0
 
 ---
 
@@ -17,9 +17,42 @@ StayOwn Hospitality provides hotel booking and smart living solutions.
 
 ---
 
-## Master SOT Reference
+## QR Ecosystem (StayOwn)
 
-**Canonical SOT:** [RABTUL-Technologies/SOT.md](https://github.com/imrejaul007/RABTUL-Technologies/blob/main/SOT.md)
+StayOwn-Hospitality provides **Room QR** and **Product Verification** QR solutions.
+
+### QR Types
+
+| QR Type | Purpose | Files |
+|---------|---------|-------|
+| **Room QR** | Hotel room access, services, checkout | `rez-stayown-service/src/room-qr.ts` |
+| **Product Verify** | Anti-counterfeit, brand verification | `verify-service/` |
+
+### Room QR Features
+
+| Feature | Description |
+|---------|-------------|
+| Auto-generate | Room QR generated when booking confirmed |
+| Multi-channel delivery | Send via email, WhatsApp, SMS |
+| JWT Authentication | Secure access token |
+| Room Access | Digital key functionality |
+| Service Charges | Sync to folio |
+| Checkout | Digital checkout |
+
+### Room QR Payload
+
+```typescript
+interface QRPpayload {
+  intent: 'room_access';
+  hotelId: string;
+  roomId: string;
+  bookingId: string;
+  guestId: string;
+  token: string;
+  checkIn: string;
+  checkOut: string;
+}
+```
 
 ---
 
@@ -27,12 +60,12 @@ StayOwn Hospitality provides hotel booking and smart living solutions.
 
 ### Core Services
 
-| Service | Type | Description |
-|---------|------|-------------|
-| `rez-stayown-service` | API | Hotel booking, Room QR |
-| `rez-habixo-service` | API | Living platform (stays/rent/match) |
-| `rez-channel-manager-service` | API | OTA sync, Overbooking prevention |
-| `verify-service` | API | QR verification |
+| Service | Type | Description | Port |
+|---------|------|-------------|------|
+| `rez-stayown-service` | API | Hotel booking, Room QR | 4016 |
+| `rez-habixo-service` | API | Living platform (stays/rent/match) | 3007 |
+| `rez-channel-manager-service` | API | OTA sync, Overbooking prevention | 3082 |
+| `verify-service` | API | Product QR verification | 3000 |
 
 ### Frontend Apps
 
@@ -77,6 +110,16 @@ User → QR Scan → REZ Mind → StayOwn API → RABTUL Payment → Booking
               RABTUL Auth
 ```
 
+### Room QR Flow
+
+```
+Booking Confirmed → Generate QR → Send to Guest → Scan at Hotel
+                         ↓
+                   MongoDB (QR Record)
+                         ↓
+                   JWT Token Validated → Room Access
+```
+
 ---
 
 ## Documentation Index
@@ -87,6 +130,7 @@ User → QR Scan → REZ Mind → StayOwn API → RABTUL Payment → Booking
 | [ARCHITECTURE.md](ARCHITECTURE.md) | System architecture |
 | [FEATURES.md](FEATURES.md) | Feature inventory |
 | [DEPLOYMENT-CHECKLIST.md](DEPLOYMENT-CHECKLIST.md) | Deployment guide |
+| [QR Ecosystem](../docs/QR-ECOSYSTEM.md) | All QR solutions across ReZ |
 
 ---
 
@@ -128,5 +172,14 @@ const response = await fetch(`${AUTH_SERVICE_URL}/api/auth/verify`, {
 
 ---
 
-**Last Updated:** May 14, 2026
+## Change Log
+
+| Date | Version | Changes |
+|------|---------|---------|
+| 2026-05-15 | 2.0 | Added QR ecosystem section, Room QR details |
+| 2026-05-14 | 1.0 | Initial SOT |
+
+---
+
+**Last Updated:** May 15, 2026
 **Owner:** StayOwn Hospitality Team
