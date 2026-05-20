@@ -1,0 +1,46 @@
+# REZ Room QR Service - Kubernetes Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: room-qr-service
+  namespace: rez-platform
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: room-qr-service
+  template:
+    metadata:
+      labels:
+        app: room-qr-service
+    spec:
+      containers:
+        - name: room-qr-service
+          image: rezplatform/room-qr-service:latest
+          ports:
+            - containerPort: 4016
+          env:
+            - name: PORT
+              value: "4016"
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: room-qr-secrets
+                  key: mongodb-uri
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: room-qr-service
+  namespace: rez-platform
+spec:
+  type: ClusterIP
+  ports:
+    - port: 4016
+      targetPort: 4016
+  selector:
+    app: room-qr-service

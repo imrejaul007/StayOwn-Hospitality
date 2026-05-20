@@ -2,8 +2,8 @@
 
 **GitHub:** https://github.com/imrejaul007/StayOwn-Hospitality
 **Local:** StayOwn-Hospitality/
-**Last Updated:** May 15, 2026
-**Version:** 2.0.0
+**Last Updated:** May 16, 2026
+**Version:** 3.0.0
 
 ---
 
@@ -19,14 +19,20 @@ StayOwn Hospitality provides hotel booking and smart living solutions.
 
 ## QR Ecosystem (StayOwn)
 
-StayOwn-Hospitality provides **Room QR** and **Product Verification** QR solutions.
+StayOwn-Hospitality provides **Room QR** and **Product Verification** QR solutions as part of the complete ReZ QR Ecosystem.
 
-### QR Types
+### Complete QR Products (1)
 
-| QR Type | Purpose | Files |
-|---------|---------|-------|
-| **Room QR** | Hotel room access, services, checkout | `rez-stayown-service/src/room-qr.ts` |
-| **Product Verify** | Anti-counterfeit, brand verification | `verify-service/` |
+| QR Product | Purpose | Tech | Port |
+|-----------|---------|------|------|
+| **Room QR** | Hotel guest services via room QR | Node.js | 4016 |
+
+### Supporting QR
+
+| QR Product | Purpose | Port |
+|-----------|---------|------|
+| **Product Verify** | Anti-counterfeit, brand verification | 3000 |
+| **Habixo QR** | Living platform QR | 3007 |
 
 ### Room QR Features
 
@@ -53,6 +59,8 @@ interface QRPpayload {
   checkOut: string;
 }
 ```
+
+For complete cross-company QR documentation, see [docs/QR-ECOSYSTEM.md](../docs/QR-ECOSYSTEM.md).
 
 ---
 

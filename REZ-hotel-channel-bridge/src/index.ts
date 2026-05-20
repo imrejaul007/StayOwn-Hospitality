@@ -15,10 +15,21 @@ const app: Express = express();
 
 // Security middleware
 app.use(helmet());
+
+// CORS configuration - CRITICAL FIX: Never allow '*' in production
+const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+const corsOrigins = process.env.CORS_ORIGIN?.split(',').filter(Boolean) || [];
+
+if (IS_PRODUCTION && corsOrigins.length === 0) {
+  console.error('[FATAL] CORS_ORIGIN must be set in production');
+  process.exit(1);
+}
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: IS_PRODUCTION ? corsOrigins : (corsOrigins.length > 0 ? corsOrigins : ['http://localhost:3000', 'http://localhost:8080']),
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Internal-Token']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Internal-Token'],
+  credentials: true,
 }));
 
 // Body parsing
