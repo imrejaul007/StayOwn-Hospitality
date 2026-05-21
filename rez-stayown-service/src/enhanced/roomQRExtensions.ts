@@ -539,7 +539,8 @@ router.post('/support/ticket', async (req: Request, res: Response) => {
 // ============================================
 
 export function initWebSocket(server: any) {
-  io = new SocketIOServer(server, { cors: { origin: '*' } });
+  const allowedOrigins = (process.env.ALLOWED_ORIGINS || 'https://rez.money').split(',');
+  io = new SocketIOServer(server, { cors: { origin: allowedOrigins, credentials: true } });
 
   io.on('connection', (socket) => {
     socket.on('join', (data: { hotel_id: string; room_id?: string }) => {
