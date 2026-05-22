@@ -91,10 +91,11 @@ let staffIO: Server | null = null;
 let staffNamespace: any = null;
 
 export function initializeStaffSocket(httpServer: any): Server {
+  const allowedOrigins = (process.env.ALLOWED_ORIGINS || process.env.FRONTEND_URL || process.env.OTA_WEB_URL || 'https://rez.money').split(',');
   staffIO = new Server(httpServer, {
     path: '/socket.io/staff',
     cors: {
-      origin: process.env.FRONTEND_URL || process.env.OTA_WEB_URL || '*',
+      origin: allowedOrigins,
       credentials: true,
     },
     transports: ['websocket', 'polling'],

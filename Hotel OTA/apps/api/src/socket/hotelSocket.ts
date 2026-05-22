@@ -95,10 +95,11 @@ interface StaffMessageData {
 let hotelIO: Server | null = null;
 
 export function initializeHotelSocket(httpServer: HttpServer): Server {
+  const allowedOrigins = (process.env.ALLOWED_ORIGINS || process.env.FRONTEND_URL || process.env.HOTEL_PANEL_URL || 'https://rez.money').split(',');
   hotelIO = new Server(httpServer, {
     path: '/socket.io',
     cors: {
-      origin: process.env.FRONTEND_URL || process.env.HOTEL_PANEL_URL || '*',
+      origin: allowedOrigins,
       credentials: true,
     },
     transports: ['websocket', 'polling'],
