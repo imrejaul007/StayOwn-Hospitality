@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * REZ Mind Client for StayOwn Service
  *
@@ -34,9 +36,9 @@ class REZMindClient {
           'Content-Type': 'application/json',
         },
       });
-      console.log(`[REZMindClient] Event sent: ${event.eventType}`);
+      logger.info(`[REZMindClient] Event sent: ${event.eventType}`);
     } catch (error: any) {
-      console.warn(`[REZMindClient] Failed to send event ${event.eventType}: ${error.message}`);
+      logger.warn(`[REZMindClient] Failed to send event ${event.eventType}: ${error.message}`);
       // Don't throw - event sending should not break the main flow
     }
   }

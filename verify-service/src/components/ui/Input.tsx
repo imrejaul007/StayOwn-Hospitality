@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { randomUUID } from 'crypto'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string
@@ -12,7 +13,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ label, error, hint, leftIcon, rightIcon, className = '', id, ...props }, ref) => {
-    const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`
+    // UI: Generate unique ID for input accessibility (not security-critical)
+    const inputId = id || `input-${randomUUID().substring(0, 9)}`
 
     return (
       <div className="w-full">
@@ -73,7 +75,8 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 
 export const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ label, error, hint, className = '', id, ...props }, ref) => {
-    const textareaId = id || `textarea-${Math.random().toString(36).substr(2, 9)}`
+    // UI: Generate unique ID for textarea accessibility (not security-critical)
+    const textareaId = id || `textarea-${randomUUID().substring(0, 9)}`
 
     return (
       <div className="w-full">
@@ -122,7 +125,8 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 
 export const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
   ({ label, error, hint, options, placeholder, className = '', id, ...props }, ref) => {
-    const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`
+    // UI: Generate unique ID for select accessibility (not security-critical)
+    const selectId = id || `select-${randomUUID().substring(0, 9)}`
 
     return (
       <div className="w-full">

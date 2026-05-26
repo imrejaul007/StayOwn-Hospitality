@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * Environment Validation for StayOwn Service
  * Fails fast on missing required environment variables
@@ -45,7 +47,7 @@ function validateEnv(): void {
   if (env === 'production') {
     for (const key of config.optional) {
       if (!process.env[key]) {
-        console.warn(`[ENV] Recommended environment variable not set: ${key}`);
+        logger.warn(`[ENV] Recommended environment variable not set: ${key}`);
       }
     }
   }

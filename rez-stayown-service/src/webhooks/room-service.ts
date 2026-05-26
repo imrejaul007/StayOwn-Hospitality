@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * Room Service Webhook Service
  *
@@ -58,13 +60,13 @@ export async function processWebhook(
 ): Promise<{ success: boolean; error?: string }> {
   // Verify signature
   if (!verifyWebhookSignature(payload, signature)) {
-    console.error('[RoomService Webhook] Invalid signature');
+    logger.error('[RoomService Webhook] Invalid signature');
     return { success: false, error: 'Invalid signature' };
   }
 
   try {
     await handleRoomServiceWebhook(payload);
-    console.log(`[RoomService Webhook] Processed event: ${payload.event}`);
+    logger.info(`[RoomService Webhook] Processed event: ${payload.event}`);
     return { success: true };
   } catch (error: any) {
     console.error('[RoomService Webhook] Processing failed:', error);
@@ -106,7 +108,7 @@ export async function registerWebhook(): Promise<boolean> {
     });
 
     if (response.data.success) {
-      console.log('[RoomService Webhook] Registered with Hotel OTA');
+      logger.info('[RoomService Webhook] Registered with Hotel OTA');
       return true;
     }
 
@@ -128,7 +130,7 @@ export async function retryWebhook(
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       await handleRoomServiceWebhook(payload);
-      console.log(`[RoomService Webhook] Retry ${attempt} succeeded`);
+      logger.info(`[RoomService Webhook] Retry ${attempt} succeeded`);
       return true;
     } catch (error: any) {
       console.error(`[RoomService Webhook] Retry ${attempt} failed:`, error.message);
@@ -148,7 +150,7 @@ export async function retryWebhook(
 export async function processWebhookQueue(): Promise<void> {
   // In production, this would process a queue of failed webhooks
   // For now, just log that the service is running
-  console.log('[RoomService Webhook] Queue processor running');
+  logger.info('[RoomService Webhook] Queue processor running');
 }
 
 function sleep(ms: number): Promise<void> {

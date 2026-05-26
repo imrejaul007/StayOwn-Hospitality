@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * QR Expiration Notification Service
  *
@@ -58,7 +60,7 @@ async function sendViaRABTUL(recipient: string, channel: 'EMAIL' | 'WHATSAPP' | 
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error(`[ExpirationNotifier] RABTUL API error: ${response.status} - ${errorText}`);
+      logger.error(`[ExpirationNotifier] RABTUL API error: ${response.status} - ${errorText}`);
       return false;
     }
 
@@ -265,6 +267,6 @@ export async function deactivateExpiredQRs(): Promise<number> {
     }
   );
 
-  console.log(`[ExpirationNotifier] Deactivated ${result.modifiedCount} expired QR codes`);
+  logger.info(`[ExpirationNotifier] Deactivated ${result.modifiedCount} expired QR codes`);
   return result.modifiedCount;
 }

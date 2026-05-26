@@ -12,6 +12,7 @@
  */
 
 import express, { Request, Response } from 'express';
+import logger from './utils/logger';
 import mongoose from 'mongoose';
 import axios from 'axios';
 import rateLimit from 'express-rate-limit';
@@ -27,7 +28,7 @@ const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:6379', {
 });
 
 redis.on('error', (err) => console.error('Redis error:', err.message));
-redis.on('connect', () => console.log('Redis connected'));
+redis.on('connect', () => logger.info('Redis connected'));
 
 let io: SocketIOServer;
 

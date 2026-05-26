@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * THE PENTOUZ Hotel Booking Widget
  * Embeddable booking widget for external websites
@@ -484,7 +486,7 @@
   function createWidget() {
     const widgetContainer = document.getElementById(`booking-widget-${widgetConfig.widgetId}`);
     if (!widgetContainer) {
-      console.error('Widget container not found');
+      logger.error('Widget container not found');
       return;
     }
 

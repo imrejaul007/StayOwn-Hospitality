@@ -21,7 +21,7 @@ const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 const corsOrigins = process.env.CORS_ORIGIN?.split(',').filter(Boolean) || [];
 
 if (IS_PRODUCTION && corsOrigins.length === 0) {
-  console.error('[FATAL] CORS_ORIGIN must be set in production');
+  logger.error('[FATAL] CORS_ORIGIN must be set in production');
   process.exit(1);
 }
 

@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 // Service Worker for handling notifications
 // This enables background notifications and advanced features
 
@@ -6,13 +8,13 @@ const API_BASE = '/api/v1';
 
 // Install service worker
 self.addEventListener('install', (event) => {
-  console.log('Notification service worker installed');
+  logger.info('Notification service worker installed');
   self.skipWaiting();
 });
 
 // Activate service worker
 self.addEventListener('activate', (event) => {
-  console.log('Notification service worker activated');
+  logger.info('Notification service worker activated');
   event.waitUntil(self.clients.claim());
 });
 

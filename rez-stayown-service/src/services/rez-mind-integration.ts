@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * REZ Mind Integration for StayOwn Hotel Services
  *
@@ -97,7 +99,7 @@ async function sendEvent(endpoint: string, data: Record<string, unknown>): Promi
       correlationId: response.data?.correlationId || response.data?.correlation_id,
     };
   } catch (error: any) {
-    console.warn(`[REZ Mind] Event failed: ${error.message}`);
+    logger.warn(`[REZ Mind] Event failed: ${error.message}`);
     return { success: false };
   }
 }
@@ -227,7 +229,7 @@ export const rezMindHotel = {
 
       return response.data;
     } catch (error) {
-      console.warn('[REZ Mind] Failed to get recommendations');
+      logger.warn('[REZ Mind] Failed to get recommendations');
       return null;
     }
   },
@@ -251,7 +253,7 @@ export const rezMindHotel = {
 
       return response.data;
     } catch (error) {
-      console.warn('[REZ Mind] Failed to get personalized pricing');
+      logger.warn('[REZ Mind] Failed to get personalized pricing');
       return null;
     }
   },
@@ -277,7 +279,7 @@ export const rezMindHotel = {
 
       return response.data;
     } catch (error) {
-      console.warn('[REZ Mind] Failed to predict SLA');
+      logger.warn('[REZ Mind] Failed to predict SLA');
       return null;
     }
   },
@@ -305,7 +307,7 @@ export const rezMindHotel = {
 
       return response.data;
     } catch (error) {
-      console.warn('[REZ Mind] Failed to predict satisfaction');
+      logger.warn('[REZ Mind] Failed to predict satisfaction');
       return null;
     }
   },

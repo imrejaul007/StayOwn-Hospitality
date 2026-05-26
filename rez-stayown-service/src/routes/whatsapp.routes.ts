@@ -6,6 +6,7 @@
  */
 
 import { Router, Request, Response } from 'express';
+import logger from './utils/logger';
 import { whatsappService, WhatsAppMessageResult } from '../services/whatsapp.service';
 import { verifyWebhookSignature, validateApiKey } from '../middleware/auth';
 
@@ -375,7 +376,7 @@ router.post('/webhook', async (req: Request, res: Response) => {
     if (mode === 'subscribe') {
       const expectedToken = process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN;
       if (expectedToken && token === expectedToken) {
-        console.log('[WhatsApp Webhook] Verified successfully');
+        logger.info('[WhatsApp Webhook] Verified successfully');
         return res.status(200).send(challenge);
       } else {
         return res.status(403).json({ error: 'Verification failed' });
@@ -437,7 +438,7 @@ router.get('/webhook', (req: Request, res: Response) => {
   if (mode === 'subscribe') {
     const expectedToken = process.env.WHATSAPP_WEBHOOK_VERIFY_TOKEN;
     if (expectedToken && token === expectedToken) {
-      console.log('[WhatsApp Webhook] Webhook verified successfully');
+      logger.info('[WhatsApp Webhook] Webhook verified successfully');
       res.status(200).send(challenge);
     } else {
       res.status(403).send('Verification failed');
@@ -505,7 +506,7 @@ async function handleIncomingMessage(message: any): Promise<void> {
 
 async function handleStatusUpdate(status: any): Promise<void> {
   // Log status update
-  console.log(`[WhatsApp] Message ${status.id} status: ${status.status}`);
+  logger.info(`[WhatsApp] Message ${status.id} status: ${status.status}`);
 
   // In production, you would:
   // 1. Update message status in database

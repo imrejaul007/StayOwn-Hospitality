@@ -9,6 +9,7 @@
  */
 
 import { Router, Request, Response } from 'express';
+import logger from './utils/logger';
 import crypto from 'crypto';
 import { googleHotelAdsService } from '../services/google-hotel-ads';
 
@@ -22,7 +23,7 @@ const WEBHOOK_SECRET = process.env.GOOGLE_HOTEL_ADS_WEBHOOK_SECRET || process.en
 function verifySignature(payload: string, signature: string | undefined): boolean {
   if (!WEBHOOK_SECRET || WEBHOOK_SECRET === 'dev-webhook-secret') {
     // Development mode - skip verification
-    console.warn('[GoogleHotelAds] Running in dev mode - skipping signature verification');
+    logger.warn('[GoogleHotelAds] Running in dev mode - skipping signature verification');
     return true;
   }
 
@@ -111,7 +112,7 @@ router.post('/click', async (req: Request, res: Response) => {
     const rawBody = JSON.stringify(req.body);
 
     if (!verifySignature(rawBody, signature)) {
-      console.warn('[GoogleHotelAds] Invalid click webhook signature');
+      logger.warn('[GoogleHotelAds] Invalid click webhook signature');
       return res.status(401).json({ success: false, error: 'Invalid signature' });
     }
 
@@ -163,7 +164,7 @@ router.post('/conversion', async (req: Request, res: Response) => {
     const rawBody = JSON.stringify(req.body);
 
     if (!verifySignature(rawBody, signature)) {
-      console.warn('[GoogleHotelAds] Invalid conversion webhook signature');
+      logger.warn('[GoogleHotelAds] Invalid conversion webhook signature');
       return res.status(401).json({ success: false, error: 'Invalid signature' });
     }
 

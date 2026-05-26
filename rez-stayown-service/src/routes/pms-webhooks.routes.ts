@@ -9,6 +9,7 @@
  */
 
 import { Router, Request, Response } from 'express';
+import logger from './utils/logger';
 import crypto from 'crypto';
 import { generateAndNotifyRoomQR, RoomQR, RoomQRConfig } from '../room-qr';
 import { deactivateRoomQR } from '../room-qr';
@@ -23,7 +24,7 @@ const WEBHOOK_SECRET = process.env.PMS_WEBHOOK_SECRET || process.env.WEBHOOK_SEC
 function verifySignature(payload: string, signature: string): boolean {
   if (!WEBHOOK_SECRET || WEBHOOK_SECRET === 'dev-webhook-secret') {
     // Development mode - skip verification
-    console.warn('[Webhook] Running in dev mode - skipping signature verification');
+    logger.warn('[Webhook] Running in dev mode - skipping signature verification');
     return true;
   }
 
@@ -64,7 +65,7 @@ router.post('/check-in', async (req: Request, res: Response) => {
 
     // Verify signature
     if (!verifySignature(rawBody, signature)) {
-      console.warn('[Webhook] Invalid signature');
+      logger.warn('[Webhook] Invalid signature');
       return res.status(401).json({
         success: false,
         message: 'Invalid webhook signature',
@@ -103,7 +104,7 @@ router.post('/check-in', async (req: Request, res: Response) => {
     });
 
     if (!roomQR) {
-      console.log('[Webhook] Booking not found, creating new Room QR');
+      logger.info('[Webhook] Booking not found, creating new Room QR');
 
       // Create Room QR for walk-in or external booking
       const config: RoomQRConfig = {
@@ -159,13 +160,13 @@ router.post('/check-in', async (req: Request, res: Response) => {
       roomQR.expiresAt = generated.expiresAt;
       await roomQR.save();
 
-      console.log('[Webhook] Room QR updated with room assignment');
+      logger.info('[Webhook] Room QR updated with room assignment');
     }
 
     // Send notifications to guest
     if (roomQR) {
       // In production, send actual notifications
-      console.log('[Webhook] QR generated, notifications would be sent');
+      logger.info('[Webhook] QR generated, notifications would be sent');
     }
 
     res.json({

@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 import { api } from './api';
 
 // Staff Alert Interfaces
@@ -272,7 +274,7 @@ class StaffAlertService {
     }
     if (failedCount > 0) {
       // Partial success — still return count so UI can report correctly
-      console.warn(`acknowledgeMultiple: ${failedCount} alert(s) failed to acknowledge`);
+      logger.warn(`acknowledgeMultiple: ${failedCount} alert(s) failed to acknowledge`);
     }
     return { modifiedCount };
   }

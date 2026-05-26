@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * Razorpay Payment Service - RABTUL Integration
  *
@@ -107,7 +109,7 @@ export async function createRazorpayOrder(params: CreateOrderParams): Promise<Ra
  */
 export async function verifyPaymentSignature(params: PaymentVerification): Promise<boolean> {
   if (!PAYMENT_SERVICE_URL) {
-    console.error('[Razorpay] Payment service URL not configured');
+    logger.error('[Razorpay] Payment service URL not configured');
     return false;
   }
 

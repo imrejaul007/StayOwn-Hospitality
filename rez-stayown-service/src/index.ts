@@ -11,6 +11,7 @@
 import 'dotenv/config';
 
 import express, { Request, Response, NextFunction } from 'express';
+import logger from './utils/logger';
 import cors from 'cors';
 import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize';
@@ -80,7 +81,7 @@ function validateEnvironment(): EnvValidationResult {
 // Validate at startup
 const envValidation = validateEnvironment();
 if (!envValidation.valid) {
-  console.error('[Startup] CRITICAL: Environment validation failed:');
+  logger.error('[Startup] CRITICAL: Environment validation failed:');
   envValidation.errors.forEach(e => console.error('  -', e));
   if (process.env.NODE_ENV === 'production') {
     process.exit(1);
@@ -138,7 +139,7 @@ app.use(cors({
     }
 
     // Log suspicious CORS attempts
-    console.warn(`[CORS] Blocked origin: ${origin}`);
+    logger.warn(`[CORS] Blocked origin: ${origin}`);
     callback(new Error(`CORS: origin ${origin} not allowed`));
   },
   credentials: true,
@@ -338,26 +339,26 @@ app.use((_req: Request, res: Response) => {
 // ─── Server Startup ───────────────────────────────────────────────────────────
 
 async function startServer(): Promise<void> {
-  console.log('[Startup] Starting rez-stayown-service...');
+  logger.info('[Startup] Starting rez-stayown-service...');
 
   try {
     // Connect to MongoDB
-    console.log('[Startup] Connecting to MongoDB...');
+    logger.info('[Startup] Connecting to MongoDB...');
     await connectMongoDB();
-    console.log('[Startup] MongoDB connected');
+    logger.info('[Startup] MongoDB connected');
 
     // Start server
     const server = app.listen(PORT, () => {
-      console.log(`[Startup] rez-stayown-service running on port ${PORT}`);
-      console.log(`[Startup] Environment: ${process.env.NODE_ENV || 'development'}`);
+      logger.info(`[Startup] rez-stayown-service running on port ${PORT}`);
+      logger.info(`[Startup] Environment: ${process.env.NODE_ENV || 'development'}`);
     });
 
     // Graceful shutdown
     const shutdown = async (signal: string): Promise<void> => {
-      console.log(`[Shutdown] Received ${signal}, shutting down gracefully...`);
+      logger.info(`[Shutdown] Received ${signal}, shutting down gracefully...`);
 
       server.close(async () => {
-        console.log('[Shutdown] HTTP server closed');
+        logger.info('[Shutdown] HTTP server closed');
 
         // Close Redis connection
         try {
@@ -369,7 +370,7 @@ async function startServer(): Promise<void> {
         // Disconnect MongoDB
         try {
           await disconnectMongoDB();
-          console.log('[Shutdown] MongoDB disconnected');
+          logger.info('[Shutdown] MongoDB disconnected');
         } catch (err) {
           console.error('[Shutdown] MongoDB disconnect error:', err);
         }
@@ -379,7 +380,7 @@ async function startServer(): Promise<void> {
 
       // Force exit after 15 seconds (reduced from 30)
       setTimeout(() => {
-        console.error('[Shutdown] Forcing exit after timeout');
+        logger.error('[Shutdown] Forcing exit after timeout');
         process.exit(1);
       }, 15000);
     };

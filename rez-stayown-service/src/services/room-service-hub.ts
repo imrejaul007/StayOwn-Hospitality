@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * Room Service Hub Backend
  *
@@ -464,7 +466,7 @@ export const roomServiceHub = {
           serviceType: request.serviceType,
           priority: 'medium',
         });
-        console.log(`[RoomServiceHub] SLA tracking started for order ${charge.id}`);
+        logger.info(`[RoomServiceHub] SLA tracking started for order ${charge.id}`);
       } catch (slaError) {
         // Non-critical: log but don't fail the order
         console.error('[RoomServiceHub] SLA tracking failed:', slaError);

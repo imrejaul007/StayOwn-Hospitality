@@ -8,6 +8,7 @@
  */
 
 import { Router, Request, Response } from 'express';
+import logger from './utils/logger';
 import { z } from 'zod';
 import { pricingService } from '../services/pricing.service';
 import { rezMindHotel } from '../services/rez-mind-integration';
@@ -49,7 +50,7 @@ async function fetchFromPMS(endpoint: string): Promise<any | null> {
     });
     return response.data;
   } catch (error) {
-    console.warn(`[AI Routes] PMS fetch failed for ${endpoint}`);
+    logger.warn(`[AI Routes] PMS fetch failed for ${endpoint}`);
     return null;
   }
 }
@@ -67,7 +68,7 @@ router.get('/pricing/:hotelId', authenticateToken, async (req: Request, res: Res
     const { roomTypeId, checkIn, checkOut, baseRate } = query;
     const userId = req.user?.sub;
 
-    console.log(`[AI Routes] Getting dynamic pricing for ${hotelId}/${roomTypeId}`);
+    logger.info(`[AI Routes] Getting dynamic pricing for ${hotelId}/${roomTypeId}`);
 
     // Get dynamic price from pricing service
     const priceResponse = await pricingService.getPrice({
@@ -111,7 +112,7 @@ router.get('/recommendations/:userId', authenticateToken, async (req: Request, r
     const query = recommendationsQuerySchema.parse(req.query);
     const { city, checkIn, checkOut, budget } = query;
 
-    console.log(`[AI Routes] Getting recommendations for user ${userId}`);
+    logger.info(`[AI Routes] Getting recommendations for user ${userId}`);
 
     // Get recommendations from REZ Mind
     const recommendations = await rezMindHotel.getRecommendations(userId, {
@@ -167,7 +168,7 @@ router.get('/insights/:hotelId', optionalAuth, async (req: Request, res: Respons
     const query = insightsQuerySchema.parse(req.query);
     const { checkIn, checkOut } = query;
 
-    console.log(`[AI Routes] Getting insights for hotel ${hotelId}`);
+    logger.info(`[AI Routes] Getting insights for hotel ${hotelId}`);
 
     // Fetch hotel data from PMS
     const hotelData = await fetchFromPMS(`/v1/hotels/${hotelId}`);

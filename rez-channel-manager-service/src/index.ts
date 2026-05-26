@@ -1,4 +1,5 @@
-import express from 'express';
+import express import logger from './utils/logger';
+import from 'express';
 import mongoose from 'mongoose';
 import channelRoutes from './routes/channels';
 
@@ -16,9 +17,9 @@ const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/rez_ch
 
 mongoose.connect(MONGODB_URI)
   .then(() => {
-    console.log('Channel Manager connected to MongoDB');
+    logger.info('Channel Manager connected to MongoDB');
     app.listen(PORT, () => {
-      console.log(`Channel Manager running on port ${PORT}`);
+      logger.info(`Channel Manager running on port ${PORT}`);
     });
   })
   .catch((err) => {

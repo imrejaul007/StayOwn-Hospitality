@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * Room QR Integration Module for StayOwn Hotel Booking
  *
@@ -21,7 +23,7 @@ function getJwtSecret(): string {
     if (process.env.NODE_ENV === 'production') {
       throw new Error('CRITICAL: ROOM_QR_JWT_SECRET or JWT_SECRET must be configured in production');
     }
-    console.warn('[Security] WARNING: Using fallback JWT secret - DO NOT use in production');
+    logger.warn('[Security] WARNING: Using fallback JWT secret - DO NOT use in production');
     return 'dev-only-fallback-secret-do-not-use-in-production';
   }
   return secret;
@@ -539,7 +541,7 @@ async function sendEmailNotification(data: {
       timeout: 10000
     });
 
-    console.log(`[RoomQR] Email sent to ${data.guestEmail}`);
+    logger.info(`[RoomQR] Email sent to ${data.guestEmail}`);
   } catch (error) {
     console.error('[RoomQR] Email notification failed:', error);
     // Don't throw - continue with other notification methods
@@ -582,7 +584,7 @@ ${data.hotelName}`;
       timeout: 10000
     });
 
-    console.log(`[RoomQR] WhatsApp sent to ${data.guestPhone}`);
+    logger.info(`[RoomQR] WhatsApp sent to ${data.guestPhone}`);
   } catch (error) {
     console.error('[RoomQR] WhatsApp notification failed:', error);
   }
@@ -607,7 +609,7 @@ async function sendSMSNotification(data: {
       timeout: 10000
     });
 
-    console.log(`[RoomQR] SMS sent to ${data.guestPhone}`);
+    logger.info(`[RoomQR] SMS sent to ${data.guestPhone}`);
   } catch (error) {
     console.error('[RoomQR] SMS notification failed:', error);
   }
@@ -696,7 +698,7 @@ export async function syncChargeToFolio(charge: ServiceChargeDocument): Promise<
 
       console.log(`[RoomQR] Charge ${charge.id} synced to folio${result.transactionId ? ` (txn: ${result.transactionId})` : ''}`);
     } else {
-      console.error(`[RoomQR] Failed to sync charge ${charge.id}: ${result.error}`);
+      logger.error(`[RoomQR] Failed to sync charge ${charge.id}: ${result.error}`);
       // Don't throw - will retry on checkout
     }
   } catch (error) {
@@ -936,7 +938,7 @@ export async function generateAndNotifyRoomQR(config: RoomQRConfig): Promise<Roo
     timestamp: new Date(),
   });
 
-  console.log(`[RoomQR] Generated and notified for booking ${config.bookingId}`);
+  logger.info(`[RoomQR] Generated and notified for booking ${config.bookingId}`);
 
   return roomQR;
 }
@@ -986,12 +988,12 @@ export interface RoomServiceWebhookEvent {
  * Handle room service webhook events from Hotel OTA
  */
 export async function handleRoomServiceWebhook(event: RoomServiceWebhookEvent): Promise<void> {
-  console.log(`[RoomQR] Webhook received: ${event.event} for booking ${event.bookingId}`);
+  logger.info(`[RoomQR] Webhook received: ${event.event} for booking ${event.bookingId}`);
 
   switch (event.event) {
     case 'request.created':
       // Log new service request
-      console.log(`[RoomQR] New ${event.data?.serviceType || 'unknown'} request for booking ${event.bookingId}`);
+      logger.info(`[RoomQR] New ${event.data?.serviceType || 'unknown'} request for booking ${event.bookingId}`);
       break;
 
     case 'request.completed':
@@ -1008,7 +1010,7 @@ export async function handleRoomServiceWebhook(event: RoomServiceWebhookEvent): 
           unitPricePaise: event.data.totalAmountPaise,
           source: 'room_service'
         });
-        console.log(`[RoomQR] Recorded charge for completed service: ${event.data.totalAmountPaise} paise`);
+        logger.info(`[RoomQR] Recorded charge for completed service: ${event.data.totalAmountPaise} paise`);
       }
       break;
 
@@ -1026,14 +1028,14 @@ export async function handleRoomServiceWebhook(event: RoomServiceWebhookEvent): 
           unitPricePaise: event.data.unitPricePaise || event.data.amountPaise,
           source: (event.data.source as any) || 'manual'
         });
-        console.log(`[RoomQR] Recorded charge: ${event.data.amountPaise} paise`);
+        logger.info(`[RoomQR] Recorded charge: ${event.data.amountPaise} paise`);
       }
       break;
 
     case 'checkout.requested':
       // Process checkout
       const summary = await processRoomCheckout(event.bookingId);
-      console.log(`[RoomQR] Checkout processed. Total: ${summary.totalPaise} paise`);
+      logger.info(`[RoomQR] Checkout processed. Total: ${summary.totalPaise} paise`);
       break;
   }
 }

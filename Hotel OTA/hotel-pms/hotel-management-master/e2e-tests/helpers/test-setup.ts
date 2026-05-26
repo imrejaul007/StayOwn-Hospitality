@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 import { test as base } from '@playwright/test';
 import { AuthHelper } from './auth-helper';
 import { BookingHelper } from './booking-helper';
@@ -25,13 +27,13 @@ export { expect } from '@playwright/test';
 
 // Global test hooks
 export const globalSetup = async () => {
-  console.log('Setting up test environment...');
+  logger.info('Setting up test environment...');
 
   // You can add global setup logic here
   // For example, seeding the database, starting services, etc.
 
   return async () => {
-    console.log('Tearing down test environment...');
+    logger.info('Tearing down test environment...');
     // Global teardown logic
   };
 };
@@ -49,10 +51,10 @@ export async function resetTestDatabase() {
     });
 
     if (!response.ok) {
-      console.warn('Failed to reset test database');
+      logger.warn('Failed to reset test database');
     }
   } catch (error) {
-    console.warn('Database reset endpoint not available');
+    logger.warn('Database reset endpoint not available');
   }
 }
 
@@ -62,7 +64,7 @@ export async function waitForBackend(maxAttempts = 30) {
     try {
       const response = await fetch('http://localhost:4000/health');
       if (response.ok) {
-        console.log('Backend is ready');
+        logger.info('Backend is ready');
         return true;
       }
     } catch (error) {
@@ -81,7 +83,7 @@ export async function waitForFrontend(maxAttempts = 30) {
     try {
       const response = await fetch('http://localhost:3000');
       if (response.ok) {
-        console.log('Frontend is ready');
+        logger.info('Frontend is ready');
         return true;
       }
     } catch (error) {
@@ -114,7 +116,7 @@ export class PerformanceHelper {
     }
 
     const duration = Date.now() - start;
-    console.log(`Performance: ${name} took ${duration}ms`);
+    logger.info(`Performance: ${name} took ${duration}ms`);
     return duration;
   }
 
@@ -123,11 +125,11 @@ export class PerformanceHelper {
     try {
       const result = await fn();
       const duration = Date.now() - start;
-      console.log(`Performance: ${name} took ${duration}ms`);
+      logger.info(`Performance: ${name} took ${duration}ms`);
       return result;
     } catch (error) {
       const duration = Date.now() - start;
-      console.log(`Performance: ${name} failed after ${duration}ms`);
+      logger.info(`Performance: ${name} failed after ${duration}ms`);
       throw error;
     }
   }
@@ -146,7 +148,7 @@ export async function retryOperation<T>(
       return await operation();
     } catch (error) {
       lastError = error;
-      console.log(`Attempt ${i + 1} failed, retrying...`);
+      logger.info(`Attempt ${i + 1} failed, retrying...`);
 
       if (i < maxRetries - 1) {
         await new Promise(resolve => setTimeout(resolve, delayMs));
@@ -167,7 +169,7 @@ export async function takeScreenshot(page: any, name: string) {
     fullPage: true
   });
 
-  console.log(`Screenshot saved: ${filename}`);
+  logger.info(`Screenshot saved: ${filename}`);
   return filename;
 }
 

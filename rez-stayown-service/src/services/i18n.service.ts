@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * Internationalization Service
  * Supports: English, Hindi, Tamil, Telugu, Bengali, Marathi
@@ -253,7 +255,7 @@ export const isValidLanguageCode = (code: string): boolean => {
 export const i18nService = {
   changeLanguage: (lang: string) => {
     if (!isValidLanguageCode(lang)) {
-      console.warn(`Invalid language code: ${lang}. Falling back to ${DEFAULT_LANGUAGE}`);
+      logger.warn(`Invalid language code: ${lang}. Falling back to ${DEFAULT_LANGUAGE}`);
       return i18n.changeLanguage(DEFAULT_LANGUAGE);
     }
     return i18n.changeLanguage(lang);

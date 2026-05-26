@@ -1,10 +1,12 @@
+import logger from './utils/logger';
+
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('Seeding database...');
+  logger.info('Seeding database...');
 
   // ─── EARN RULES (from spec: 04_COIN_ECONOMICS.md) ─────────
   const earnRules = [
@@ -35,7 +37,7 @@ async function main() {
     });
   }
 
-  console.log('Earn rules seeded');
+  logger.info('Earn rules seeded');
 
   // ─── BURN RULES (from spec) ────────────────────────────────
   const burnRules = [
@@ -50,7 +52,7 @@ async function main() {
     await prisma.burnRule.createMany({ data: burnRules });
   }
 
-  console.log('Burn rules seeded');
+  logger.info('Burn rules seeded');
 
   // ─── ADMIN USER ────────────────────────────────────────────
   const adminPassword = await bcrypt.hash('admin123', 10);
@@ -65,7 +67,7 @@ async function main() {
     update: {},
   });
 
-  console.log('Admin user seeded (admin@ota.com / admin123)');
+  logger.info('Admin user seeded (admin@ota.com / admin123)');
 
   // ─── SAMPLE HOTELS (Bangalore launch) ─────────────────────
   const sampleHotels = [
@@ -214,7 +216,7 @@ async function main() {
       update: {},
     });
 
-    console.log(`Hotel seeded: ${hotelData.name}`);
+    logger.info(`Hotel seeded: ${hotelData.name}`);
   }
 
   // ─── 5th HOTEL: MG ROAD ───────────────────────────────────
@@ -263,7 +265,7 @@ async function main() {
     create: { hotelId: mgRoad.id, phone: '9876543214', fullName: 'Vikram Singh', role: 'manager' },
     update: {},
   });
-  console.log('Hotel seeded: MG Road Business Hotel');
+  logger.info('Hotel seeded: MG Road Business Hotel');
 
   // ─── TEST USERS ─────────────────────────────────────────
   let testUser = await prisma.user.findUnique({ where: { phone: '9999999999' } });
@@ -274,7 +276,7 @@ async function main() {
     await prisma.coinWallet.create({
       data: { userId: testUser.id, otaCoinBalancePaise: 50000, rezCoinBalancePaise: 20000, otaCoinLifetimeEarnedPaise: 120000 },
     });
-    console.log('Test user seeded: 9999999999 (Silver tier, ₹500 OTA coins)');
+    logger.info('Test user seeded: 9999999999 (Silver tier, ₹500 OTA coins)');
   }
 
   // Corporate test user
@@ -298,10 +300,10 @@ async function main() {
     await prisma.corporateUser.create({
       data: { corporateAccountId: corpAccount.id, userId: corpUser.id, role: 'admin' },
     });
-    console.log('Corporate user seeded: 9888888888 (TechStartup Pvt Ltd)');
+    logger.info('Corporate user seeded: 9888888888 (TechStartup Pvt Ltd)');
   }
 
-  console.log('\nSeed completed successfully!');
+  logger.info('\nSeed completed successfully!');
 }
 
 main()

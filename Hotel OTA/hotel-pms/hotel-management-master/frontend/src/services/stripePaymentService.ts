@@ -1,9 +1,11 @@
+import logger from './utils/logger';
+
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 import { api } from './api';
 
 const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 if (!STRIPE_PUBLISHABLE_KEY) {
-  console.error('VITE_STRIPE_PUBLIC_KEY environment variable is required');
+  logger.error('VITE_STRIPE_PUBLIC_KEY environment variable is required');
 }
 
 let stripePromise: Promise<Stripe | null>;

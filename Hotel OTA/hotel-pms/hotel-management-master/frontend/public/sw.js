@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 const CACHE_NAME = 'hotel-management-v1.4.0';
 const OFFLINE_URL = '/offline.html';
 
@@ -29,12 +31,12 @@ const SYNC_TAGS = {
 };
 
 self.addEventListener('install', (event) => {
-  console.log('Service Worker installing');
+  logger.info('Service Worker installing');
   
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE_NAME);
-      console.log('Caching static assets');
+      logger.info('Caching static assets');
       
       try {
         await cache.addAll(STATIC_ASSETS);
@@ -60,7 +62,7 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker activating');
+  logger.info('Service Worker activating');
   
   event.waitUntil(
     (async () => {
@@ -115,7 +117,7 @@ async function handleStaticRequest(request) {
           return networkResponse;
         }
       } catch (error) {
-        console.log('Network failed for navigation, trying cache');
+        logger.info('Network failed for navigation, trying cache');
       }
       
       // Fall back to cache
@@ -190,7 +192,7 @@ async function handleApiRequest(request) {
     if (OFFLINE_API_ROUTES.some(route => url.pathname.startsWith(route))) {
       const cachedResponse = await cache.match(request);
       if (cachedResponse) {
-        console.log('Serving API request from cache');
+        logger.info('Serving API request from cache');
         return cachedResponse;
       }
     }
@@ -224,7 +226,7 @@ async function handleMutatingRequest(request) {
     }
     throw new Error(`Network response not ok: ${networkResponse.status}`);
   } catch (error) {
-    console.log('Mutating request failed, queuing for background sync');
+    logger.info('Mutating request failed, queuing for background sync');
 
     // Only queue for background sync if we can safely clone the request
     try {
@@ -295,7 +297,7 @@ async function storeForBackgroundSync(requestData, syncTag) {
     // Register background sync
     await self.registration.sync.register(syncTag);
     
-    console.log(`Stored request for background sync with tag: ${syncTag}`);
+    logger.info(`Stored request for background sync with tag: ${syncTag}`);
   } catch (error) {
     console.error('Failed to store for background sync:', error);
   }
@@ -338,7 +340,7 @@ async function syncQueuedRequests(syncTag) {
     const index = store.index('syncTag');
     
     const requests = await index.getAll(syncTag);
-    console.log(`Found ${requests.length} requests to sync for tag: ${syncTag}`);
+    logger.info(`Found ${requests.length} requests to sync for tag: ${syncTag}`);
     
     const results = {
       success: 0,
@@ -363,7 +365,7 @@ async function syncQueuedRequests(syncTag) {
           await store.delete(requestData.id);
           results.success++;
           results.removed++;
-          console.log(`Successfully synced request: ${requestData.url}`);
+          logger.info(`Successfully synced request: ${requestData.url}`);
           
           // Notify clients of successful sync
           await notifyClients({
@@ -380,7 +382,7 @@ async function syncQueuedRequests(syncTag) {
             // Max retries reached - remove from queue
             await store.delete(requestData.id);
             results.removed++;
-            console.log(`Max retries reached for: ${requestData.url}`);
+            logger.info(`Max retries reached for: ${requestData.url}`);
             
             await notifyClients({
               type: 'sync-failed',
@@ -392,7 +394,7 @@ async function syncQueuedRequests(syncTag) {
           } else {
             // Update retry count
             await store.put(requestData);
-            console.log(`Retry ${requestData.retryCount} failed for: ${requestData.url}`);
+            logger.info(`Retry ${requestData.retryCount} failed for: ${requestData.url}`);
           }
           results.failed++;
         }
@@ -437,7 +439,7 @@ async function notifyClients(message) {
 
 // Push notification handling
 self.addEventListener('push', (event) => {
-  console.log('Push notification received');
+  logger.info('Push notification received');
   
   let notificationData = {
     title: 'PENTOUZ Hotel',
@@ -617,7 +619,7 @@ self.addEventListener('periodicsync', (event) => {
   if (event.tag === 'periodic-sync') {
     event.waitUntil(
       (async () => {
-        console.log('Periodic background sync triggered');
+        logger.info('Periodic background sync triggered');
         
         // Sync all queued requests
         for (const syncTag of Object.values(SYNC_TAGS)) {
@@ -662,4 +664,4 @@ async function cleanupOldCaches() {
   }
 }
 
-console.log('Service Worker loaded successfully');
+logger.info('Service Worker loaded successfully');

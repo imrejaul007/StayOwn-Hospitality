@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * Pre-Arrival Service for StayOwn Hotel Booking
  *
@@ -387,7 +389,7 @@ export async function checkPreArrivalReminders(): Promise<void> {
 
     // Find bookings that need reminders
     // For each, check if preferences are set and send reminder if not
-    console.log('[PreArrival] Checking for pending reminders...');
+    logger.info('[PreArrival] Checking for pending reminders...');
   } catch (error) {
     console.error('[PreArrival] Reminder check failed:', error);
   }

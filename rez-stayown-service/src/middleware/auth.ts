@@ -8,6 +8,7 @@
  */
 
 import { Request, Response, NextFunction } from 'express';
+import logger from './utils/logger';
 
 const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || 'https://rez-auth-service.onrender.com';
 const INTERNAL_SERVICE_TOKEN = process.env.INTERNAL_SERVICE_TOKEN || '';
@@ -82,14 +83,14 @@ export function authenticateToken(req: Request, res: Response, next: NextFunctio
 
   // CRITICAL: Fail closed if AUTH_SERVICE_URL not configured
   if (!AUTH_SERVICE_URL) {
-    console.error('[Auth] CRITICAL: AUTH_SERVICE_URL not configured - rejecting all requests');
+    logger.error('[Auth] CRITICAL: AUTH_SERVICE_URL not configured - rejecting all requests');
     res.status(500).json({ success: false, message: 'Server configuration error' });
     return;
   }
 
   verifyTokenWithRABTUL(token).then((user) => {
     if (!user) {
-      console.error('[Auth] Token verification failed');
+      logger.error('[Auth] Token verification failed');
       res.status(401).json({ success: false, message: 'Invalid or expired token' });
       return;
     }
@@ -278,7 +279,7 @@ export function verifyWebhookSignature(req: Request, res: Response, next: NextFu
   const appSecret = process.env.FACEBOOK_APP_SECRET;
 
   if (!appSecret) {
-    console.error('[Webhook] CRITICAL: FACEBOOK_APP_SECRET not configured - rejecting webhook');
+    logger.error('[Webhook] CRITICAL: FACEBOOK_APP_SECRET not configured - rejecting webhook');
     res.status(500).json({ error: 'Webhook verification not configured' });
     return;
   }

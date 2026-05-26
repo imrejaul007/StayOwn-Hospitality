@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * Pricing Service with REZ Mind Dynamic Pricing
  *
@@ -142,7 +144,7 @@ async function getDynamicPrice(request: PriceRequest): Promise<PriceResponse> {
   // Check cache first
   const cached = getCachedPrice(cacheKey);
   if (cached) {
-    console.log(`[Pricing] Cache hit for ${cacheKey}`);
+    logger.info(`[Pricing] Cache hit for ${cacheKey}`);
     return cached;
   }
 
@@ -180,7 +182,7 @@ async function getDynamicPrice(request: PriceRequest): Promise<PriceResponse> {
           dynamicRate = Math.round(request.baseRate * (1 - discountPercent / 100));
         }
 
-        console.log(`[Pricing] REZ Mind pricing for ${request.hotelId}: ${dynamicRate} (${discountPercent}% off)`);
+        logger.info(`[Pricing] REZ Mind pricing for ${request.hotelId}: ${dynamicRate} (${discountPercent}% off)`);
       }
     } catch (error) {
       console.warn(`[Pricing] REZ Mind pricing failed, using fallback:`, error);
@@ -299,7 +301,7 @@ export const pricingService = {
    */
   clearCache(): void {
     priceCache.clear();
-    console.log('[Pricing] Cache cleared');
+    logger.info('[Pricing] Cache cleared');
   },
 
   /**

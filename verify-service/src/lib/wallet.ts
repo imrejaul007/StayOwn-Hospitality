@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 import prisma from './db'
 
 const WALLET_API_URL = process.env.WALLET_API_URL || 'http://localhost:3001'
@@ -118,7 +120,7 @@ export async function getBalance(userId: string): Promise<WalletBalance | null> 
     try {
       return JSON.parse(text) as WalletBalance
     } catch {
-      console.error('Wallet balance: Invalid JSON response')
+      logger.error('Wallet balance: Invalid JSON response')
       return null
     }
   } catch (error) {

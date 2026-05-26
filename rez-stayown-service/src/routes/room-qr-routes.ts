@@ -12,6 +12,7 @@
  */
 
 import { Router, Request, Response } from 'express';
+import logger from './utils/logger';
 import {
   generateAndNotifyRoomQR,
   getRoomQRByBookingId,
@@ -109,7 +110,7 @@ router.post('/generate', authenticateToken, rateLimiters.qrGenerate, async (req:
 
     const roomQR = await generateAndNotifyRoomQR(config);
 
-    console.log(`[RoomQR API] Generated QR for booking ${bookingId}`);
+    logger.info(`[RoomQR API] Generated QR for booking ${bookingId}`);
 
     res.status(201).json({
       success: true,
@@ -208,7 +209,7 @@ router.post('/:bookingId/send', authenticateToken, async (req: Request, res: Res
       });
     }
 
-    console.log(`[RoomQR API] Resent notification for booking ${bookingId}`);
+    logger.info(`[RoomQR API] Resent notification for booking ${bookingId}`);
 
     res.json({
       success: true,
@@ -311,7 +312,7 @@ router.post('/charge', authenticateToken, rateLimiters.charge, async (req: Reque
       source: source || 'manual'
     });
 
-    console.log(`[RoomQR API] Added charge for booking ${bookingId}: ${amountPaise} paise`);
+    logger.info(`[RoomQR API] Added charge for booking ${bookingId}: ${amountPaise} paise`);
 
     res.status(201).json({
       success: true,
@@ -439,7 +440,7 @@ router.post('/:bookingId/checkout', authenticateToken, rateLimiters.checkout, as
 
     const summary = await processRoomCheckout(bookingId);
 
-    console.log(`[RoomQR API] Processed checkout for booking ${bookingId}`);
+    logger.info(`[RoomQR API] Processed checkout for booking ${bookingId}`);
 
     res.json({
       success: true,
@@ -489,7 +490,7 @@ router.post('/:bookingId/deactivate', authenticateToken, async (req: Request, re
       });
     }
 
-    console.log(`[RoomQR API] Deactivated QR for booking ${bookingId}`);
+    logger.info(`[RoomQR API] Deactivated QR for booking ${bookingId}`);
 
     res.json({
       success: true,

@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * SLA Monitor Service
  *
@@ -152,7 +154,7 @@ export class SLAMonitorService {
   }): Promise<void> {
     const record = await SLARecord.findOne({ requestId: params.requestId });
     if (!record) {
-      console.warn(`[SLAMonitor] Record not found for request: ${params.requestId}`);
+      logger.warn(`[SLAMonitor] Record not found for request: ${params.requestId}`);
       return;
     }
 

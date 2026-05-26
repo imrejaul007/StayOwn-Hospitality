@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 import { ApiResponse } from '../types/api';
 import { api, normalizeEntityId } from './api';
 
@@ -129,7 +131,7 @@ class AdminGuestServicesService {
     }
 
     // Fallback: Use a placeholder error or throw - the API should provide hotelId
-    console.warn('No hotelId found from auth endpoint, falling back to user context');
+    logger.warn('No hotelId found from auth endpoint, falling back to user context');
     throw new Error('Unable to determine hotel ID. Please ensure you are logged in.');
   }
 

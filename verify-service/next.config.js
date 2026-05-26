@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
 const securityHeaders = [
   {
     key: 'X-DNS-Prefetch-Control',
@@ -27,6 +31,9 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
+  output: 'standalone',
+  compress: true,
+  poweredByHeader: false,
   reactStrictMode: true,
   swcMinify: true,
   experimental: {
@@ -43,11 +50,46 @@ const nextConfig = {
   async headers() {
     return [
       {
+        source: '/_next/static/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
         source: '/:path*',
         headers: securityHeaders,
       },
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self'",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: https: blob:",
+              "connect-src 'self'",
+              "font-src 'self'",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors 'none'",
+              "upgrade-insecure-requests",
+            ].join('; '),
+          },
+          { key: 'Cache-Control', value: 'public, max-age=0, must-revalidate' },
+        ],
+      },
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, proxy-revalidate' },
+          { key: 'Vary', value: 'Origin' },
+        ],
+      },
     ];
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = withBundleAnalyzer(nextConfig);

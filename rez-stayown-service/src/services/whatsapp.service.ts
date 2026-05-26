@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 /**
  * WhatsApp Business API Integration
  * FIX: Added retry logic with exponential backoff for transient failures
@@ -35,7 +37,7 @@ async function withRetry<T>(
       // Check if we should retry
       if (attempt < retries && isRetryableError(error)) {
         const delay = RETRY_DELAYS[attempt] || RETRY_DELAYS[RETRY_DELAYS.length - 1];
-        console.log(`[WhatsApp] Retry attempt ${attempt + 1}/${retries} after ${delay}ms`);
+        logger.info(`[WhatsApp] Retry attempt ${attempt + 1}/${retries} after ${delay}ms`);
         await sleep(delay);
         continue;
       }
@@ -128,7 +130,7 @@ class WhatsAppService {
     const templateConfig = TEMPLATES[template];
 
     if (!WHATSAPP_TOKEN) {
-      console.warn('[WhatsApp] WHATSAPP_ACCESS_TOKEN not configured - message not sent');
+      logger.warn('[WhatsApp] WHATSAPP_ACCESS_TOKEN not configured - message not sent');
       return { success: false, error: 'WhatsApp not configured' };
     }
 

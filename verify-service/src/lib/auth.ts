@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 import jwt from 'jsonwebtoken'
 import bcrypt from 'bcryptjs'
 import { NextRequest } from 'next/server'
@@ -10,7 +12,7 @@ function getJwtSecret(): string {
     if (process.env.NODE_ENV === 'production') {
       throw new Error('CRITICAL: JWT_SECRET must be configured in production');
     }
-    console.warn('[Security] WARNING: Using development JWT secret - DO NOT use in production');
+    logger.warn('[Security] WARNING: Using development JWT secret - DO NOT use in production');
     return 'dev-only-secret-do-not-use-in-production';
   }
   return secret;

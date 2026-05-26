@@ -9,6 +9,8 @@
  */
 
 import { Request, Response, NextFunction } from 'express';
+import { randomUUID } from 'crypto';
+import logger from './utils/logger';
 import Redis from 'ioredis';
 
 // Redis client for rate limiting
@@ -25,7 +27,7 @@ try {
 
     redis.on('connect', () => {
       isRedisConnected = true;
-      console.log('[RateLimiter] Redis connected');
+      logger.info('[RateLimiter] Redis connected');
     });
 
     redis.on('error', (err) => {
@@ -38,7 +40,7 @@ try {
     });
   }
 } catch {
-  console.warn('[RateLimiter] Redis not available, using in-memory fallback');
+  logger.warn('[RateLimiter] Redis not available, using in-memory fallback');
 }
 
 // In-memory fallback for when Redis is not available
@@ -56,7 +58,7 @@ setInterval(() => {
     }
   }
   if (cleaned > 0) {
-    console.log(`[RateLimiter] Cleaned ${cleaned} expired entries from in-memory store`);
+    logger.info(`[RateLimiter] Cleaned ${cleaned} expired entries from in-memory store`);
   }
 }, MEMORY_CLEANUP_INTERVAL);
 
@@ -67,7 +69,7 @@ export async function closeRedisClient(): Promise<void> {
   if (redis) {
     try {
       await redis.quit();
-      console.log('[RateLimiter] Redis connection closed');
+      logger.info('[RateLimiter] Redis connection closed');
     } catch (err) {
       console.error('[RateLimiter] Error closing Redis:', err);
     }
@@ -141,7 +143,9 @@ async function checkRateLimitRedis(
     // Remove old entries and count current
     const multi = redis.multi();
     multi.zremrangebyscore(fullKey, 0, windowStart);
-    multi.zadd(fullKey, now, `${now}:${Math.random()}`);
+    // STATISTICAL: Random suffix for Redis sorted set score uniqueness (not for security)
+    // This is acceptable as sorted sets don't require cryptographic randomness
+    multi.zadd(fullKey, now, `${now}:${randomUUID()}`);
     multi.zcard(fullKey);
     multi.expire(fullKey, Math.ceil(config.windowMs / 1000));
 
