@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 import Redis from 'ioredis';
 import { env } from './env';
 
@@ -7,7 +9,7 @@ export const redis = new Redis(env.REDIS_URL, {
   lazyConnect: true,
   retryStrategy: (times) => {
     if (times > 3) {
-      console.warn('Redis unavailable — BullMQ jobs disabled. Set a valid REDIS_URL to enable.');
+      logger.warn('Redis unavailable — BullMQ jobs disabled. Set a valid REDIS_URL to enable.');
       return null; // stop retrying, don't crash
     }
     return Math.min(times * 500, 2000);
@@ -19,5 +21,5 @@ redis.on('error', (err) => {
 });
 
 redis.on('connect', () => {
-  console.log('[Redis] connected');
+  logger.info('[Redis] connected');
 });

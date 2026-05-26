@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -83,9 +85,9 @@ export function validateCriticalEnv(): void {
   }
 
   if (errors.length > 0) {
-    console.error('\n[CRITICAL] Missing required environment variables:');
-    errors.forEach((e) => console.error(`  - ${e}`));
-    console.error('\nFix these before starting the application.\n');
+    logger.error('\n[CRITICAL] Missing required environment variables:');
+    errors.forEach((e) => logger.error(`  - ${e}`));
+    logger.error('\nFix these before starting the application.\n');
     process.exit(1);
   }
 }
@@ -107,13 +109,13 @@ export function validateEnv(): string[] {
     if (!process.env.REZ_API_KEY) errors.push('REZ_API_KEY required for production — without it REZ API calls will be rejected');
     if (!process.env.MSG91_API_KEY && process.env.SMS_TEST_MODE !== 'true') errors.push('MSG91_API_KEY required for production — without it OTP/SMS delivery will fail');
     if (!process.env.AUTH_SERVICE_URL) {
-      console.warn('[ENV] AUTH_SERVICE_URL not set — partner SSO will use fallback');
+      logger.warn('[ENV] AUTH_SERVICE_URL not set — partner SSO will use fallback');
     }
     if (!process.env.REZ_OAUTH_CLIENT_SECRET) {
-      console.warn('[ENV] REZ_OAUTH_CLIENT_SECRET not set — OAuth2 partner SSO disabled');
+      logger.warn('[ENV] REZ_OAUTH_CLIENT_SECRET not set — OAuth2 partner SSO disabled');
     }
     if (!process.env.WALLET_SERVICE_URL) {
-      console.warn('[ENV] WALLET_SERVICE_URL not set — wallet operations will use local fallback');
+      logger.warn('[ENV] WALLET_SERVICE_URL not set — wallet operations will use local fallback');
     }
     if (!process.env.INTERNAL_SERVICE_TOKEN) errors.push('INTERNAL_SERVICE_TOKEN required for production');
     if (!process.env.PMS_WEBHOOK_SECRET) errors.push('PMS_WEBHOOK_SECRET required for production');

@@ -1,4 +1,5 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response } import logger from './utils/logger';
+import from 'express';
 import { AuthService } from '../services/auth/auth.service';
 import { RezIntegrationService } from '../services/integrations/rez-integration.service';
 import { otpRateLimiter, adminRateLimiter } from '../middleware/rateLimiter';
@@ -119,7 +120,7 @@ router.post('/logout', asyncHandler(async (req: Request, res: Response) => {
     await redis.set(`blacklist:${token}`, '1', 'EX', ttl);
   } catch {
     // If Redis is unavailable, log but still return success
-    console.warn('[Auth] Redis unavailable — token not blacklisted');
+    logger.warn('[Auth] Redis unavailable — token not blacklisted');
   }
   res.json({ success: true, message: 'Logged out successfully' });
 }));

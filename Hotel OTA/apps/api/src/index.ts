@@ -1,4 +1,5 @@
-import express from 'express';
+import express import logger from './utils/logger';
+import from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import { createServer } from 'http';
@@ -90,7 +91,7 @@ const ALLOWED_ORIGINS_PROD = [
 
 // Fail startup if no CORS origins configured in production
 if (process.env.NODE_ENV === 'production' && ALLOWED_ORIGINS_PROD.length === 0) {
-  console.error('[CORS] CRITICAL: No allowed origins configured. Set FRONTEND_URL, HOTEL_PANEL_URL, ADMIN_PANEL_URL.');
+  logger.error('[CORS] CRITICAL: No allowed origins configured. Set FRONTEND_URL, HOTEL_PANEL_URL, ADMIN_PANEL_URL.');
   process.exit(1);
 }
 
@@ -193,15 +194,15 @@ async function start() {
   });
 
   httpServer.listen(env.PORT, () => {
-    console.log(`Hotel OTA API running on port ${env.PORT}`);
-    console.log(`Environment: ${env.NODE_ENV}`);
-    console.log(`Socket.IO namespaces: /hotel, /ai/hotel, /ai/support, /ai/restaurant, /ai/retail, /ai/general, /ai/room-qr, /ai/web-menu`);
-    console.log(`AI Chat enabled: ${!!process.env.ANTHROPIC_API_KEY ? 'Yes (Anthropic API configured)' : 'No (set ANTHROPIC_API_KEY to enable)'}`);
+    logger.info(`Hotel OTA API running on port ${env.PORT}`);
+    logger.info(`Environment: ${env.NODE_ENV}`);
+    logger.info(`Socket.IO namespaces: /hotel, /ai/hotel, /ai/support, /ai/restaurant, /ai/retail, /ai/general, /ai/room-qr, /ai/web-menu`);
+    logger.info(`AI Chat enabled: ${!!process.env.ANTHROPIC_API_KEY ? 'Yes (Anthropic API configured)' : 'No (set ANTHROPIC_API_KEY to enable)'}`);
 
     // Initialize scheduled jobs after server is up (non-blocking, won't crash on Redis failure)
     setTimeout(() => {
       initializeScheduledJobs()
-        .then(() => console.log('[Scheduler] Jobs initialized'))
+        .then(() => logger.info('[Scheduler] Jobs initialized'))
         .catch((err) => console.warn('[Scheduler] Jobs unavailable (Redis required):', err.message));
     }, 5000); // Wait 5s for Redis to fully connect
   });
@@ -213,12 +214,12 @@ start().catch((err) => {
 });
 
 process.on('SIGTERM', async () => {
-  console.log('SIGTERM received, shutting down gracefully...');
+  logger.info('SIGTERM received, shutting down gracefully...');
   await disconnectDatabase();
   process.exit(0);
 });
 process.on('SIGINT', async () => {
-  console.log('SIGINT received, shutting down...');
+  logger.info('SIGINT received, shutting down...');
   await disconnectDatabase();
   process.exit(0);
 });

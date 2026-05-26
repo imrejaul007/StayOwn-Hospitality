@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 import crypto, { timingSafeEqual } from 'crypto';
 import Razorpay from 'razorpay';
 import dayjs from 'dayjs';
@@ -609,7 +611,7 @@ export class PaymentOrchestrationService {
               triggeredBy: 'rez_webhook',
             },
           });
-          console.warn(`[PaymentOrchestration] Late capture for cancelled booking ${booking.bookingRef}`);
+          logger.warn(`[PaymentOrchestration] Late capture for cancelled booking ${booking.bookingRef}`);
           break;
         }
 
@@ -682,7 +684,7 @@ export class PaymentOrchestrationService {
 
       default:
         // Unknown / unhandled event — log silently
-        console.log(`[PaymentOrchestration] Unhandled webhook event: ${event}`);
+        logger.info(`[PaymentOrchestration] Unhandled webhook event: ${event}`);
     }
   }
 

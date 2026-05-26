@@ -9,6 +9,7 @@
  *   await otaToPmsIntegration.syncInventory(hotelId, roomTypeId, date, availableRooms);
  */
 
+import { randomUUID } from 'crypto';
 import { PMSWebhookSender } from './pms-webhook-sender.service';
 import { logger } from '../../config/logger';
 import { prisma } from '../../config/database';
@@ -350,7 +351,8 @@ export class OtaToPmsIntegration {
 
     try {
       const payload: OTAWebhookPayload = {
-        eventId: `${eventType}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        // SECURITY: Use crypto.randomUUID() for cryptographically secure event IDs
+        eventId: `${eventType}_${Date.now()}_${randomUUID().substring(0, 9)}`,
         eventType,
         timestamp: new Date().toISOString(),
         hotelId: connection.pmsHotelId,

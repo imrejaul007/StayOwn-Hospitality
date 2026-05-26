@@ -8,7 +8,8 @@
  * Auth: x-internal-token header (same secret as INTERNAL_SERVICE_TOKEN)
  */
 
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response } import logger from './utils/logger';
+import from 'express';
 import { prisma } from '../config/database';
 import { CoinService } from '../services/finance/coin.service';
 import { Errors } from '../utils/errors';
@@ -25,7 +26,7 @@ function authenticatePms(req: Request, res: Response, next: Function) {
 
   if (!expected) {
     // No token configured — reject all requests regardless of environment
-    console.error('[PMS] REZ_OTA_INTERNAL_TOKEN / INTERNAL_SERVICE_TOKEN not set — all PMS requests rejected');
+    logger.error('[PMS] REZ_OTA_INTERNAL_TOKEN / INTERNAL_SERVICE_TOKEN not set — all PMS requests rejected');
     return res.status(503).json({ error: 'PMS integration not configured' });
   }
 

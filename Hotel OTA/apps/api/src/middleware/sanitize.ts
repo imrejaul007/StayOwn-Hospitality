@@ -1,4 +1,5 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } import logger from './utils/logger';
+import from 'express';
 
 /**
  * FIX-BUG-17: Enhanced sanitization middleware for XSS and injection prevention
@@ -126,7 +127,7 @@ function sanitizeObject(obj: Record<string, any>, path: string = ''): void {
 
       // Check for injection patterns (log but don't block - let route validation handle it)
       if (containsInjectionPatterns(value)) {
-        console.warn(`[SANITIZE] Potential injection pattern detected at ${currentPath}`);
+        logger.warn(`[SANITIZE] Potential injection pattern detected at ${currentPath}`);
       }
 
       obj[key] = sanitized;

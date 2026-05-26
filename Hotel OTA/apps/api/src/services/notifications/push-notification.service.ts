@@ -38,7 +38,7 @@ export class PushNotificationService {
     });
 
     if (!user?.fcmToken) {
-      console.log(`[PUSH] No FCM token for user ${userId}`);
+      logger.info(`[PUSH] No FCM token for user ${userId}`);
       return false;
     }
 
@@ -66,13 +66,13 @@ export class PushNotificationService {
    */
   static async send(fcmToken: string, title: string, body: string, data?: Record<string, string>): Promise<boolean> {
     if (env.NODE_ENV !== 'production') {
-      console.log(`[PUSH] ${title}: ${body} → ${fcmToken.slice(0, 20)}...`);
+      logger.info(`[PUSH] ${title}: ${body} → ${fcmToken.slice(0, 20)}...`);
       return true;
     }
 
     const messaging = getFirebaseMessaging();
     if (!messaging) {
-      console.log(`[PUSH] Firebase not configured. ${title}: ${body}`);
+      logger.info(`[PUSH] Firebase not configured. ${title}: ${body}`);
       return false;
     }
 

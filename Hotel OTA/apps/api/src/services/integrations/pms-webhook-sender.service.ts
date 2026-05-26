@@ -14,7 +14,7 @@
  */
 
 import axios, { AxiosError } from 'axios';
-import * as crypto from 'crypto';
+import { randomUUID } from 'crypto';
 import { prisma } from '../../config/database';
 import { logger } from '../../config/logger';
 import { redis } from '../../config/redis';
@@ -176,7 +176,8 @@ export class PMSWebhookSender {
     isBlocked = false
   ): Promise<WebhookDeliveryResult> {
     const payload: OTAWebhookPayload = {
-      eventId: `inv_sync_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      // SECURITY: Use crypto.randomUUID() for cryptographically secure event IDs
+      eventId: `inv_sync_${Date.now()}_${randomUUID().substring(0, 9)}`,
       eventType: OTAWebhookEventType.INVENTORY_SYNC_REQUEST,
       timestamp: new Date().toISOString(),
       hotelId,
@@ -206,7 +207,8 @@ export class PMSWebhookSender {
     currency = 'INR'
   ): Promise<WebhookDeliveryResult> {
     const payload: OTAWebhookPayload = {
-      eventId: `price_sync_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      // SECURITY: Use crypto.randomUUID() for cryptographically secure event IDs
+      eventId: `price_sync_${Date.now()}_${randomUUID().substring(0, 9)}`,
       eventType: OTAWebhookEventType.PRICING_SYNC_REQUEST,
       timestamp: new Date().toISOString(),
       hotelId,
@@ -235,7 +237,8 @@ export class PMSWebhookSender {
     otaUserId?: string
   ): Promise<{ success: boolean; loyaltyTier?: string; loyaltyPoints?: number; error?: string }> {
     const payload: OTAWebhookPayload = {
-      eventId: `loyalty_query_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      // SECURITY: Use crypto.randomUUID() for cryptographically secure event IDs
+      eventId: `loyalty_query_${Date.now()}_${randomUUID().substring(0, 9)}`,
       eventType: OTAWebhookEventType.GUEST_LOYALTY_QUERY,
       timestamp: new Date().toISOString(),
       hotelId,
@@ -287,7 +290,8 @@ export class PMSWebhookSender {
     refundAmount?: number
   ): Promise<WebhookDeliveryResult> {
     const payload: OTAWebhookPayload = {
-      eventId: `ota_cancel_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      // SECURITY: Use crypto.randomUUID() for cryptographically secure event IDs
+      eventId: `ota_cancel_${Date.now()}_${randomUUID().substring(0, 9)}`,
       eventType: OTAWebhookEventType.BOOKING_CANCELLED,
       timestamp: new Date().toISOString(),
       hotelId,

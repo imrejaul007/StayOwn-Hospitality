@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 import { env } from '../../config/env';
 import crypto from 'crypto';
 
@@ -17,7 +19,7 @@ export class S3UploadService {
     if (!env.AWS_ACCESS_KEY || env.NODE_ENV === 'development') {
       // Dev mode: return mock URL
       const mockUrl = `https://${env.AWS_S3_BUCKET || 'ota-dev'}.s3.${env.AWS_REGION}.amazonaws.com/${key}`;
-      console.log(`[S3] Mock upload: ${mockUrl}`);
+      logger.info(`[S3] Mock upload: ${mockUrl}`);
       return mockUrl;
     }
 
@@ -51,7 +53,7 @@ export class S3UploadService {
 
     if (!env.AWS_ACCESS_KEY || env.NODE_ENV === 'development') {
       const mockUrl = `https://${env.AWS_S3_BUCKET || 'ota-dev'}.s3.${env.AWS_REGION}.amazonaws.com/${key}`;
-      console.log(`[S3] Mock upload: ${mockUrl}`);
+      logger.info(`[S3] Mock upload: ${mockUrl}`);
       return mockUrl;
     }
 

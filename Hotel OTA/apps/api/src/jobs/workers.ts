@@ -87,7 +87,7 @@ export const holdExpiryWorker = new Worker(
     });
 
     if (!result) {
-      console.log(`Hold expiry job ${job.id}: booking ${bookingId} already processed, skipping`);
+      logger.info(`Hold expiry job ${job.id}: booking ${bookingId} already processed, skipping`);
       return;
     }
 
@@ -120,7 +120,7 @@ export const holdExpiryWorker = new Worker(
       });
     }
 
-    console.log(`Hold expired for booking ${booking.bookingRef}`);
+    logger.info(`Hold expired for booking ${booking.bookingRef}`);
   },
   { connection }
 );
@@ -237,7 +237,7 @@ export const coinExpiryWorker = new Worker(
       });
     }
 
-    console.log(`Coin expiry: ${otaExpiries.length} OTA + ${brandExpiries.length} hotel_brand records processed`);
+    logger.info(`Coin expiry: ${otaExpiries.length} OTA + ${brandExpiries.length} hotel_brand records processed`);
   },
   { connection }
 );
@@ -250,9 +250,9 @@ export const settlementBatchWorker = new Worker(
   async () => {
     const result = await SettlementService.processSettlementBatch();
     if (result) {
-      console.log(`Settlement batch ${result.batchRef}: ${result.totalHotels} hotels, ₹${result.totalAmountPaise / 100}`);
+      logger.info(`Settlement batch ${result.batchRef}: ${result.totalHotels} hotels, ₹${result.totalAmountPaise / 100}`);
     } else {
-      console.log('No settlements to process today');
+      logger.info('No settlements to process today');
     }
   },
   { connection }
@@ -311,7 +311,7 @@ export const tierUpdateWorker = new Worker(
       }
     }
 
-    console.log(`Tier update: ${upgraded} upgraded, ${downgraded} downgraded`);
+    logger.info(`Tier update: ${upgraded} upgraded, ${downgraded} downgraded`);
   },
   { connection }
 );
@@ -326,9 +326,9 @@ export const monthlyMiningWorker = new Worker(
     const lastMonth = dayjs().subtract(1, 'month').startOf('month').toDate();
     try {
       const result = await MiningService.runMiningCycle(lastMonth);
-      console.log(`Mining completed: ${result.hotelsProcessed} hotels, ${result.monthlyPoolUnits} units distributed`);
+      logger.info(`Mining completed: ${result.hotelsProcessed} hotels, ${result.monthlyPoolUnits} units distributed`);
     } catch (err: any) {
-      console.log(`Mining skipped: ${err.message}`);
+      logger.info(`Mining skipped: ${err.message}`);
     }
   },
   { connection }
@@ -341,7 +341,7 @@ export const vestingCheckerWorker = new Worker(
   'vesting-checker',
   async () => {
     const result = await MiningService.processVesting();
-    console.log(`Vesting: ${result.unlocked} unlocked, ${result.forfeited} forfeited`);
+    logger.info(`Vesting: ${result.unlocked} unlocked, ${result.forfeited} forfeited`);
   },
   { connection }
 );
@@ -355,7 +355,7 @@ export const reconciliationWorker = new Worker(
     // P0-LOGIC-4: Ledger verification sub-job
     if (job.name === 'ledger-verification') {
       const verification = await CoinLedger.batchVerifyBalances();
-      console.log(`Ledger verification: ${verification.valid}/${verification.total} valid, ${verification.invalid} discrepancies`);
+      logger.info(`Ledger verification: ${verification.valid}/${verification.total} valid, ${verification.invalid} discrepancies`);
       if (verification.invalid > 0) {
         logger.error('[Scheduler] Ledger discrepancy detected', {
           discrepancies: verification.invalid,
@@ -368,7 +368,7 @@ export const reconciliationWorker = new Worker(
 
     // Default: booking/settlement reconciliation
     const report = await ReconciliationPipeline.runFullReconciliation();
-    console.log(`Reconciliation: ${report.stuckHolds} stuck holds, ${report.missedCheckouts} missed checkouts, ${report.missingSettlements} missing settlements`);
+    logger.info(`Reconciliation: ${report.stuckHolds} stuck holds, ${report.missedCheckouts} missed checkouts, ${report.missingSettlements} missing settlements`);
 
     // Fix stuck holds
     if (report.stuckHolds > 0) {
@@ -379,7 +379,7 @@ export const reconciliationWorker = new Worker(
           data: { status: 'cancelled', cancellationReason: 'Hold expired (reconciliation)' },
         }).catch((err: unknown) => { console.warn('[Workers] operation failed', { err }); });
       }
-      console.log(`  Fixed ${stuckIds.length} stuck holds`);
+      logger.info(`  Fixed ${stuckIds.length} stuck holds`);
     }
 
     // Process no-shows
@@ -391,7 +391,7 @@ export const reconciliationWorker = new Worker(
           data: { status: 'no_show' },
         }).catch((err: unknown) => { console.warn('[Workers] operation failed', { err }); });
       }
-      console.log(`  Marked ${missedIds.length} as no-show`);
+      logger.info(`  Marked ${missedIds.length} as no-show`);
     }
 
     // Store reconciliation run
@@ -420,12 +420,12 @@ export const coinExpiryFifoWorker = new Worker(
   'coin-expiry-fifo',
   async () => {
     const result = await CoinLedger.processExpiredCoins();
-    console.log(`Coin expiry FIFO: ${result.processed} batches, ₹${result.totalExpired / 100} expired`);
+    logger.info(`Coin expiry FIFO: ${result.processed} batches, ₹${result.totalExpired / 100} expired`);
 
     // Verify balances after expiry
     const verification = await CoinLedger.batchVerifyBalances();
     if (verification.invalid > 0) {
-      console.warn(`⚠️ ${verification.invalid} wallet discrepancies found!`);
+      logger.warn(`⚠️ ${verification.invalid} wallet discrepancies found!`);
     }
   },
   { connection }
@@ -454,7 +454,7 @@ export const pmsInventorySyncWorker = new Worker(
       select: { id: true, name: true, onboardingStatus: true },
     });
     if (!hotel || hotel.onboardingStatus !== 'active') {
-      console.log(`[PmsSync] Skipping inactive hotel ${hotelId}`);
+      logger.info(`[PmsSync] Skipping inactive hotel ${hotelId}`);
       return;
     }
 
@@ -487,7 +487,7 @@ export const pmsInventorySyncWorker = new Worker(
       const payload: any = await res.json();
       pmsData = payload.data ?? payload ?? [];
     } catch (err: any) {
-      console.error(`[PmsSync] Fetch failed for hotel ${hotel.name}: ${err.message}`);
+      logger.error(`[PmsSync] Fetch failed for hotel ${hotel.name}: ${err.message}`);
       // Re-enqueue with 5-minute backoff on error
       await pmsInventorySyncQueue.add(
         `sync-${hotelId}`,
@@ -498,7 +498,7 @@ export const pmsInventorySyncWorker = new Worker(
     }
 
     if (!Array.isArray(pmsData) || pmsData.length === 0) {
-      console.log(`[PmsSync] No inventory data from PMS for hotel ${hotel.name}`);
+      logger.info(`[PmsSync] No inventory data from PMS for hotel ${hotel.name}`);
     } else {
       // Upsert inventory slots — OTA is the source-of-truth for availability
       for (const slot of pmsData) {
@@ -522,7 +522,7 @@ export const pmsInventorySyncWorker = new Worker(
         `;
       }
 
-      console.log(`[PmsSync] Synced ${pmsData.length} slots for hotel ${hotel.name}`);
+      logger.info(`[PmsSync] Synced ${pmsData.length} slots for hotel ${hotel.name}`);
     }
 
     // Re-enqueue for next sync in 15 minutes
@@ -559,7 +559,7 @@ export const pmsNotificationWorker = new Worker(
     };
 
     if (!PMS_WEBHOOK_URL) {
-      console.warn(`[PmsNotify] PMS_API_URL not set — skipping event: ${event}`);
+      logger.warn(`[PmsNotify] PMS_API_URL not set — skipping event: ${event}`);
       return;
     }
 
@@ -592,7 +592,7 @@ export const pmsNotificationWorker = new Worker(
         },
       });
 
-      console.log(`[PmsNotify] ${event} delivered successfully for booking ${bookingId}`);
+      logger.info(`[PmsNotify] ${event} delivered successfully for booking ${bookingId}`);
       return { success: true, statusCode: response.status };
     } catch (err: any) {
       // Log failed attempt - will be retried by BullMQ
@@ -628,11 +628,11 @@ export const pmsNotificationWorker = new Worker(
 
 // Log worker events
 pmsNotificationWorker.on('completed', (job) => {
-  console.log(`[PmsNotify] Job ${job.id} completed for event ${job.data.event}`);
+  logger.info(`[PmsNotify] Job ${job.id} completed for event ${job.data.event}`);
 });
 
 pmsNotificationWorker.on('failed', (job, err) => {
-  console.error(`[PmsNotify] Job ${job?.id} permanently failed: ${err.message}`);
+  logger.error(`[PmsNotify] Job ${job?.id} permanently failed: ${err.message}`);
 });
 
 /**
@@ -665,11 +665,11 @@ async function bootstrapPmsSyncJobs() {
       { jobId, delay: 30_000 } // first run 30s after startup to let server settle
     );
 
-    console.log(`[PmsSync] Scheduled startup sync for hotel ${hotel.name}`);
+    logger.info(`[PmsSync] Scheduled startup sync for hotel ${hotel.name}`);
   }
 
   if (connectedHotels.length === 0) {
-    console.log('[PmsSync] No PMS-connected hotels found at startup');
+    logger.info('[PmsSync] No PMS-connected hotels found at startup');
   }
 }
 

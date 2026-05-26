@@ -9,6 +9,7 @@
  * - Fallback to next available
  */
 
+import { randomInt } from 'crypto';
 import { prisma } from '../../config/database';
 import { logger } from '../../config/logger';
 
@@ -372,12 +373,13 @@ export async function getStaffLoad(hotelId: string): Promise<StaffWorkload[]> {
   const names = ['Priya S.', 'Rajesh K.', 'Anita M.', 'Vikram J.', 'Sunita D.'];
 
   for (let i = 0; i < mockStaff.length; i++) {
+    // STATISTICAL: Mock workload data for demo purposes (not security-critical)
     staffLoads.push({
       staffId: mockStaff[i],
       staffName: names[i],
-      activeRequests: Math.floor(Math.random() * 4),
-      completedToday: Math.floor(Math.random() * 15) + 5,
-      avgCompletionTime: Math.floor(Math.random() * 20) + 10,
+      activeRequests: randomInt(0, 4),
+      completedToday: randomInt(5, 20),
+      avgCompletionTime: randomInt(10, 30),
       currentAssignments: [],
     });
   }

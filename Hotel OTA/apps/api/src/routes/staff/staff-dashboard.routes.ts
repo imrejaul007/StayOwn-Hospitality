@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import { randomInt } from 'crypto';
 import { prisma } from '../../config/database';
 import { logger } from '../../config/logger';
 
@@ -846,7 +847,8 @@ router.post('/auto-assign', async (req: Request, res: Response) => {
     };
 
     const deptStaff = departments[request.serviceType] || ['staff-default'];
-    const selectedStaff = deptStaff[Math.floor(Math.random() * deptStaff.length)];
+    // STATISTICAL: Random selection for demo/fallback (not security-critical)
+    const selectedStaff = deptStaff[randomInt(0, deptStaff.length)];
 
     // Update the request
     const updatedRequest = await prisma.roomServiceRequest.update({
@@ -928,8 +930,9 @@ router.get('/:staffId/location', async (req: Request, res: Response) => {
     // Mock location data
     const location = {
       staffId,
-      floor: Math.floor(Math.random() * 4) + 1,
-      zone: ['north', 'south', 'center', 'east', 'west'][Math.floor(Math.random() * 5)],
+      // STATISTICAL: Mock location data for demo (not security-critical)
+      floor: randomInt(1, 5),
+      zone: ['north', 'south', 'center', 'east', 'west'][randomInt(0, 5)],
       lastUpdated: new Date().toISOString(),
     };
 

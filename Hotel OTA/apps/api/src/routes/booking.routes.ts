@@ -208,7 +208,7 @@ razorpayWebhookRouter.post('/razorpay', asyncHandler(async (req: Request, res: R
 
   // Verify signature
   if (!secret) {
-    console.error('[Razorpay Webhook] RAZORPAY_WEBHOOK_SECRET not configured — rejecting all webhook calls');
+    logger.error('[Razorpay Webhook] RAZORPAY_WEBHOOK_SECRET not configured — rejecting all webhook calls');
     return res.status(401).json({ error: 'Webhook secret not configured' });
   }
   if (!signature) {

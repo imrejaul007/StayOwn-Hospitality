@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 const API_BASE = (() => {
   const url = process.env.EXPO_PUBLIC_API_URL;
   if (!url) {
@@ -47,7 +49,7 @@ async function secureSet(key: string, value: string): Promise<void> {
   } catch {
     // CD-SEC-001 FIX: If SecureStore fails, fail explicitly. Do NOT fall back to
     // AsyncStorage for token storage — that would re-introduce the plaintext vulnerability.
-    console.error(`[Hotel OTA API] SecureStore.setItemAsync failed for ${key} — refusing AsyncStorage fallback`);
+    logger.error(`[Hotel OTA API] SecureStore.setItemAsync failed for ${key} — refusing AsyncStorage fallback`);
     throw new Error(`Failed to store sensitive key '${key}' securely`);
   }
 }

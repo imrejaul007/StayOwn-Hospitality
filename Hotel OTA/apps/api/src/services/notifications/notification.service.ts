@@ -1,3 +1,5 @@
+import logger from './utils/logger';
+
 import { env } from '../../config/env';
 
 /**
@@ -10,7 +12,7 @@ export class NotificationService {
    */
   static async sendOtp(phone: string, otp: string): Promise<void> {
     if (env.NODE_ENV === 'development' || !env.MSG91_API_KEY) {
-      console.log(`[DEV] OTP for ${phone}: ${otp}`);
+      logger.info(`[DEV] OTP for ${phone}: ${otp}`);
       return;
     }
 
@@ -39,7 +41,7 @@ export class NotificationService {
     const message = `Your booking ${bookingRef} at ${hotelName} is confirmed. Show this at check-in.`;
 
     if (env.NODE_ENV === 'development' || !env.MSG91_API_KEY) {
-      console.log(`[DEV] SMS to ${phone}: ${message}`);
+      logger.info(`[DEV] SMS to ${phone}: ${message}`);
       return;
     }
 
