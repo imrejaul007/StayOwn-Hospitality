@@ -1,0 +1,49 @@
+# Habixo Service - Render Deployment Configuration
+# https://render.com/docs/deploy
+services:
+  - type: web
+    name: habixo-service
+    env: node
+    region: singapore
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    numInstances: 2
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3007
+      - key: MONGODB_URI
+        sync: false
+      - key: REDIS_HOST
+        sync: false
+      - key: REDIS_PORT
+        value: 6379
+      - key: JWT_SECRET
+        sync: false
+      - key: INTERNAL_SERVICE_TOKEN
+        sync: false
+      - key: REZ_AUTH_SERVICE_URL
+        value: https://rez-auth-service.onrender.com
+      - key: REZ_WALLET_SERVICE_URL
+        value: https://rez-wallet-service.onrender.com
+      - key: REZ_KARMA_SERVICE_URL
+        value: https://rez-karma-service.onrender.com
+      - key: REZ_INTENT_GRAPH_URL
+        value: https://rez-intent-graph.onrender.com
+      - key: REZ_NOTIFICATIONS_URL
+        value: https://rez-notifications-hub.onrender.com
+      - key: REZ_GAMIFICATION_URL
+        value: https://rez-gamification-service.onrender.com
+      - key: REZ_PROFILE_SERVICE_URL
+        value: https://rez-profile-service.onrender.com
+      - key: REZ_PAYMENT_SERVICE_URL
+        value: https://rez-payment-service.onrender.com
+      - key: LOG_LEVEL
+        value: info
+      - key: RATE_LIMIT_WINDOW_MS
+        value: 60000
+      - key: RATE_LIMIT_MAX
+        value: 100

@@ -1,0 +1,85 @@
+openapi: 3.0.0
+info:
+  title: Habixo API
+  version: 1.0.0
+  description: Smart Living OS powered by ReZ
+
+servers:
+  - url: http://localhost:3007
+    description: Local development
+
+paths:
+  /api/habixo/properties:
+    get:
+      summary: List properties
+      tags: [Properties]
+      responses:
+        '200':
+          description: List of properties
+    post:
+      summary: Create property
+      tags: [Properties]
+      responses:
+        '201':
+          description: Property created
+
+  /api/habixo/properties/{id}:
+    get:
+      summary: Get property
+      tags: [Properties]
+      parameters:
+        - name: id
+          in: path
+          required: true
+      responses:
+        '200':
+          description: Property details
+
+  /api/habixo/bookings:
+    get:
+      summary: List bookings
+      tags: [Bookings]
+      responses:
+        '200':
+          description: List of bookings
+    post:
+      summary: Create booking
+      tags: [Bookings]
+      responses:
+        '201':
+          description: Booking created
+
+  /api/habixo/match/profile:
+    post:
+      summary: Create flatmate profile
+      tags: [Matching]
+      responses:
+        '201':
+          description: Profile created
+
+  /api/habixo/match/suggestions:
+    get:
+      summary: Get match suggestions
+      tags: [Matching]
+      responses:
+        '200':
+          description: Match suggestions
+
+  /api/habixo/trust/{entityId}:
+    get:
+      summary: Get trust score
+      tags: [Trust]
+      parameters:
+        - name: entityId
+          in: path
+          required: true
+      responses:
+        '200':
+          description: Trust score
+
+  /health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service is healthy
